@@ -11,6 +11,11 @@ import java.io.Serializable;
 public class Credentials implements Serializable {
 
 	/**
+	 * Generated serial version UID.
+	 */
+	private static final long serialVersionUID = 5714875278857835112L;
+
+	/**
 	 * Represents first name of the user. If user has many names, they should be
 	 * concatenated with a dash.
 	 */
