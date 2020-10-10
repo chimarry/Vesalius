@@ -1,0 +1,27 @@
+/.metadata/
+ 
+# Maven
+.mvn
+*.classpath
+*.project
+*.settings
+/bin/*
+/target/*
+
+#gradle
+.gradle
+/build
+
+# Compiled class file
+*.class
+
+
+# Eclipse
+.project
+.classpath
+.settings
+
+# Folder config file
+Desktop.ini
+
+
