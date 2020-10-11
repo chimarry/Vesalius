@@ -16,10 +16,13 @@ public class RedisConnector {
 
 	/**
 	 * Configures Jedis pool.
+	 * 
 	 * @return Configured Jedis pool.
 	 */
 	public static JedisPool createConnection() {
-		return new JedisPool(POOL_CONFIG, ConfigurationUtil.get("redisServer"));
+		String address = ConfigurationUtil.get("redisServer");
+		int port = Integer.parseInt(ConfigurationUtil.get("redisPort"));
+		return new JedisPool(address, port);
 	}
 
 	/**

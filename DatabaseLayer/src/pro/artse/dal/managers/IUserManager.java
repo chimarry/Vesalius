@@ -2,6 +2,7 @@ package pro.artse.dal.managers;
 
 import java.util.List;
 
+import pro.artse.dal.models.BasicUserInfo;
 import pro.artse.dal.models.User;
 
 /**
@@ -31,5 +32,5 @@ public interface IUserManager {
 	 * 
 	 * @return List of all active tokens.
 	 */
-	List<String> GetAllTokens();
+	List<BasicUserInfo> GetAllAllowedInformation();
 }

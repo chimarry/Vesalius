@@ -3,12 +3,21 @@
  */
 package pro.artse.dal.models;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Marija
  * 
  *         Represents information about user that are kept in storage.
  */
 public class User {
+
+	/**
+	 * Information about the user that can be displayed to the public.
+	 */
+	private BasicUserInfo basicUserInfo;
+
 	/**
 	 * Represents first name of the user. If user has many names, they should be
 	 * concatenated with a dash.
@@ -27,19 +36,26 @@ public class User {
 	private String UBN;
 
 	/**
-	 * Token that is related to this user.
+	 * Created user object with default values.
 	 */
-	private String token;
+	public User() {
+
+	}
 
 	/**
-	 * Flag that indicates whether the user is active or not.
+	 * Creates user object.
+	 * @param basicUserInfo Public information about the user.
+	 * @param firstName First name of the user.
+	 * @param lastName Last name of the user.
+	 * @param uBN Unique birth number of the user.
 	 */
-	private boolean isDeactivated;
-
-	/**
-	 * Type of a person (infected, potentially infected, not infected).
-	 */
-	private int personType;
+	public User(BasicUserInfo basicUserInfo, String firstName, String lastName, String uBN) {
+		super();
+		this.basicUserInfo = basicUserInfo;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		UBN = uBN;
+	}
 
 	/**
 	 * @return First name of an user.
@@ -86,51 +102,34 @@ public class User {
 	}
 
 	/**
-	 * @return Token of an user.
+	 * @return Basic information about the user.
 	 */
-	public String getToken() {
-		return token;
+	public BasicUserInfo getBasicUserInfo() {
+		return basicUserInfo;
 	}
 
 	/**
-	 * Sets token for an user.
+	 * Sets basic information about the user.
 	 * 
-	 * @param token User's token.
+	 * @param basicUserInfo Information containing token and person's type.
 	 */
-	public void setToken(String token) {
-		this.token = token;
+	public void setBasicUserInfo(BasicUserInfo basicUserInfo) {
+		this.basicUserInfo = basicUserInfo;
 	}
 
 	/**
-	 * @return Flag that indicates about status of user's token.
-	 */
-	public boolean isDeactivated() {
-		return isDeactivated;
-	}
-
-	/**
-	 * Sets flag that indicates whether user's token has been deactivated.
+	 * Maps names of the attributes with their value.
 	 * 
-	 * @param isDeactivated Has user's token been deactivated?
+	 * @return Filled map.
 	 */
-	public void setDeactivated(boolean isDeactivated) {
-		this.isDeactivated = isDeactivated;
-	}
-
-	/**
-	 * @return Number that indicates what type of a person does user belong to.
-	 */
-	public int getPersonType() {
-		return personType;
-	}
-
-	/**
-	 * Sets type of a person.
-	 * 
-	 * @param personType Number that indicates what type of a person does user
-	 *                   belong to.
-	 */
-	public void setPersonType(int personType) {
-		this.personType = personType;
+	public Map<String, String> mapAttributes() {
+		Map<String, String> attributes = new HashMap<String, String>();
+		attributes.put("firstName", firstName);
+		attributes.put("lastName", lastName);
+		attributes.put("UBN", UBN);
+		attributes.put("isDeactivated", String.valueOf(basicUserInfo.isDeactivatedInt()));
+		attributes.put("token", basicUserInfo.getToken());
+		attributes.put("personType", String.valueOf(basicUserInfo.getPersonType()));
+		return attributes;
 	}
 }

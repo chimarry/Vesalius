@@ -1,14 +1,15 @@
 package pro.arste.tokenserver.services;
 
-import pro.artse.tokenserver.models.Credentials;
+
+import pro.arste.common.result.ResultMessage;
 
 /**
- * @author Marija
- * Provided interface for managing tokens.
+ * @author Marija Provided interface for managing tokens.
  */
 public interface ITokenService {
-	/** Generates unique token based on provided user's credentials and
-	 *  returns it to the user.
+	/**
+	 * Generates unique token based on provided user's credentials and returns it to
+	 * the user.
 	 */
-		String generateToken(Credentials credentials);
+	String generateToken(String firstName, String lastName, String ubn);
 }
