@@ -1,4 +1,4 @@
-import pro.arste.tokenserver.services.TokenService;
+import pro.artse.tokenserver.services.TokenService;
 
 public class Test {
 

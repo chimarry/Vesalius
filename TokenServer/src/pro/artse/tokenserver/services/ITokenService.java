@@ -1,7 +1,7 @@
-package pro.arste.tokenserver.services;
+package pro.artse.tokenserver.services;
 
 
-import pro.arste.common.result.ResultMessage;
+import pro.arste.common.*;
 
 /**
  * @author Marija Provided interface for managing tokens.

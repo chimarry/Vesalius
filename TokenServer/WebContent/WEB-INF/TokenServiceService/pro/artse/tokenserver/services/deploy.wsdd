@@ -3,17 +3,17 @@
   <!-- Services from TokenServiceService WSDL service -->
 
   <service name="TokenService" provider="java:RPC" style="wrapped" use="literal">
-      <parameter name="wsdlTargetNamespace" value="http://services.tokenserver.arste.pro"/>
+      <parameter name="wsdlTargetNamespace" value="http://services.tokenserver.artse.pro"/>
       <parameter name="wsdlServiceElement" value="TokenServiceService"/>
-      <parameter name="schemaQualified" value="http://services.tokenserver.arste.pro"/>
+      <parameter name="schemaQualified" value="http://services.tokenserver.artse.pro"/>
       <parameter name="wsdlServicePort" value="TokenService"/>
-      <parameter name="className" value="pro.arste.tokenserver.services.TokenService"/>
+      <parameter name="className" value="pro.artse.tokenserver.services.TokenService"/>
       <parameter name="wsdlPortType" value="TokenService"/>
       <parameter name="typeMappingVersion" value="1.2"/>
-      <operation xmlns:operNS="http://services.tokenserver.arste.pro" xmlns:retNS="http://services.tokenserver.arste.pro" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="generateToken" qname="operNS:generateToken" returnQName="retNS:generateTokenReturn" returnType="rtns:string" soapAction="">
-        <parameter xmlns:pns="http://services.tokenserver.arste.pro" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:firstName" type="tns:string"/>
-        <parameter xmlns:pns="http://services.tokenserver.arste.pro" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:lastName" type="tns:string"/>
-        <parameter xmlns:pns="http://services.tokenserver.arste.pro" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:ubn" type="tns:string"/>
+      <operation xmlns:operNS="http://services.tokenserver.artse.pro" xmlns:retNS="http://services.tokenserver.artse.pro" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="generateToken" qname="operNS:generateToken" returnQName="retNS:generateTokenReturn" returnType="rtns:string" soapAction="">
+        <parameter xmlns:pns="http://services.tokenserver.artse.pro" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:firstName" type="tns:string"/>
+        <parameter xmlns:pns="http://services.tokenserver.artse.pro" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:lastName" type="tns:string"/>
+        <parameter xmlns:pns="http://services.tokenserver.artse.pro" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:ubn" type="tns:string"/>
       </operation>
       <parameter name="allowedMethods" value="generateToken"/>
 

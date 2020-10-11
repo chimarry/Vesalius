@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pro.arste.tokenserver.services;
+package pro.artse.tokenserver.services;
 
 import java.nio.ByteBuffer;
 import java.util.Base64;

@@ -1,0 +1,6 @@
+.label {
+    -fx-text-fill: white;
+    -fx-font-family: "Baskerville Old Face";
+	-fx-font-weight: bold;
+    -fx-font-size: 20px;
+}
