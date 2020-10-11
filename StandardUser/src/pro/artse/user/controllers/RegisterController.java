@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 import javax.xml.rpc.ServiceException;
 
@@ -29,7 +30,6 @@ import pro.artse.user.util.Validator;
 public class RegisterController implements Initializable {
 
 	private final TokenService tokenService = WebServiceFactory.getTokenService();
-	public static String USER_TOKEN = null;
 
 	@FXML
 	private Button registerButton;
@@ -43,6 +43,11 @@ public class RegisterController implements Initializable {
 	@FXML
 	private TextArea ubnBox;
 
+	/**
+	 * Creates register controller.
+	 * 
+	 * @throws ServiceException
+	 */
 	public RegisterController() throws ServiceException {
 	}
 
@@ -51,6 +56,11 @@ public class RegisterController implements Initializable {
 		registerButton.setOnAction(this::register);
 	}
 
+	/**
+	 * Implements registration process with error handling.
+	 * 
+	 * @param action
+	 */
 	@SuppressWarnings("unchecked")
 	private void register(ActionEvent action) {
 		if (!areValidFields()) {
@@ -62,7 +72,8 @@ public class RegisterController implements Initializable {
 						ubnBox.getText());
 				ResultMessage<String> token = new Gson().fromJson(jsonResultString,
 						new ResultMessage<String>(null).getClass());
-				USER_TOKEN = token.getResult();
+				Preferences userPreferences = Preferences.userRoot();
+				userPreferences.put("token", token.getResult());
 				if (token.isSuccess()) {
 					AnchorPane pane = (AnchorPane) FXMLLoader
 							.load(getClass().getResource("/pro/artse/user/fxml/LoginDialog.fxml"));
@@ -75,11 +86,17 @@ public class RegisterController implements Initializable {
 			} catch (RemoteException e) {
 				UserAlert.alert(AlertType.ERROR, "Unable to connect to server.");
 			} catch (IOException e) {
+				e.printStackTrace();
 				UserAlert.alert(AlertType.ERROR, "Unable to open login dialog");
 			}
 		}
 	}
 
+	/**
+	 * Check if field are valid.
+	 * 
+	 * @return True if are valid, false if not.
+	 */
 	private boolean areValidFields() {
 		return !Validator.AreNullOrEmpty(firstNameBox.getText(), lastNameBox.getText(), ubnBox.getText());
 	}

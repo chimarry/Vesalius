@@ -1,5 +1,7 @@
 package pro.artse.user.controllers;
 
+import java.util.prefs.Preferences;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -27,6 +29,8 @@ public class StartupApplication extends Application {
 		Thread.setDefaultUncaughtExceptionHandler(UserAlert::showExceptionError);
 
 		Pane mainPane = null;
+		if (Preferences.userRoot().get("token", null) != null)
+			isRegistered = true;
 		if (!isRegistered)
 			mainPane = (GridPane) FXMLLoader.load(getClass().getResource("/pro/artse/user/fxml/RegisterForm.fxml"));
 		else
