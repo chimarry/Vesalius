@@ -16,6 +16,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -24,6 +25,7 @@ import pro.arste.common.result.OperationStatus;
 import pro.arste.common.result.ResultMessage;
 import pro.artse.tokenserver.services.TokenService;
 import pro.artse.user.factories.WebServiceFactory;
+import pro.artse.user.util.StageUtil;
 import pro.artse.user.util.UserAlert;
 import pro.artse.user.util.Validator;
 
@@ -42,6 +44,9 @@ public class RegisterController implements Initializable {
 
 	@FXML
 	private TextArea ubnBox;
+
+	@FXML
+	private GridPane registerPane;
 
 	/**
 	 * Creates register controller.
@@ -75,19 +80,12 @@ public class RegisterController implements Initializable {
 				Preferences userPreferences = Preferences.userRoot();
 				userPreferences.put("token", token.getResult());
 				if (token.isSuccess()) {
-					AnchorPane pane = (AnchorPane) FXMLLoader
-							.load(getClass().getResource("/pro/artse/user/fxml/LoginDialog.fxml"));
-					Stage s = new Stage();
-					s.setScene(new Scene(pane));
-					s.show();
+					StageUtil.switchStage(registerButton, "/pro/artse/user/fxml/LoginDialog.fxml");
 				} else
 					UserAlert.alert(AlertType.ERROR, token.getOperationStatus().toString(),
 							"Registration failed." + token.getMessage());
 			} catch (RemoteException e) {
 				UserAlert.alert(AlertType.ERROR, "Unable to connect to server.");
-			} catch (IOException e) {
-				e.printStackTrace();
-				UserAlert.alert(AlertType.ERROR, "Unable to open login dialog");
 			}
 		}
 	}

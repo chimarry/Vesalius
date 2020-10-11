@@ -5,8 +5,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
-import com.sun.javafx.scene.traversal.SceneTraversalEngine;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +17,7 @@ import javafx.stage.Stage;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
+import pro.artse.user.util.StageUtil;
 import pro.artse.user.util.UserAlert;
 import pro.artse.user.util.Validator;
 
@@ -42,6 +41,9 @@ public class LoginDialogController implements Initializable {
 	@FXML
 	private PasswordField repeatPasswordField;
 
+	@FXML
+	private AnchorPane loginPane;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		loginButton.setOnAction(this::login);
@@ -59,15 +61,7 @@ public class LoginDialogController implements Initializable {
 			UserAlert.alert(AlertType.ERROR, "Passwords do not match.");
 		else {
 			Preferences.userRoot().put("password", passwordField.getText());
-			try {
-				GridPane pane = (GridPane) FXMLLoader
-						.load(getClass().getResource("/pro/artse/user/fxml/StandardUserMainForm.fxml"));
-				Stage stage = new Stage();
-				stage.setScene(new Scene(pane));
-				stage.show();
-			} catch (IOException e) {
-				UserAlert.alert(AlertType.ERROR, "Could not show main form!");
-			}
+			StageUtil.switchStage(loginButton, "/pro/artse/user/fxml/StandardUserMainForm.fxml");
 		}
 	}
 

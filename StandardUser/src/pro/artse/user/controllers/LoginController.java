@@ -14,8 +14,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import pro.artse.user.util.StageUtil;
 import pro.artse.user.util.UserAlert;
 import pro.artse.user.util.Validator;
 
@@ -30,10 +32,14 @@ public class LoginController implements Initializable {
 	@FXML
 	private Label tokenDisplay;
 
+	@FXML
+	private AnchorPane loginPane;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		loginButton.setOnAction(this::login);
 		tokenDisplay.setText(Preferences.userRoot().get("token", "No related token"));
+		System.out.println(Preferences.userRoot().get("password", ""));
 	}
 
 	/**
@@ -46,17 +52,7 @@ public class LoginController implements Initializable {
 			UserAlert.alert(AlertType.ERROR, UserAlert.REQUIRED_FIELDS);
 		else if (!Preferences.userRoot().get("password", "").equals(passwordBox.getText()))
 			UserAlert.alert(AlertType.ERROR, "Password is invalid.");
-		else {
-			GridPane pane;
-			try {
-				pane = (GridPane) FXMLLoader
-						.load(getClass().getResource("/pro/artse/user/fxml/StandardUserMainForm.fxml"));
-				Stage stage = new Stage();
-				stage.setScene(new Scene(pane));
-				stage.show();
-			} catch (IOException e) {
-				UserAlert.alert(AlertType.ERROR, "Could not show main form!");
-			}
-		}
+		else
+			StageUtil.switchStage(loginButton, "/pro/artse/user/fxml/StandardUserMainForm.fxml");
 	}
 }
