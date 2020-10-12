@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane fx:id="mainUserPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" style="-fx-background-color: #04121c;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane fx:id="mainUserPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" style="-fx-background-color: #04121c;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pro.artse.user.controllers.StandardUserMainController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1000.0" minWidth="10.0" prefWidth="1000.0" />
   </columnConstraints>
@@ -43,7 +43,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </GridPane.margin>
                   </TextArea>
-                  <Button fx:id="sendMsgButton" mnemonicParsing="false" prefHeight="36.0" prefWidth="141.0" stylesheets="@../MDP/Aplikacija/Vesalius/Design/ButtonCss.css" text="Send message" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                  <Button fx:id="sendMsgButton" mnemonicParsing="false" prefHeight="36.0" prefWidth="141.0" stylesheets="@../../../../../../Design/ButtonCss.css" text="Send message" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                </children>
                <HBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -67,21 +67,21 @@
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </MapView>
-                  <DatePicker fx:id="sinceDatePicker" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                  <DatePicker fx:id="untilDatePicker" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                  <DatePicker fx:id="sinceDatePicker" promptText="since" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                  <DatePicker fx:id="untilDatePicker" promptText="until" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                   <TextArea fx:id="latitudeBox" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="37.0" prefWidth="196.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
                   <TextArea fx:id="longitudeBox" layoutX="10.0" layoutY="367.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="38.0" prefWidth="196.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-                  <Label prefHeight="17.0" prefWidth="93.0" style="-fx-text-fill: white;" text="Latitude" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                  <Label prefHeight="17.0" prefWidth="93.0" style="-fx-text-fill: white;" stylesheets="@../../../../../../Design/LabelCss.css" text="Latitude" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                      <GridPane.margin>
                         <Insets left="20.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label prefHeight="17.0" prefWidth="88.0" style="-fx-text-fill: white;" text="Longitude" GridPane.rowIndex="3">
+                  <Label prefHeight="17.0" prefWidth="88.0" style="-fx-text-fill: white;" stylesheets="@../../../../../../Design/LabelCss.css" text="Longitude" GridPane.rowIndex="3">
                      <GridPane.margin>
                         <Insets left="20.0" />
                      </GridPane.margin>
                   </Label>
-                  <Button fx:id="sendLocationButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="132.0" style="-fx-font-weight: bold;" stylesheets="@../MDP/Aplikacija/Vesalius/Design/ButtonCss.css" text="Send location" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                  <Button fx:id="sendLocationButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="132.0" style="-fx-font-weight: bold;" stylesheets="@../../../../../../Design/ButtonCss.css" text="Send location" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                      <GridPane.margin>
                         <Insets right="20.0" />
                      </GridPane.margin>
@@ -90,7 +90,7 @@
             </GridPane>
             <VBox prefHeight="546.0" prefWidth="254.0">
                <children>
-                  <Button fx:id="uploadDocsButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="247.0" stylesheets="@../MDP/Aplikacija/Vesalius/Design/ButtonCss.css" text="Upload documents">
+                  <Button fx:id="uploadDocsButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="247.0" stylesheets="@../../../../../../Design/ButtonCss.css" text="Upload documents">
                      <VBox.margin>
                         <Insets bottom="10.0" />
                      </VBox.margin>
@@ -100,7 +100,7 @@
                         <Insets />
                      </VBox.margin>
                   </ListView>
-                  <Button fx:id="sendDocsButton" mnemonicParsing="false" prefHeight="35.0" prefWidth="200.0" stylesheets="@../MDP/Aplikacija/Vesalius/Design/ButtonCss.css" text="Send documents">
+                  <Button fx:id="sendDocsButton" mnemonicParsing="false" prefHeight="35.0" prefWidth="200.0" stylesheets="@../../../../../../Design/ButtonCss.css" text="Send documents">
                      <VBox.margin>
                         <Insets bottom="20.0" left="30.0" right="20.0" top="10.0" />
                      </VBox.margin>
@@ -130,7 +130,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="detailsButton" mnemonicParsing="false" prefHeight="34.0" prefWidth="97.0" stylesheets="@../MDP/Aplikacija/Vesalius/Design/ButtonCss.css" text="Details" visible="false" GridPane.columnIndex="1">
+            <Button fx:id="detailsButton" mnemonicParsing="false" prefHeight="34.0" prefWidth="97.0" stylesheets="@../../../../../../Design/ButtonCss.css" text="Details" visible="false" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets right="10.0" />
                </GridPane.margin>

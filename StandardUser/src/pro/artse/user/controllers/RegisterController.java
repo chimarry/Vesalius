@@ -1,6 +1,5 @@
 package pro.artse.user.controllers;
 
-import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
@@ -12,16 +11,11 @@ import com.google.gson.Gson;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import pro.arste.common.result.OperationStatus;
 import pro.arste.common.result.ResultMessage;
 import pro.artse.tokenserver.services.TokenService;
 import pro.artse.user.factories.WebServiceFactory;
@@ -29,6 +23,12 @@ import pro.artse.user.util.StageUtil;
 import pro.artse.user.util.UserAlert;
 import pro.artse.user.util.Validator;
 
+/**
+ * Responsible for interaction with registration form.
+ * 
+ * @author Marija
+ *
+ */
 public class RegisterController implements Initializable {
 
 	private final TokenService tokenService = WebServiceFactory.getTokenService();
