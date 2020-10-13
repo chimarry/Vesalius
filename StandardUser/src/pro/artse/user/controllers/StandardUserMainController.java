@@ -19,7 +19,7 @@ public class StandardUserMainController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		Menu logoutMenu = new Menu("Log out");
 		logoutMenu.setGraphic(new ImageView("file:../Design/logout.png"));
-		logoutMenu.setStyle("-fx-accent: #a67a53;");
+		logoutMenu.setStyle("-fx-accent: #a67a53");
 		MenuItem logoutItem = new MenuItem("Log out");
 		logoutItem.setOnAction(this::logout);
 		MenuItem unregisterItem = new MenuItem("Unregister");
@@ -29,14 +29,14 @@ public class StandardUserMainController implements Initializable {
 
 		Menu activitiesMenu = new Menu("Activity log");
 		activitiesMenu.setGraphic(new ImageView("file:../Design/activityLog.png"));
-		logoutMenu.setStyle("-fx-accent: #a67a53;");
+		activitiesMenu.setStyle("-fx-accent: #a67a53");
 		MenuItem actItem = new MenuItem("Show activity log");
 		actItem.setOnAction(this::showActivityLog);
 		activitiesMenu.getItems().add(actItem);
 
 		Menu locationMenu = new Menu("Locations");
 		locationMenu.setGraphic(new ImageView("file:../Design/location.png"));
-		logoutMenu.setStyle("-fx-accent: #a67a53;");
+		locationMenu.setStyle("-fx-accent: #a67a53");
 		MenuItem locationItem = new MenuItem("Show visited locations");
 		locationItem.setOnAction(this::showLocations);
 		locationMenu.getItems().add(locationItem);

@@ -39,7 +39,7 @@ public class ActivityLogController implements Initializable {
 
 		LocalDateTime logInAt = LocalDateTime.now();
 		ArrayList<ActivityLog> activityLogs = new ArrayList<>();
-		
+
 		activityLogs.add(new ActivityLog(logInAt, logInAt.plusMinutes(30)));
 		activityLogs.add(new ActivityLog(logInAt.plusMinutes(40), logInAt.plusMinutes(50)));
 		activityLogs.add(new ActivityLog(logInAt.plusMinutes(300), logInAt.plusMinutes(500)));
