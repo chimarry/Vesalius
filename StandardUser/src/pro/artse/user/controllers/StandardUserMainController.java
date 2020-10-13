@@ -21,7 +21,9 @@ public class StandardUserMainController implements Initializable {
 		logoutMenu.setGraphic(new ImageView("file:../Design/logout.png"));
 		logoutMenu.setStyle("-fx-accent: #a67a53;");
 		MenuItem logoutItem = new MenuItem("Log out");
+		logoutItem.setOnAction(this::logout);
 		MenuItem unregisterItem = new MenuItem("Unregister");
+		unregisterItem.setOnAction(this::unregister);
 		logoutMenu.getItems().add(logoutItem);
 		logoutMenu.getItems().add(unregisterItem);
 
@@ -50,7 +52,7 @@ public class StandardUserMainController implements Initializable {
 	 * @param event
 	 */
 	private void showActivityLog(ActionEvent event) {
-
+		StageUtil.showDialog("/pro/artse/user/fxml/ActivityLogDialog.fxml");
 	}
 
 	/**

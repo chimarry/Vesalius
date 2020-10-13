@@ -114,11 +114,6 @@
       </HBox>
       <MenuBar fx:id="mainMenu" style="-fx-background-color: #725438;">
          <menus>
-            <Menu mnemonicParsing="false" text="Log out">
-              <items>
-                <MenuItem mnemonicParsing="false" text="Action 1" />
-              </items>
-            </Menu>
          </menus>
       </MenuBar>
       <GridPane GridPane.rowIndex="1">

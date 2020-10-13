@@ -39,10 +39,11 @@ public class ActivityLogController implements Initializable {
 
 		LocalDateTime logInAt = LocalDateTime.now();
 		ArrayList<ActivityLog> activityLogs = new ArrayList<>();
-		ObservableList<ActivityLog> activityLogs2 = FXCollections.observableArrayList(activityLogs);
+		
 		activityLogs.add(new ActivityLog(logInAt, logInAt.plusMinutes(30)));
 		activityLogs.add(new ActivityLog(logInAt.plusMinutes(40), logInAt.plusMinutes(50)));
 		activityLogs.add(new ActivityLog(logInAt.plusMinutes(300), logInAt.plusMinutes(500)));
+		ObservableList<ActivityLog> activityLogs2 = FXCollections.observableArrayList(activityLogs);
 
 		logInTime.setCellValueFactory(new PropertyValueFactory<>("LogInAt"));
 		logOutTime.setCellValueFactory(new PropertyValueFactory<>("LogOutAt"));

@@ -103,4 +103,9 @@ public class ActivityLog {
 		this.logInAt = formatter.format(logInAt);
 		this.logOutAt = formatter.format(logOutAt);
 	}
+
+	@Override
+	public String toString() {
+		return logInAt + "#" + logOutAt + "#" + totalTime;
+	}
 }
