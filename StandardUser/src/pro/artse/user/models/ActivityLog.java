@@ -88,7 +88,7 @@ public class ActivityLog {
 	 */
 	private double calculateTimeSpent(LocalDateTime logInAt, LocalDateTime logOutAt) {
 		long secs = ChronoUnit.SECONDS.between(logInAt, logOutAt);
-		return secs / 3600.0;
+		return Math.round(100.0 * secs / 3600.0) / 100.0;
 	}
 
 	/**
