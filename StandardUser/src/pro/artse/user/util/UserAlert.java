@@ -13,10 +13,12 @@ public final class UserAlert {
 
 	public static final String REQUIRED_FIELDS = "All fields are required!";
 
+	public static final String CENTRAL_REGISTER_CONNECTION_PROBLEM = "Connection with central register could not been established.";
+
 	/**
 	 * Alerts user about actions.
 	 * 
-	 * @param type Level of alert. @see AlertType
+	 * @param type    Level of alert. @see AlertType
 	 * @param message Message to display.
 	 */
 	public static void alert(AlertType type, String message) {
@@ -27,7 +29,7 @@ public final class UserAlert {
 	 * Alerts user about actions.
 	 * 
 	 * @param type    Level of alert. @see AlertType
-	 * @param title Title of alert.
+	 * @param title   Title of alert.
 	 * @param message Message to display.
 	 */
 	public static void alert(AlertType type, String title, String message) {

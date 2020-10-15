@@ -2,6 +2,13 @@ package pro.arste.common.result;
 
 public class ResultMessage<T> {
 
+	public static final String EXISTS_MESSAGE = "Resource already exists.";
+	public static final String NOT_FOUND = "Resource does not exists.";
+	public static final String ACCEPTED = "Successful.";
+	public static final String INTERNAL_SERVER_ERROR = "Error happend on server. Please, try later.";
+	public static final String UNKNOWN_ERROR = "Error happend without known cause. Please contact our support.";
+	public static final String BAD_REQUEST = "Inputed data is not valid.";
+
 	private T result;
 
 	private OperationStatus operationStatus;
@@ -26,6 +33,7 @@ public class ResultMessage<T> {
 	public ResultMessage(OperationStatus operationStatus) {
 		super();
 		this.operationStatus = operationStatus;
+		this.message = getMessage();
 	}
 
 	public T getResult() {
@@ -45,6 +53,24 @@ public class ResultMessage<T> {
 	}
 
 	public String getMessage() {
+		if (message == null) {
+			switch (operationStatus) {
+			case SUCCESS:
+				return ACCEPTED;
+			case UNKNOWN_ERROR:
+				return INTERNAL_SERVER_ERROR;
+			case SERVER_ERROR:
+				return INTERNAL_SERVER_ERROR;
+			case USER_ERROR:
+				return BAD_REQUEST;
+			case EXISTS:
+				return EXISTS_MESSAGE;
+			case NOT_FOUND:
+				return NOT_FOUND;
+			default:
+				return INTERNAL_SERVER_ERROR;
+			}
+		}
 		return message;
 	}
 
