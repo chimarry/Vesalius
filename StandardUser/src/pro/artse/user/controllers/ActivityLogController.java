@@ -2,6 +2,7 @@ package pro.artse.user.controllers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.lang.reflect.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -11,10 +12,14 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
-import com.sun.javafx.scene.web.Debugger;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
@@ -24,8 +29,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import pro.artse.centralr.api.ApiPaths;
 import pro.artse.centralr.models.ActivityLogWrapper;
 import pro.artse.user.models.ActivityLog;
-import pro.artse.user.util.RestApiConnector;
+import pro.artse.user.util.RestApiUtil;
 import pro.artse.user.util.UserAlert;
+import pro.artse.user.util.json.JsonUtil;
 
 /**
  * Interacts with activity log view.
@@ -49,36 +55,43 @@ public class ActivityLogController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		HttpURLConnection connection = RestApiConnector.openConnectionJSON(Preferences.userRoot().get("token", null),
+		logInTime.setCellValueFactory(new PropertyValueFactory<>("LogInAt"));
+		logOutTime.setCellValueFactory(new PropertyValueFactory<>("LogOutAt"));
+		totalTimeSpent.setCellValueFactory(new PropertyValueFactory<>("TotalTime"));
+
+		Task<List<ActivityLog>> task = new Task<List<ActivityLog>>() {
+			@Override
+			public List<ActivityLog> call() throws Exception {
+
+				List<ActivityLog> data = getActivities();
+				return data;
+			}
+		};
+		task.setOnSucceeded(e -> activityLog.getItems().setAll(task.getValue()));
+		task.setOnFailed(e -> UserAlert.alert(AlertType.ERROR, UserAlert.CENTRAL_REGISTER_CONNECTION_PROBLEM));
+		new Thread(task).start();
+	}
+
+	/**
+	 * Gets list of user activities using HTTP connection (Rest).
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	public ArrayList<ActivityLog> getActivities() throws IOException {
+		HttpURLConnection connection = RestApiUtil.openConnectionJSON(Preferences.userRoot().get("token", null),
 				ApiPaths.GET_ALL_ACTIVITIES, "GET", false);
 		if (connection == null) {
 			UserAlert.alert(AlertType.ERROR, UserAlert.CENTRAL_REGISTER_CONNECTION_PROBLEM);
 		}
-		try (BufferedReader bufferedReader = RestApiConnector.getReader(connection)) {
+		try (BufferedReader bufferedReader = RestApiUtil.getReader(connection)) {
+			ArrayList<ActivityLog> activities = JsonUtil.deserialize(JsonUtil.readJsonList(bufferedReader),
+					ActivityLog.class);
 			connection.disconnect();
-			String output;
-			while ((output = bufferedReader.readLine()) != null) {
-				System.out.println(output);
-			}
+			return activities;
 		} catch (IOException e) {
 			connection.disconnect();
+			throw e;
 		}
-
-		/*
-		 * LocalDateTime logInAt = LocalDateTime.now(); ArrayList<ActivityLog>
-		 * activityLogs = new ArrayList<>();
-		 * 
-		 * activityLogs.add(new ActivityLog(logInAt, logInAt.plusMinutes(30)));
-		 * activityLogs.add(new ActivityLog(logInAt.plusMinutes(40),
-		 * logInAt.plusMinutes(50))); activityLogs.add(new
-		 * ActivityLog(logInAt.plusMinutes(300), logInAt.plusMinutes(500)));
-		 * ObservableList<ActivityLog> activityLogs2 =
-		 * FXCollections.observableArrayList(activityLogs);
-		 * 
-		 * logInTime.setCellValueFactory(new PropertyValueFactory<>("LogInAt"));
-		 * logOutTime.setCellValueFactory(new PropertyValueFactory<>("LogOutAt"));
-		 * totalTimeSpent.setCellValueFactory(new PropertyValueFactory<>("TotalTime"));
-		 * activityLog.setItems(activityLogs2);
-		 */
 	}
 }

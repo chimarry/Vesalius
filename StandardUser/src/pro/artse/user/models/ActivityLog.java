@@ -33,25 +33,6 @@ public class ActivityLog {
 	private double totalTime;
 
 	/**
-	 * Creates activity log object from strings. If strings cannot be parsed, result
-	 * is set to Unknown.
-	 * 
-	 * @param logInAt  When did user log in? (Expects date-time format)
-	 * @param logOutAt When did user log out? (Expects date-time format)
-	 */
-	public ActivityLog(String logInAt, String logOutAt) {
-		super();
-		try {
-			LocalDateTime time1 = LocalDateTime.parse(logInAt);
-			LocalDateTime time2 = LocalDateTime.parse(logOutAt);
-			initialize(time1, time2);
-		} catch (Exception e) {
-			this.logOutAt = "Unknown";
-			this.logInAt = "Unknown";
-		}
-	}
-
-	/**
 	 * Creates activity log object from date-time objects. If strings cannot be
 	 * parsed, result is set to Unknown.
 	 * 
@@ -60,7 +41,8 @@ public class ActivityLog {
 	 */
 	public ActivityLog(LocalDateTime logInAt, LocalDateTime logOutAt) {
 		super();
-		initialize(logInAt, logOutAt);
+		this.logInAt = logInAt.toString();
+		this.logOutAt = logOutAt.toString();
 	}
 
 	public static DateTimeFormatter getFormatter() {
@@ -76,7 +58,7 @@ public class ActivityLog {
 	}
 
 	public double getTotalTime() {
-		return totalTime;
+		return calculateTimeSpent();
 	}
 
 	/**
@@ -86,22 +68,9 @@ public class ActivityLog {
 	 * @param logOutAt End.
 	 * @return
 	 */
-	private double calculateTimeSpent(LocalDateTime logInAt, LocalDateTime logOutAt) {
-		long secs = ChronoUnit.SECONDS.between(logInAt, logOutAt);
-		return Math.round(100.0 * secs / 3600.0) / 100.0;
-	}
-
-	/**
-	 * Initializes log in and log out time with proper formatter, and sets total
-	 * time spent in application.
-	 * 
-	 * @param logInAt  When did user log in?
-	 * @param logOutAt When did user log out?
-	 */
-	private void initialize(LocalDateTime logInAt, LocalDateTime logOutAt) {
-		this.totalTime = calculateTimeSpent(logInAt, logOutAt);
-		this.logInAt = formatter.format(logInAt);
-		this.logOutAt = formatter.format(logOutAt);
+	private double calculateTimeSpent() {
+		long secs = ChronoUnit.SECONDS.between(LocalDateTime.parse(logInAt), LocalDateTime.parse(logOutAt));
+		return Math.round(1000.0 * secs / 3600.0) / 1000.0;
 	}
 
 	@Override

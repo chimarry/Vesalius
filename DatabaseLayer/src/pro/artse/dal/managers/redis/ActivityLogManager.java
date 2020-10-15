@@ -1,5 +1,9 @@
 package pro.artse.dal.managers.redis;
 
+import java.io.Console;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +53,7 @@ public class ActivityLogManager implements IActivityLogManager {
 			activities = jedis.lrange(key, BEGIN, END).stream().map(x -> new ActivityLogDTO.ActivityDTO(x))
 					.collect(Collectors.toCollection(ArrayList<ActivityDTO>::new));
 			;
+
 			return activities;
 		} catch (DateTimeParseException e) {
 			return activities;
