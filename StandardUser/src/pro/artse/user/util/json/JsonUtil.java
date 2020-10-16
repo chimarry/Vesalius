@@ -2,17 +2,24 @@ package pro.artse.user.util.json;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import javax.xml.rpc.encoding.Deserializer;
+import com.google.gson.*;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import pro.artse.centralr.models.ActivityLogWrapper;
 
 public class JsonUtil {
+
+	public static final JsonSerializer<ActivityLogWrapper> ACTIVITY_LOG_SERIALIZER = new JsonSerializer<ActivityLogWrapper>() {
+		@Override
+		public JsonElement serialize(ActivityLogWrapper src, Type typeOfSrc, JsonSerializationContext context) {
+			JsonObject serialized = new JsonObject();
+			serialized.addProperty("logInAt", src.getLogInAt().toString());
+			serialized.addProperty("logOutAt", src.getLogOutAt().toString());
+			return serialized;
+		}
+	};
 
 	/**
 	 * Parses java string as JSON array.
@@ -42,6 +49,32 @@ public class JsonUtil {
 		JsonElement elem = parser.parse(resultString);
 		JsonObject object = elem.getAsJsonObject();
 		return object;
+	}
+
+	/**
+	 * Maps object to JSON.
+	 * 
+	 * @param <T>     Type of the element.
+	 * @param element Element to map.
+	 * @return JSON string.
+	 */
+	public static <T> String mapToJson(T element) {
+		Gson gson = new Gson();
+		return gson.toJson(element);
+	}
+
+	/**
+	 * Maps object to JSON.
+	 * 
+	 * @param <T>     Type of the element.
+	 * @param element Element to map.
+	 * @return JSON string.
+	 */
+	public static <T> String mapToJson(T element, JsonSerializer<T> serializer, Class t) {
+		GsonBuilder builder = new GsonBuilder();
+		builder.registerTypeAdapter(t, serializer);
+		Gson gson = builder.create();
+		return gson.toJson(element);
 	}
 
 	public static <T> ArrayList<T> deserialize(JsonArray array, Class resultType) {

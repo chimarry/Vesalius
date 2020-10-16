@@ -36,7 +36,7 @@ public class ActivityLogManager implements IActivityLogManager {
 		try (Jedis jedis = RedisConnector.createConnection().getResource()) {
 			String key = userActivity.getToken() + ACTIVITIES_SUFFIX;
 			String value = userActivity.toString();
-			jedis.set(key, value);
+			jedis.rpush(key, value);
 		} catch (DateTimeParseException e) {
 			return false;
 		}

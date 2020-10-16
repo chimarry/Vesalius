@@ -13,9 +13,6 @@ import java.time.temporal.ChronoUnit;
  */
 public class ActivityLog {
 
-	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
-	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
-
 	/**
 	 * When did user log in?
 	 */
@@ -43,10 +40,6 @@ public class ActivityLog {
 		super();
 		this.logInAt = logInAt.toString();
 		this.logOutAt = logOutAt.toString();
-	}
-
-	public static DateTimeFormatter getFormatter() {
-		return formatter;
 	}
 
 	public String getLogInAt() {

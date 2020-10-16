@@ -1,16 +1,26 @@
 package pro.artse.user.controllers;
 
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
+import pro.artse.user.centralr.services.IActivityLogService;
+import pro.artse.user.centralr.services.ManagersFactory;
+import pro.artse.user.models.ActivityLog;
 import pro.artse.user.util.StageUtil;
+import pro.artse.user.util.UserAlert;
 
 public class StandardUserMainController implements Initializable {
+	private static final IActivityLogService activityService = ManagersFactory.getActivityLogService();
 
 	@FXML
 	private MenuBar mainMenu;
@@ -70,6 +80,22 @@ public class StandardUserMainController implements Initializable {
 	 * @param event
 	 */
 	private void logout(ActionEvent event) {
+		LocalDateTime logInAt = LocalDateTime
+				.parse(Preferences.userRoot().get("logInAt", LocalDateTime.MIN.toString()));
+		LocalDateTime logOutAt = LocalDateTime.now().plusHours(2);
+		ActivityLog activityLog = new ActivityLog(logInAt, logOutAt);
+
+		Task<Boolean> task = new Task<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+
+				boolean isAdded = activityService.add(activityLog, Preferences.userRoot().get("token", null));
+				return isAdded;
+			}
+		};
+		task.setOnSucceeded(e -> System.out.println("ADDED"));
+		task.setOnFailed(e -> UserAlert.alert(AlertType.ERROR, UserAlert.CENTRAL_REGISTER_CONNECTION_PROBLEM));
+		new Thread(task).start();
 		StageUtil.switchStage(mainMenu, "/pro/artse/user/fxml/LoginForm.fxml");
 	}
 

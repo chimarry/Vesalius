@@ -1,6 +1,7 @@
 package pro.artse.user.controllers;
 
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
@@ -55,6 +56,7 @@ public class LoginDialogController implements Initializable {
 			UserAlert.alert(AlertType.ERROR, "Passwords do not match.");
 		else {
 			Preferences.userRoot().put("password", passwordField.getText());
+			Preferences.userRoot().put("logInAt", LocalDateTime.now().toString());
 			StageUtil.switchStage(loginButton, "/pro/artse/user/fxml/StandardUserMainForm.fxml");
 		}
 	}

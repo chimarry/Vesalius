@@ -1,6 +1,7 @@
 package pro.artse.user.controllers;
 
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
@@ -52,7 +53,9 @@ public class LoginController implements Initializable {
 			UserAlert.alert(AlertType.ERROR, UserAlert.REQUIRED_FIELDS);
 		else if (!Preferences.userRoot().get("password", "").equals(passwordBox.getText()))
 			UserAlert.alert(AlertType.ERROR, "Password is invalid.");
-		else
+		else {
+			Preferences.userRoot().put("logInAt", LocalDateTime.now().toString());
 			StageUtil.switchStage(loginButton, "/pro/artse/user/fxml/StandardUserMainForm.fxml");
+		}
 	}
 }

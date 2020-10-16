@@ -4,26 +4,45 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class ActivityLogWrapper {
-	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
-	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
-
 	/**
 	 * When did user log in?
 	 */
-	private LocalDateTime logInAt;
+	private String logInAt;
 
 	/**
 	 * When did user log out?
 	 */
-	private LocalDateTime logOutAt;
+	private String logOutAt;
 
-	/**
-	 * How much time user spent in application?
-	 */
+	public ActivityLogWrapper() {
+
+	}
 
 	public ActivityLogWrapper(LocalDateTime logInAt, LocalDateTime logOutAt) {
 		super();
+		this.logInAt = logInAt.toString();
+		this.logOutAt = logOutAt.toString();
+	}
+
+	public ActivityLogWrapper(String logInAt, String logOutAt) {
+		super();
 		this.logInAt = logInAt;
+		this.logOutAt = logOutAt;
+	}
+
+	public String getLogInAt() {
+		return logInAt;
+	}
+
+	public void setLogInAt(String logInAt) {
+		this.logInAt = logInAt;
+	}
+
+	public String getLogOutAt() {
+		return logOutAt;
+	}
+
+	public void setLogOutAt(String logOutAt) {
 		this.logOutAt = logOutAt;
 	}
 
@@ -32,19 +51,19 @@ public class ActivityLogWrapper {
 		return super.toString();
 	}
 
-	public void setLogInAt(LocalDateTime logInAt) {
-		this.logInAt = logInAt;
+	public void setLogInAtAsDateTime(LocalDateTime logInAt) {
+		this.logInAt = logInAt.toString();
 	}
 
-	public void setLogOutAt(LocalDateTime logOutAt) {
-		this.logOutAt = logOutAt;
+	public void setLogOutAtAsDateTime(LocalDateTime logOutAt) {
+		this.logOutAt = logOutAt.toString();
 	}
 
-	public LocalDateTime getLogInAt() {
-		return logInAt;
+	public LocalDateTime getLogInAtAsDateTime() {
+		return LocalDateTime.parse(logInAt);
 	}
 
-	public LocalDateTime getLogOutAt() {
-		return logOutAt;
+	public LocalDateTime getLogOutAtAsDateTime() {
+		return LocalDateTime.parse(logOutAt);
 	}
 }

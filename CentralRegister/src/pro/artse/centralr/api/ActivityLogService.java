@@ -12,7 +12,7 @@ import pro.artse.centralr.managers.IActivityLogManager;
 import pro.artse.centralr.managers.ManagerFactory;
 import pro.artse.centralr.models.ActivityLogWrapper;
 
-@Path("activity-log")
+@Path("activities")
 public class ActivityLogService {
 	private final IActivityLogManager activitylogManger = ManagerFactory.getActivityLogManager();
 

@@ -7,4 +7,6 @@ import pro.artse.user.models.ActivityLog;
 
 public interface IActivityLogService {
 	List<ActivityLog> getAll(String token) throws IOException;
+
+	boolean add(ActivityLog activityLog, String token) throws IOException;
 }
