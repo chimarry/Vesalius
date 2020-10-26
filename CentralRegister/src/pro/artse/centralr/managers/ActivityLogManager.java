@@ -19,8 +19,6 @@ public class ActivityLogManager implements pro.artse.centralr.managers.IActivity
 
 	@Override
 	public ResultMessage<Boolean> add(ActivityLogWrapper activity, String token) {
-		// TODO: check token validity
-
 		ActivityLogDTO item = Mapper.mapToDTO(activity);
 		item.setToken(token);
 
@@ -33,8 +31,6 @@ public class ActivityLogManager implements pro.artse.centralr.managers.IActivity
 
 	@Override
 	public List<ActivityLogWrapper> getAll(String token) {
-		// TODO: check token validation
-
 		List<ActivityDTO> activities = activityLogManager.getAll(token);
 		return activities.stream().map(x -> Mapper.mapToWrapper(x))
 				.collect(Collectors.toCollection(ArrayList<ActivityLogWrapper>::new));

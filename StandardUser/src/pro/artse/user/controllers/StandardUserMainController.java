@@ -93,7 +93,6 @@ public class StandardUserMainController implements Initializable {
 				return isAdded;
 			}
 		};
-		task.setOnSucceeded(e -> System.out.println("ADDED"));
 		task.setOnFailed(e -> UserAlert.alert(AlertType.ERROR, UserAlert.CENTRAL_REGISTER_CONNECTION_PROBLEM));
 		new Thread(task).start();
 		StageUtil.switchStage(mainMenu, "/pro/artse/user/fxml/LoginForm.fxml");

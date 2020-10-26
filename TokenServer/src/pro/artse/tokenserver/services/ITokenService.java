@@ -1,6 +1,5 @@
 package pro.artse.tokenserver.services;
 
-
 import pro.arste.common.*;
 
 /**
@@ -12,4 +11,11 @@ public interface ITokenService {
 	 * the user.
 	 */
 	String generateToken(String firstName, String lastName, String ubn);
+
+	/**
+	 * Checks validity of a token.
+	 * @param token
+	 * @return
+	 */
+	boolean isValidToken(String token);
 }

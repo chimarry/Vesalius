@@ -28,6 +28,14 @@ public interface IUserManager {
 	boolean deactivate(String token);
 
 	/**
+	 * Checks if token is valid.
+	 * 
+	 * @param token Token to validate.
+	 * @return True if valid, false if not.
+	 */
+	boolean isValidToken(String token);
+
+	/**
 	 * Selects only token from a users that are active.
 	 * 
 	 * @return List of all active tokens.

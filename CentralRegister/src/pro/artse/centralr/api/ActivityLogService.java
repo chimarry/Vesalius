@@ -9,12 +9,14 @@ import javax.ws.rs.core.Response;
 import pro.arste.common.result.ResultMessage;
 import pro.artse.centralr.api.HttpResultMessage.OperationType;
 import pro.artse.centralr.managers.IActivityLogManager;
+import pro.artse.centralr.managers.IAuthorizationManager;
 import pro.artse.centralr.managers.ManagerFactory;
 import pro.artse.centralr.models.ActivityLogWrapper;
 
 @Path("activities")
 public class ActivityLogService {
 	private final IActivityLogManager activitylogManger = ManagerFactory.getActivityLogManager();
+	private final IAuthorizationManager authorizationManager = ManagerFactory.getAuthorizationManager();
 
 	/**
 	 * Adds new activity, if user has privilege to do so.
@@ -26,7 +28,8 @@ public class ActivityLogService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response Add(ActivityLogWrapper newActivity, @HeaderParam("token") String token) {
-		// TODO: Add token validation
+		if (!authorizationManager.authorize(token))
+			return HttpResultMessage.unauthorized();
 		ResultMessage<Boolean> resultMessage = activitylogManger.add(newActivity, token);
 		return HttpResultMessage.GetResponse(resultMessage, OperationType.CREATE);
 	}
@@ -40,8 +43,9 @@ public class ActivityLogService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response GetAll(@HeaderParam("token") String token) {
-		// TODO: Add token validation
+		if (!authorizationManager.authorize(token))
+			return HttpResultMessage.unauthorized();
 		List<ActivityLogWrapper> activities = activitylogManger.getAll(token);
-		return HttpResultMessage.GetResponse(activities);
+		return HttpResultMessage.getResponse(activities);
 	}
 }

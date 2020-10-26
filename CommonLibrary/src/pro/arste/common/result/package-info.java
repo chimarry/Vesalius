@@ -1,1 +1,0 @@
-package pro.arste.common.result;

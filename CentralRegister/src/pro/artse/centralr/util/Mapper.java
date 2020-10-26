@@ -13,7 +13,6 @@ import pro.artse.dal.models.ActivityLogDTO.ActivityDTO;
  *
  */
 public class Mapper {
-
 	public static ActivityLogDTO mapToDTO(ActivityLogWrapper wrapper) {
 		return new ActivityLogDTO(LocalDateTime.parse(wrapper.getLogInAt()),
 				LocalDateTime.parse(wrapper.getLogOutAt()));

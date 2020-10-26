@@ -68,4 +68,9 @@ public class TokenService implements ITokenService {
 		return bb.array();
 	}
 
+	@Override
+	public boolean isValidToken(String token) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

@@ -48,8 +48,18 @@ public final class HttpResultMessage {
 	 * @param list List to send over HTTP.
 	 * @return Configured HTTP response. @see Response.Status
 	 */
-	public static <T> Response GetResponse(List<T> list) {
+	public static <T> Response getResponse(List<T> list) {
 		return Response.status(Response.Status.ACCEPTED).entity(list).build();
+	}
+
+	/**
+	 * Configures HTTP response in case that user is not authorized.
+	 * 
+	 * @return Configured HTTP response. @see Response.Status
+	 */
+	public static Response unauthorized() {
+		return Response.status(Response.Status.UNAUTHORIZED).entity("You are not authorized to access Central register")
+				.build();
 	}
 
 	/**
@@ -59,7 +69,7 @@ public final class HttpResultMessage {
 	 * @param result Result of operation.
 	 * @return Configured HTTP response. @see Response.Status
 	 */
-	public static <T> Response GetResponse(ResultMessage<T> result) {
+	public static <T> Response getResponse(ResultMessage<T> result) {
 		if (result.isSuccess())
 			return ok(result, OperationType.UNSPECIFIED);
 		return error(result);
