@@ -9,7 +9,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import pro.artse.user.util.UserAlert;
+import pro.artse.user.errorhandling.UserAlert;
 
 /**
  * Startup application for Standard user application.

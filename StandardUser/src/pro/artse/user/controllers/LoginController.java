@@ -13,9 +13,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
+import pro.artse.user.errorhandling.UserAlert;
+import pro.artse.user.errorhandling.Validator;
 import pro.artse.user.util.StageUtil;
-import pro.artse.user.util.UserAlert;
-import pro.artse.user.util.Validator;
 
 /**
  * Interacts with login form view.
@@ -51,9 +51,10 @@ public class LoginController implements Initializable {
 	private void login(ActionEvent event) {
 		if (Validator.IsNullOrEmpty(passwordBox.getText()))
 			UserAlert.alert(AlertType.ERROR, UserAlert.REQUIRED_FIELDS);
-		else if (!Preferences.userRoot().get("password", "").equals(passwordBox.getText()))
+		else if (!Preferences.userRoot().get("password", "").equals(passwordBox.getText())) {
 			UserAlert.alert(AlertType.ERROR, "Password is invalid.");
-		else {
+			passwordBox.setText("");
+		} else {
 			Preferences.userRoot().put("logInAt", LocalDateTime.now().toString());
 			StageUtil.switchStage(loginButton, "/pro/artse/user/fxml/StandardUserMainForm.fxml");
 		}

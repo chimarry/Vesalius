@@ -25,7 +25,10 @@
         <parameter qname="pns:lastName" xmlns:pns="http://services.tokenserver.artse.pro" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
         <parameter qname="pns:ubn" xmlns:pns="http://services.tokenserver.artse.pro" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
       </operation>
-      <parameter name="allowedMethods" value="generateToken"/>
+      <operation name="isValidToken" qname="operNS:isValidToken" xmlns:operNS="http://services.tokenserver.artse.pro" returnQName="retNS:isValidTokenReturn" xmlns:retNS="http://services.tokenserver.artse.pro" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:token" xmlns:pns="http://services.tokenserver.artse.pro" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="generateToken isValidToken"/>
 
   </service>
 </deployment>

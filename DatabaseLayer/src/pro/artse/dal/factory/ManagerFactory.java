@@ -4,9 +4,8 @@ import pro.artse.dal.managers.*;
 import pro.artse.dal.managers.redis.*;
 
 /**
- * @author Marija
- * Represents dependency factory, that is responsible for creating 
- * managers that work with different type of databases.
+ * @author Marija Represents dependency factory, that is responsible for
+ *         creating managers that work with different type of databases.
  */
 public final class ManagerFactory {
 
@@ -24,13 +23,5 @@ public final class ManagerFactory {
 	 */
 	public static IUserManager getUserManager() {
 		return new UserManager();
-	}
-
-	/**
-	 * @return Manager for manipulation recorded map's location of a user.
-	 * @see LocationManager
-	 */
-	public static ILocationManager getLocationManager() {
-		return new LocationManager();
 	}
 }

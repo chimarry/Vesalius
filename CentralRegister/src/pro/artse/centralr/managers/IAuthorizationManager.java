@@ -1,5 +1,7 @@
 package pro.artse.centralr.managers;
 
+import pro.arste.centralr.errorhandling.CrResultMessage;
+
 public interface IAuthorizationManager {
-	boolean authorize(String token);
+	CrResultMessage<Boolean> authorize(String token);
 }

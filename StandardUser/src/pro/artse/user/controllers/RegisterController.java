@@ -16,12 +16,12 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import pro.arste.common.result.ResultMessage;
+import pro.arste.centralr.errorhandling.CrResultMessage;
 import pro.artse.tokenserver.services.TokenService;
+import pro.artse.user.errorhandling.UserAlert;
+import pro.artse.user.errorhandling.Validator;
 import pro.artse.user.factories.WebServiceFactory;
 import pro.artse.user.util.StageUtil;
-import pro.artse.user.util.UserAlert;
-import pro.artse.user.util.Validator;
 
 /**
  * Responsible for interaction with registration form.
@@ -75,14 +75,14 @@ public class RegisterController implements Initializable {
 			try {
 				jsonResultString = tokenService.generateToken(firstNameBox.getText(), lastNameBox.getText(),
 						ubnBox.getText());
-				ResultMessage<String> token = new Gson().fromJson(jsonResultString,
-						new ResultMessage<String>(null).getClass());
+				CrResultMessage<String> token = new Gson().fromJson(jsonResultString,
+						new CrResultMessage<String>().getClass());
 				Preferences userPreferences = Preferences.userRoot();
 				userPreferences.put("token", token.getResult());
 				if (token.isSuccess()) {
 					StageUtil.switchStage(registerButton, "/pro/artse/user/fxml/LoginDialog.fxml");
 				} else
-					UserAlert.alert(AlertType.ERROR, token.getOperationStatus().toString(),
+					UserAlert.alert(AlertType.ERROR, token.getHttpStatusCode().toString(),
 							"Registration failed." + token.getMessage());
 			} catch (RemoteException e) {
 				UserAlert.alert(AlertType.ERROR, "Unable to connect to server.");

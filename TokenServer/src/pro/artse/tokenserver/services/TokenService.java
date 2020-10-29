@@ -1,6 +1,3 @@
-/**
- * 
- */
 package pro.artse.tokenserver.services;
 
 import java.nio.ByteBuffer;
@@ -8,10 +5,10 @@ import java.util.Base64;
 import java.util.UUID;
 
 import com.google.gson.Gson;
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 
 import pro.arste.common.result.OperationStatus;
 import pro.arste.common.result.ResultMessage;
+import pro.artse.dal.errorhandling.DBResultMessage;
 import pro.artse.dal.factory.ManagerFactory;
 import pro.artse.dal.managers.IUserManager;
 import pro.artse.dal.models.User;
@@ -37,6 +34,8 @@ public class TokenService implements ITokenService {
 	@Override
 	public String generateToken(String firstName, String lastName, String ubn) {
 		Gson serializer = new Gson();
+		serializer.serializeNulls();
+
 		// Validate ubn
 		if (ubn == null || ubn.isEmpty())
 			return serializer.toJson(new ResultMessage<String>(OperationStatus.USER_ERROR));
@@ -47,13 +46,16 @@ public class TokenService implements ITokenService {
 
 		// Save information about the user
 		User user = Mapper.mapFrom(new Credentials(firstName, lastName, ubn), token);
-		boolean isAdded = userManager.add(user);
+		DBResultMessage<Boolean> isAdded = userManager.add(user);
+		return serializer.toJson(Mapper.mapFrom(isAdded));
+	}
 
-		if (isAdded)
-			return serializer.toJson(new ResultMessage<String>(token, OperationStatus.SUCCESS));
-		else
-			return serializer.toJson(new ResultMessage<String>(OperationStatus.UNKNOWN_ERROR));
-
+	@Override
+	public String isValidToken(String token) {
+		Gson serializer = new Gson();
+		serializer.serializeNulls();
+		DBResultMessage<Boolean> isValid = userManager.isValidToken(token);
+		return serializer.toJson(Mapper.mapFrom(isValid));
 	}
 
 	/**
@@ -66,11 +68,5 @@ public class TokenService implements ITokenService {
 		bb.putLong(uuid.getMostSignificantBits());
 		bb.putLong(uuid.getLeastSignificantBits());
 		return bb.array();
-	}
-
-	@Override
-	public boolean isValidToken(String token) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 }

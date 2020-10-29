@@ -1,5 +1,6 @@
 package pro.artse.user.models;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
@@ -11,7 +12,7 @@ import java.time.temporal.ChronoUnit;
  * @author Marija
  *
  */
-public class ActivityLog {
+public class ActivityLog implements Serializable {
 
 	/**
 	 * When did user log in?
@@ -29,6 +30,10 @@ public class ActivityLog {
 
 	private double totalTime;
 
+	public ActivityLog() {
+
+	}
+
 	/**
 	 * Creates activity log object from date-time objects. If strings cannot be
 	 * parsed, result is set to Unknown.
@@ -40,6 +45,14 @@ public class ActivityLog {
 		super();
 		this.logInAt = logInAt.toString();
 		this.logOutAt = logOutAt.toString();
+	}
+
+	public void setLogInAt(String logInAt) {
+		this.logInAt = logInAt;
+	}
+
+	public void setLogOutAt(String logOutAt) {
+		this.logOutAt = logOutAt;
 	}
 
 	public String getLogInAt() {

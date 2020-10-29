@@ -1,4 +1,4 @@
-package pro.artse.user.util;
+package pro.artse.user.errorhandling;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;

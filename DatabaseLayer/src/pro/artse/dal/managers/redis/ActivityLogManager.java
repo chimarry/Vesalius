@@ -1,20 +1,19 @@
 package pro.artse.dal.managers.redis;
 
-import java.io.Console;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import pro.artse.dal.errorhandling.DBResultMessage;
+import pro.artse.dal.errorhandling.DbStatus;
+import pro.artse.dal.errorhandling.ErrorHandler;
 import pro.artse.dal.managers.IActivityLogManager;
 import pro.artse.dal.models.*;
 import pro.artse.dal.models.ActivityLogDTO.ActivityDTO;
 import pro.artse.dal.util.RedisConnector;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.exceptions.JedisConnectionException;
 
 /**
  * Implements IActivityLogManager using Redis database.
@@ -32,31 +31,36 @@ public class ActivityLogManager implements IActivityLogManager {
 	 * Adds user's activity in Redis database.
 	 */
 	@Override
-	public boolean add(ActivityLogDTO userActivity) {
+	public DBResultMessage<Boolean> add(ActivityLogDTO userActivity) {
 		try (Jedis jedis = RedisConnector.createConnection().getResource()) {
 			String key = userActivity.getToken() + ACTIVITIES_SUFFIX;
 			String value = userActivity.toString();
-			jedis.rpush(key, value);
+			long status = jedis.rpush(key, value);
+			if (status == RedisConnector.ERROR)
+				return new DBResultMessage<Boolean>(DbStatus.UNKNOWN_ERROR);
+			return new DBResultMessage<Boolean>(true, DbStatus.SUCCESS);
 		} catch (DateTimeParseException e) {
-			return false;
+			return ErrorHandler.handle(e);
+		} catch (JedisConnectionException e) {
+			return ErrorHandler.handle(e);
 		}
-		return true;
 	}
 
 	/**
 	 * Returns list of user's activities.
 	 */
-	public List<ActivityDTO> getAll(String token) {
+	public DBResultMessage<List<ActivityDTO>> getAll(String token) {
 		List<ActivityDTO> activities = new ArrayList<>();
 		try (Jedis jedis = RedisConnector.createConnection().getResource()) {
 			String key = token + ACTIVITIES_SUFFIX;
 			activities = jedis.lrange(key, BEGIN, END).stream().map(x -> new ActivityLogDTO.ActivityDTO(x))
 					.collect(Collectors.toCollection(ArrayList<ActivityDTO>::new));
 			;
-
-			return activities;
+			return new DBResultMessage<List<ActivityDTO>>(activities, DbStatus.SUCCESS);
 		} catch (DateTimeParseException e) {
-			return activities;
+			return ErrorHandler.handle(e, activities);
+		} catch (JedisConnectionException e) {
+			return ErrorHandler.handle(e, activities);
 		}
 	}
 }

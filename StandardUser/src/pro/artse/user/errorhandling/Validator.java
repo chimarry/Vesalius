@@ -1,4 +1,4 @@
-package pro.artse.user.util;
+package pro.artse.user.errorhandling;
 
 /**
  * Custom validation for some objects.

@@ -7,8 +7,8 @@
   <ns1:parameter name="dotNetSoapEncFix" value="true"/>
   <ns1:parameter name="enableNamespacePrefixOptimization" value="false"/>
   <ns1:parameter name="sendXMLDeclaration" value="true"/>
-  <ns1:parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
   <ns1:parameter name="sendXsiTypes" value="true"/>
+  <ns1:parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
   <ns1:requestFlow>
    <ns1:handler type="java:org.apache.axis.handlers.JWSHandler">
     <ns1:parameter name="scope" value="session"/>
@@ -38,7 +38,10 @@
    <ns2:parameter qname="ns1:lastName" type="xsd:string"/>
    <ns2:parameter qname="ns1:ubn" type="xsd:string"/>
   </ns2:operation>
-  <ns1:parameter name="allowedMethods" value="generateToken"/>
+  <ns1:operation name="isValidToken" qname="ns2:isValidToken" returnQName="ns2:isValidTokenReturn" returnType="xsd:string" soapAction="" xmlns:ns2="http://services.tokenserver.artse.pro" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns2:token" type="xsd:string"/>
+  </ns1:operation>
+  <ns1:parameter name="allowedMethods" value="generateToken isValidToken"/>
   <ns1:parameter name="typeMappingVersion" value="1.2"/>
   <ns1:parameter name="wsdlPortType" value="TokenService"/>
   <ns1:parameter name="className" value="pro.artse.tokenserver.services.TokenService"/>

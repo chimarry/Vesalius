@@ -2,6 +2,7 @@ package pro.artse.dal.managers;
 
 import java.util.List;
 
+import pro.artse.dal.errorhandling.DBResultMessage;
 import pro.artse.dal.models.BasicUserInfo;
 import pro.artse.dal.models.User;
 
@@ -17,7 +18,7 @@ public interface IUserManager {
 	 *             mandatory.
 	 * @return True if user is added, false if not.
 	 */
-	boolean add(User user);
+	DBResultMessage<Boolean> add(User user);
 
 	/**
 	 * Deactivates user's token.
@@ -25,7 +26,7 @@ public interface IUserManager {
 	 * @param token Unique identifier of an user.
 	 * @return True if token is deactivated, false if not.
 	 */
-	boolean deactivate(String token);
+	DBResultMessage<Boolean> deactivate(String token);
 
 	/**
 	 * Checks if token is valid.
@@ -33,12 +34,12 @@ public interface IUserManager {
 	 * @param token Token to validate.
 	 * @return True if valid, false if not.
 	 */
-	boolean isValidToken(String token);
+	DBResultMessage<Boolean> isValidToken(String token);
 
 	/**
 	 * Selects only token from a users that are active.
 	 * 
 	 * @return List of all active tokens.
 	 */
-	List<BasicUserInfo> GetAllAllowedInformation();
+	DBResultMessage<List<BasicUserInfo>> GetAllAllowedInformation();
 }

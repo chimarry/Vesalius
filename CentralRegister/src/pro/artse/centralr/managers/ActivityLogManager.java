@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import pro.arste.common.result.OperationStatus;
-import pro.arste.common.result.ResultMessage;
+import pro.arste.centralr.errorhandling.CrResultMessage;
 import pro.artse.centralr.models.ActivityLogWrapper;
 import pro.artse.centralr.util.Mapper;
+import pro.artse.dal.errorhandling.DBResultMessage;
 import pro.artse.dal.factory.ManagerFactory;
 import pro.artse.dal.managers.IActivityLogManager;
 import pro.artse.dal.models.ActivityLogDTO;
@@ -18,21 +18,20 @@ public class ActivityLogManager implements pro.artse.centralr.managers.IActivity
 	private final IActivityLogManager activityLogManager = ManagerFactory.getActivityLogManager();
 
 	@Override
-	public ResultMessage<Boolean> add(ActivityLogWrapper activity, String token) {
+	public CrResultMessage<Boolean> add(ActivityLogWrapper activity, String token) {
 		ActivityLogDTO item = Mapper.mapToDTO(activity);
 		item.setToken(token);
 
-		Boolean isAdded = activityLogManager.add(item);
-		if (isAdded)
-			return new ResultMessage<Boolean>(isAdded, OperationStatus.SUCCESS);
-		else
-			return new ResultMessage<Boolean>(isAdded, OperationStatus.SERVER_ERROR);
+		DBResultMessage<Boolean> isAdded = activityLogManager.add(item);
+		return Mapper.mapFrom(isAdded);
 	}
 
 	@Override
-	public List<ActivityLogWrapper> getAll(String token) {
-		List<ActivityDTO> activities = activityLogManager.getAll(token);
-		return activities.stream().map(x -> Mapper.mapToWrapper(x))
+	public CrResultMessage<List<ActivityLogWrapper>> getAll(String token) {
+		DBResultMessage<List<ActivityDTO>> activities = activityLogManager.getAll(token);
+		List<ActivityLogWrapper> wrappedActivities = activities.getResult().stream().map(x -> Mapper.mapToWrapper(x))
 				.collect(Collectors.toCollection(ArrayList<ActivityLogWrapper>::new));
+		return new CrResultMessage<List<ActivityLogWrapper>>(wrappedActivities, Mapper.mapStatus(activities.getStatus()),
+				activities.getMessage());
 	}
 }

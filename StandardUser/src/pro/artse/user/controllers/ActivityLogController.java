@@ -14,8 +14,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import pro.artse.user.centralr.services.IActivityLogService;
 import pro.artse.user.centralr.services.ManagersFactory;
+import pro.artse.user.errorhandling.UserAlert;
 import pro.artse.user.models.ActivityLog;
-import pro.artse.user.util.UserAlert;
 
 /**
  * Interacts with activity log view.

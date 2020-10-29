@@ -70,7 +70,7 @@ public class JsonUtil {
 	 * @param element Element to map.
 	 * @return JSON string.
 	 */
-	public static <T> String mapToJson(T element, JsonSerializer<T> serializer, Class t) {
+	public static <T> String mapToJson(T element, JsonSerializer<T> serializer, Class<T> t) {
 		GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(t, serializer);
 		Gson gson = builder.create();

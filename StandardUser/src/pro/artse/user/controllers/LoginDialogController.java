@@ -12,9 +12,9 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
+import pro.artse.user.errorhandling.UserAlert;
+import pro.artse.user.errorhandling.Validator;
 import pro.artse.user.util.StageUtil;
-import pro.artse.user.util.UserAlert;
-import pro.artse.user.util.Validator;
 
 /**
  * Interaction with login dialog window.
@@ -52,9 +52,10 @@ public class LoginDialogController implements Initializable {
 	 * @param event
 	 */
 	private void login(ActionEvent event) {
-		if (!areValidPasswords())
+		if (!areValidPasswords()) {
 			UserAlert.alert(AlertType.ERROR, "Passwords do not match.");
-		else {
+			repeatPasswordField.setText("");
+		} else {
 			Preferences.userRoot().put("password", passwordField.getText());
 			Preferences.userRoot().put("logInAt", LocalDateTime.now().toString());
 			StageUtil.switchStage(loginButton, "/pro/artse/user/fxml/StandardUserMainForm.fxml");

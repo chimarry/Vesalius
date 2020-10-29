@@ -1,7 +1,7 @@
 package pro.artse.centralr.managers;
 
-import pro.arste.common.result.ResultMessage;
+import pro.arste.centralr.errorhandling.CrResultMessage;
 
 public interface IUserManager {
-	ResultMessage<Boolean> unregister(String token);
+	CrResultMessage<Boolean> unregister(String token);
 }

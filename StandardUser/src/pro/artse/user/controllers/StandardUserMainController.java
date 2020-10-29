@@ -15,9 +15,10 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import pro.artse.user.centralr.services.IActivityLogService;
 import pro.artse.user.centralr.services.ManagersFactory;
+import pro.artse.user.errorhandling.SUResultMessage;
+import pro.artse.user.errorhandling.UserAlert;
 import pro.artse.user.models.ActivityLog;
 import pro.artse.user.util.StageUtil;
-import pro.artse.user.util.UserAlert;
 
 public class StandardUserMainController implements Initializable {
 	private static final IActivityLogService activityService = ManagersFactory.getActivityLogService();
@@ -85,11 +86,12 @@ public class StandardUserMainController implements Initializable {
 		LocalDateTime logOutAt = LocalDateTime.now().plusHours(2);
 		ActivityLog activityLog = new ActivityLog(logInAt, logOutAt);
 
-		Task<Boolean> task = new Task<Boolean>() {
+		Task<SUResultMessage<Boolean>> task = new Task<SUResultMessage<Boolean>>() {
 			@Override
-			public Boolean call() throws Exception {
+			public SUResultMessage<Boolean> call() throws Exception {
 
-				boolean isAdded = activityService.add(activityLog, Preferences.userRoot().get("token", null));
+				SUResultMessage<Boolean> isAdded = activityService.add(activityLog,
+						Preferences.userRoot().get("token", null));
 				return isAdded;
 			}
 		};

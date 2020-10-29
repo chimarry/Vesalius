@@ -4,24 +4,25 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.glassfish.json.JsonUtil;
-
-import pro.arste.common.result.ResultMessage;
-import pro.artse.centralr.managers.IAuthorizationManager;
+import pro.arste.centralr.errorhandling.CrResultMessage;
+import pro.arste.centralr.errorhandling.ErrorHandler;
 import pro.artse.centralr.managers.IUserManager;
 import pro.artse.centralr.managers.ManagerFactory;
+import pro.artse.centralr.util.UnauthorizedException;
 
 @Path("users")
-public class UserService {
+public class UserService extends BaseService {
 	private final IUserManager userManager = ManagerFactory.getUserManager();
-	private final IAuthorizationManager authorizationManager = ManagerFactory.getAuthorizationManager();
 
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response unregister(@HeaderParam("token") String token) {
-		if (!authorizationManager.authorize(token))
-			return HttpResultMessage.unauthorized();
-		ResultMessage<Boolean> isUnregistered = userManager.unregister(token);
-		return HttpResultMessage.getResponse(isUnregistered);
+		try {
+			authorize(token);
+			CrResultMessage<Boolean> isUnregistered = userManager.unregister(token);
+			return isUnregistered.buildResponse();
+		} catch (UnauthorizedException ex) {
+			return ErrorHandler.handle(ex).buildResponse();
+		}
 	}
 }

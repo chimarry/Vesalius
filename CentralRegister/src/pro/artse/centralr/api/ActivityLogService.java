@@ -6,17 +6,17 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import pro.arste.common.result.ResultMessage;
-import pro.artse.centralr.api.HttpResultMessage.OperationType;
+import pro.arste.centralr.errorhandling.CrResultMessage;
+import pro.arste.centralr.errorhandling.ErrorHandler;
 import pro.artse.centralr.managers.IActivityLogManager;
 import pro.artse.centralr.managers.IAuthorizationManager;
 import pro.artse.centralr.managers.ManagerFactory;
 import pro.artse.centralr.models.ActivityLogWrapper;
+import pro.artse.centralr.util.UnauthorizedException;
 
 @Path("activities")
-public class ActivityLogService {
+public class ActivityLogService extends BaseService {
 	private final IActivityLogManager activitylogManger = ManagerFactory.getActivityLogManager();
-	private final IAuthorizationManager authorizationManager = ManagerFactory.getAuthorizationManager();
 
 	/**
 	 * Adds new activity, if user has privilege to do so.
@@ -27,11 +27,15 @@ public class ActivityLogService {
 	 */
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response Add(ActivityLogWrapper newActivity, @HeaderParam("token") String token) {
-		if (!authorizationManager.authorize(token))
-			return HttpResultMessage.unauthorized();
-		ResultMessage<Boolean> resultMessage = activitylogManger.add(newActivity, token);
-		return HttpResultMessage.GetResponse(resultMessage, OperationType.CREATE);
+		try {
+			authorize(token);
+			CrResultMessage<Boolean> resultMessage = activitylogManger.add(newActivity, token);
+			return resultMessage.buildResponse();
+		} catch (UnauthorizedException e) {
+			return ErrorHandler.handle(e).buildResponse();
+		}
 	}
 
 	/**
@@ -43,9 +47,12 @@ public class ActivityLogService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response GetAll(@HeaderParam("token") String token) {
-		if (!authorizationManager.authorize(token))
-			return HttpResultMessage.unauthorized();
-		List<ActivityLogWrapper> activities = activitylogManger.getAll(token);
-		return HttpResultMessage.getResponse(activities);
+		try {
+			authorize(token);
+			CrResultMessage<List<ActivityLogWrapper>> activities = activitylogManger.getAll(token);
+			return activities.buildResponse();
+		} catch (UnauthorizedException e) {
+			return ErrorHandler.handle(e).buildResponse();
+		}
 	}
 }

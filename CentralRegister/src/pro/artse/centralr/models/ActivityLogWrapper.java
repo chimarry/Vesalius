@@ -1,7 +1,6 @@
 package pro.artse.centralr.models;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class ActivityLogWrapper {
 	/**
@@ -57,13 +56,5 @@ public class ActivityLogWrapper {
 
 	public void setLogOutAtAsDateTime(LocalDateTime logOutAt) {
 		this.logOutAt = logOutAt.toString();
-	}
-
-	public LocalDateTime getLogInAtAsDateTime() {
-		return LocalDateTime.parse(logInAt);
-	}
-
-	public LocalDateTime getLogOutAtAsDateTime() {
-		return LocalDateTime.parse(logOutAt);
 	}
 }

@@ -1,5 +1,10 @@
 package pro.artse.centralr.managers;
 
+import javax.xml.rpc.ServiceException;
+
+import pro.artse.tokenserver.services.TokenService;
+import pro.artse.tokenserver.services.TokenServiceServiceLocator;
+
 /**
  * Resolves dependencies.
  * 
@@ -21,8 +26,9 @@ public final class ManagerFactory {
 	 * Creates implementation for IAuthorizationManager.
 	 * 
 	 * @return @see AuthorizationManager
+	 * @throws ServiceException 
 	 */
-	public static IAuthorizationManager getAuthorizationManager() {
+	public static IAuthorizationManager getAuthorizationManager() throws ServiceException {
 		return new AuthorizationManager();
 	}
 
@@ -33,5 +39,15 @@ public final class ManagerFactory {
 	 */
 	public static IUserManager getUserManager() {
 		return new UserManager();
+	}
+
+	/**
+	 * 
+	 * @return Configured token service.
+	 * @throws ServiceException
+	 */
+	public static TokenService geTokenService() throws ServiceException {
+		TokenServiceServiceLocator locator = new TokenServiceServiceLocator();
+		return locator.getTokenService();
 	}
 }

@@ -14,8 +14,9 @@ public interface ITokenService {
 
 	/**
 	 * Checks validity of a token.
+	 * 
 	 * @param token
 	 * @return
 	 */
-	boolean isValidToken(String token);
+	String isValidToken(String token);
 }

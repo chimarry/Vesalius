@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import pro.artse.user.errorhandling.UserAlert;
 
 /**
  * Manipulates scenes and stages.
