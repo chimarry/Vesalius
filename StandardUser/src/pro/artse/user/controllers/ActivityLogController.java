@@ -14,6 +14,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import pro.artse.user.centralr.services.IActivityLogService;
 import pro.artse.user.centralr.services.ManagersFactory;
+import pro.artse.user.errorhandling.SUResultMessage;
 import pro.artse.user.errorhandling.UserAlert;
 import pro.artse.user.models.ActivityLog;
 
@@ -45,17 +46,23 @@ public class ActivityLogController implements Initializable {
 		logOutTime.setCellValueFactory(new PropertyValueFactory<>("LogOutAt"));
 		totalTimeSpent.setCellValueFactory(new PropertyValueFactory<>("TotalTime"));
 
-		Task<List<ActivityLog>> task = new Task<List<ActivityLog>>() {
+		Task<SUResultMessage<ActivityLog[]>> task = new Task<SUResultMessage<ActivityLog[]>>() {
 			@Override
-			public List<ActivityLog> call() throws Exception {
-
-				List<ActivityLog> data = activityService.getAll(Preferences.userRoot().get("token", null));
+			public SUResultMessage<ActivityLog[]> call() throws Exception {
+				SUResultMessage<ActivityLog[]> data = activityService.getAll(Preferences.userRoot().get("token", null));
 				return data;
 			}
 		};
-		task.setOnSucceeded(e -> activityLog.getItems().setAll(task.getValue()));
-		task.setOnFailed(e -> UserAlert.alert(AlertType.ERROR, UserAlert.CENTRAL_REGISTER_CONNECTION_PROBLEM));
+		task.setOnSucceeded(e -> {
+			SUResultMessage<ActivityLog[]> resultMessage = task.getValue();
+			if (resultMessage.isSuccess())
+				activityLog.getItems().setAll(resultMessage.getResult());
+			else
+				UserAlert.processResult(resultMessage);
+		});
+		task.setOnFailed(e -> {
+			UserAlert.alert(AlertType.ERROR, UserAlert.CENTRAL_REGISTER_CONNECTION_PROBLEM);
+		});
 		new Thread(task).start();
-
 	}
 }

@@ -12,7 +12,6 @@ import pro.artse.centralr.managers.IActivityLogManager;
 import pro.artse.centralr.managers.IAuthorizationManager;
 import pro.artse.centralr.managers.ManagerFactory;
 import pro.artse.centralr.models.ActivityLogWrapper;
-import pro.artse.centralr.util.UnauthorizedException;
 
 @Path("activities")
 public class ActivityLogService extends BaseService {
@@ -28,12 +27,12 @@ public class ActivityLogService extends BaseService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response Add(ActivityLogWrapper newActivity, @HeaderParam("token") String token) {
+	public Response add(ActivityLogWrapper newActivity, @HeaderParam("token") String token) {
 		try {
 			authorize(token);
 			CrResultMessage<Boolean> resultMessage = activitylogManger.add(newActivity, token);
 			return resultMessage.buildResponse();
-		} catch (UnauthorizedException e) {
+		} catch (Exception e) {
 			return ErrorHandler.handle(e).buildResponse();
 		}
 	}
@@ -46,12 +45,12 @@ public class ActivityLogService extends BaseService {
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response GetAll(@HeaderParam("token") String token) {
+	public Response getAll(@HeaderParam("token") String token) {
 		try {
 			authorize(token);
 			CrResultMessage<List<ActivityLogWrapper>> activities = activitylogManger.getAll(token);
 			return activities.buildResponse();
-		} catch (UnauthorizedException e) {
+		} catch (Exception e) {
 			return ErrorHandler.handle(e).buildResponse();
 		}
 	}

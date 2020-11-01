@@ -43,4 +43,10 @@ public final class UserAlert {
 		alert(AlertType.ERROR, "Exception occured.");
 	}
 
+	public static <T> void processResult(SUResultMessage<T> resultMessage) {
+		if (resultMessage.isSuccess())
+			UserAlert.alert(AlertType.INFORMATION, resultMessage.getStatus().toString(), resultMessage.getMessage());
+		else
+			UserAlert.alert(AlertType.ERROR, resultMessage.getStatus().toString(), resultMessage.getMessage());
+	}
 }

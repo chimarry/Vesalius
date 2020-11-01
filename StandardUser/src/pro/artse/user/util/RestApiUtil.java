@@ -10,6 +10,8 @@ import java.net.URL;
 import com.google.gson.*;
 
 public class RestApiUtil {
+	public static int SUCCESS_HTTP_CODE_MAX = 299;
+
 	/**
 	 * Opens and configures HTTP URL connection.
 	 * 
@@ -29,8 +31,11 @@ public class RestApiUtil {
 			connection.setRequestProperty("token", token);
 			return connection;
 		} catch (FileNotFoundException e) {
+			// TODO: Add logger
 			return null;
 		} catch (IOException e) {
+			// TODO: Add logger
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -43,6 +48,8 @@ public class RestApiUtil {
 	 * @throws IOException
 	 */
 	public static BufferedReader getReader(HttpURLConnection connection) throws IOException {
-		return new BufferedReader(new InputStreamReader((connection.getInputStream())));
+		return new BufferedReader(new InputStreamReader(
+				(connection.getResponseCode() <= SUCCESS_HTTP_CODE_MAX ? connection.getInputStream()
+						: connection.getErrorStream())));
 	}
 }

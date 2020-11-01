@@ -9,11 +9,11 @@ public class CrResultMessage<T> {
 	public static final String EXISTS_MESSAGE = "Resource already exists.";
 	public static final String NOT_FOUND = "Resource does not exists.";
 	public static final String ACCEPTED = "Successful.";
-	public static final String INTERNAL_SERVER_ERROR = "Error happend on server. Please, try later.";
-	public static final String UNKNOWN_ERROR = "Error happend without known cause. Please contact our support.";
+	public static final String INTERNAL_SERVER_ERROR = "Error happend on a server. Please, try again later.";
+	public static final String UNKNOWN_ERROR = "Error happend without a known cause. Please contact our support.";
 	public static final String BAD_REQUEST = "Inputed data is not valid.";
 	public static final String UNAUTHORIZED = "You are not authorized to access Central register";
-
+	
 	private T result;
 	private Status httpStatusCode;
 	private String message;
@@ -30,6 +30,10 @@ public class CrResultMessage<T> {
 	public CrResultMessage(T result, Status code) {
 		this(code);
 		this.result = result;
+	}
+
+	public CrResultMessage(Status status, String message) {
+		this(null, status, message);
 	}
 
 	public CrResultMessage(Status status) {

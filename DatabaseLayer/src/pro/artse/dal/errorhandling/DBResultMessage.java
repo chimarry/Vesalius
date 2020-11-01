@@ -43,4 +43,8 @@ public class DBResultMessage<T> {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+
+	public boolean isSuccess() {
+		return DbStatus.SUCCESS == status;
+	}
 }

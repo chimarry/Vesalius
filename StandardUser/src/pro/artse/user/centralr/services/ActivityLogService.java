@@ -16,6 +16,7 @@ import pro.arste.centralr.errorhandling.CrResultMessage;
 import pro.artse.centralr.api.ApiPaths;
 import pro.artse.centralr.models.ActivityLogWrapper;
 import pro.artse.centralr.util.Mapper;
+import pro.artse.user.errorhandling.ErrorHandler;
 import pro.artse.user.errorhandling.SUResultMessage;
 import pro.artse.user.errorhandling.SUStatus;
 import pro.artse.user.models.ActivityLog;
@@ -32,21 +33,21 @@ public class ActivityLogService implements IActivityLogService {
 	 * @throws IOException
 	 */
 	@Override
-	public List<ActivityLog> getAll(String token) throws IOException {
+	public SUResultMessage<ActivityLog[]> getAll(String token) throws IOException {
 		HttpURLConnection connection = RestApiUtil.openConnectionJSON(token, ApiPaths.GET_ALL_ACTIVITIES, "GET", false);
 		try (BufferedReader bufferedReader = RestApiUtil.getReader(connection)) {
 			String resultString = bufferedReader.readLine();
 			SUResultMessage<ActivityLog[]> resultActivities = pro.artse.user.util.Mapper.mapFromCR(resultString,
 					ActivityLog[].class);
 			connection.disconnect();
-			return Arrays.asList(resultActivities.getResult());
+			return resultActivities;
 		} catch (IOException e) {
-			e.printStackTrace();
+			// TODO Add logger
 			connection.disconnect();
 			throw e;
 		} catch (Exception e) {
+			// TODO Add logger
 			connection.disconnect();
-			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -58,13 +59,13 @@ public class ActivityLogService implements IActivityLogService {
 		connection.setRequestProperty("Content-Type", "application/json");
 		ActivityLogWrapper wrapper = pro.artse.user.util.Mapper.mapToWrapper(activityLog);
 		String jsonString = JsonUtil.mapToJson(wrapper);
+
 		try (OutputStream os = connection.getOutputStream()) {
 			os.write(jsonString.getBytes());
 			os.flush();
 		} catch (Exception e) {
-			e.printStackTrace();
-			connection.disconnect();
-			return null;
+			// TODO: Add logger
+			return ErrorHandler.handle(e, connection);
 		}
 		try (BufferedReader reader = RestApiUtil.getReader(connection)) {
 			String resultString = reader.readLine();
@@ -73,9 +74,8 @@ public class ActivityLogService implements IActivityLogService {
 			connection.disconnect();
 			return activityResult;
 		} catch (Exception e) {
-			e.printStackTrace();
-			connection.disconnect();
-			return null;
+			// TODO: Add logger
+			return ErrorHandler.handle(e, connection);
 		}
 	}
 }

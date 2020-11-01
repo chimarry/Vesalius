@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import pro.arste.centralr.errorhandling.CrResultMessage;
 import pro.artse.centralr.models.ActivityLogWrapper;
 import pro.artse.centralr.util.Mapper;
@@ -29,9 +31,10 @@ public class ActivityLogManager implements pro.artse.centralr.managers.IActivity
 	@Override
 	public CrResultMessage<List<ActivityLogWrapper>> getAll(String token) {
 		DBResultMessage<List<ActivityDTO>> activities = activityLogManager.getAll(token);
-		List<ActivityLogWrapper> wrappedActivities = activities.getResult().stream().map(x -> Mapper.mapToWrapper(x))
-				.collect(Collectors.toCollection(ArrayList<ActivityLogWrapper>::new));
-		return new CrResultMessage<List<ActivityLogWrapper>>(wrappedActivities, Mapper.mapStatus(activities.getStatus()),
-				activities.getMessage());
+		List<ActivityLogWrapper> wrappedActivities = activities.isSuccess() ? activities.getResult().stream()
+				.map(x -> Mapper.mapToWrapper(x)).collect(Collectors.toCollection(ArrayList<ActivityLogWrapper>::new))
+				: null;
+		return new CrResultMessage<List<ActivityLogWrapper>>(wrappedActivities,
+				Mapper.mapStatus(activities.getStatus()), activities.getMessage());
 	}
 }

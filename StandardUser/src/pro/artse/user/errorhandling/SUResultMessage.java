@@ -47,4 +47,8 @@ public class SUResultMessage<T> {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+
+	public boolean isSuccess() {
+		return status == SUStatus.SUCCESS;
+	}
 }
