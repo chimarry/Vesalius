@@ -6,12 +6,13 @@ public class KeyUserInfo implements Serializable {
 
 	private String token;
 
-	private CovidStatus status;
+	// TODO: Maybe use CovidStatus - nicer
+	private int status;
 
-	public KeyUserInfo(String token, CovidStatus status) {
+	public KeyUserInfo(String token, int status) {
 		this();
-		this.token = token;
-		this.status = status;
+		setToken(token);
+		setStatus(status);
 	}
 
 	public KeyUserInfo() {
@@ -26,12 +27,24 @@ public class KeyUserInfo implements Serializable {
 		this.token = token;
 	}
 
-	public CovidStatus getStatus() {
+	public int getStatus() {
 		return status;
 	}
 
-	public void setStatus(CovidStatus status) {
-		this.status = status;
+	public String getCovidStatus() {
+		switch (status) {
+		case 0:
+			return "Not infected";
+		case 1:
+			return "Infected";
+		case 2:
+			return "Potentially infected";
+		default:
+			return "Unknown";
+		}
 	}
 
+	public void setStatus(int status) {
+		this.status = status;
+	}
 }
