@@ -27,7 +27,7 @@ public class BaseService {
 	public void authorize(String token) throws UnauthorizedException {
 		CrResultMessage<Boolean> authorized = authorizationManager.authorize(token);
 
-		// User is not authorized
+		// UserDTO is not authorized
 		if (!authorized.isSuccess())
 			throw new UnauthorizedException(authorized.getHttpStatusCode());
 	}

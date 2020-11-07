@@ -4,19 +4,13 @@
 Built on Apr 22, 2006 (06:55:48 PDT)-->
  <wsdl:types>
   <schema elementFormDefault="qualified" targetNamespace="http://services.tokenserver.artse.pro" xmlns="http://www.w3.org/2001/XMLSchema">
-   <element name="generateToken">
-    <complexType>
-     <sequence>
-      <element name="firstName" type="xsd:string"/>
-      <element name="lastName" type="xsd:string"/>
-      <element name="ubn" type="xsd:string"/>
-     </sequence>
-    </complexType>
+   <element name="getAll">
+    <complexType/>
    </element>
-   <element name="generateTokenResponse">
+   <element name="getAllResponse">
     <complexType>
      <sequence>
-      <element name="generateTokenReturn" type="xsd:string"/>
+      <element name="getAllReturn" type="xsd:string"/>
      </sequence>
     </complexType>
    </element>
@@ -34,8 +28,32 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
      </sequence>
     </complexType>
    </element>
+   <element name="generateToken">
+    <complexType>
+     <sequence>
+      <element name="firstName" type="xsd:string"/>
+      <element name="lastName" type="xsd:string"/>
+      <element name="ubn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="generateTokenResponse">
+    <complexType>
+     <sequence>
+      <element name="generateTokenReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
   </schema>
  </wsdl:types>
+
+   <wsdl:message name="getAllRequest">
+
+      <wsdl:part element="impl:getAll" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
 
    <wsdl:message name="isValidTokenRequest">
 
@@ -69,15 +87,23 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
    </wsdl:message>
 
+   <wsdl:message name="getAllResponse">
+
+      <wsdl:part element="impl:getAllResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
    <wsdl:portType name="TokenService">
 
-      <wsdl:operation name="generateToken">
+      <wsdl:operation name="getAll">
 
-         <wsdl:input message="impl:generateTokenRequest" name="generateTokenRequest">
+         <wsdl:input message="impl:getAllRequest" name="getAllRequest">
 
        </wsdl:input>
 
-         <wsdl:output message="impl:generateTokenResponse" name="generateTokenResponse">
+         <wsdl:output message="impl:getAllResponse" name="getAllResponse">
 
        </wsdl:output>
 
@@ -95,23 +121,35 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       </wsdl:operation>
 
+      <wsdl:operation name="generateToken">
+
+         <wsdl:input message="impl:generateTokenRequest" name="generateTokenRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:generateTokenResponse" name="generateTokenResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
    </wsdl:portType>
 
    <wsdl:binding name="TokenServiceSoapBinding" type="impl:TokenService">
 
       <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
 
-      <wsdl:operation name="generateToken">
+      <wsdl:operation name="getAll">
 
          <wsdlsoap:operation soapAction=""/>
 
-         <wsdl:input name="generateTokenRequest">
+         <wsdl:input name="getAllRequest">
 
             <wsdlsoap:body use="literal"/>
 
          </wsdl:input>
 
-         <wsdl:output name="generateTokenResponse">
+         <wsdl:output name="getAllResponse">
 
             <wsdlsoap:body use="literal"/>
 
@@ -130,6 +168,24 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
          </wsdl:input>
 
          <wsdl:output name="isValidTokenResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="generateToken">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="generateTokenRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="generateTokenResponse">
 
             <wsdlsoap:body use="literal"/>
 

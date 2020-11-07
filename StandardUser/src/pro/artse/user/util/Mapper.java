@@ -34,11 +34,11 @@ public final class Mapper {
 		}.getType());
 	}
 
-	public static final <T> SUResultMessage<T> mapFromTS(String resultMessage, Type resultType) {
-		// TODO: Fix deserialization
-		CustomTsDeserializer<T> deserializer = new CustomTsDeserializer<T>(resultType);
+	public static final <T> SUResultMessage<T> mapFromTs(String resultMessage, Type resultType) {
 		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.registerTypeAdapter(new SUResultMessage<T>().getClass(), deserializer);
+		CustomTsDeserializer<T> deserializer = new CustomTsDeserializer<T>(resultType);
+		gsonBuilder.registerTypeAdapter(new TypeToken<SUResultMessage<T>>() {
+		}.getType(), deserializer);
 
 		Gson customGson = gsonBuilder.create();
 		return customGson.fromJson(resultMessage, new TypeToken<SUResultMessage<T>>() {
@@ -63,7 +63,7 @@ public final class Mapper {
 	}
 
 	public static SUStatus mapTsStatus(String status) {
-		switch (status) {
+		switch (status.toUpperCase()) {
 		case "SERVER_ERROR":
 			return SUStatus.SERVER_ERROR;
 		case "SUCCESS":
@@ -78,5 +78,4 @@ public final class Mapper {
 			return SUStatus.SERVER_ERROR;
 		}
 	}
-
 }

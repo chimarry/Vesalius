@@ -5,7 +5,8 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="loginPane"  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="301.0" prefWidth="486.0" style="-fx-background-color: #04121c;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pro.artse.user.controllers.LoginDialogController">
+<AnchorPane fx:id="loginPane"  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="301.0" prefWidth="486.0" style="-fx-background-color: #04121c;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+ fx:controller="pro.artse.user.controllers.LoginDialogController">
    <children>
       <Label layoutX="29.0" layoutY="42.0" prefHeight="44.0" prefWidth="138.0" stylesheets="@../../../../../../Design/LabelCss.css" text="Password*" />
       <PasswordField fx:id="passwordField" layoutX="157.0" layoutY="45.0" prefHeight="38.0" prefWidth="240.0" />

@@ -19,7 +19,7 @@ public class ActivityLogDTO {
 	private String token;
 
 	/**
-	 * User's activity.
+	 * UserDTO's activity.
 	 */
 	private ActivityDTO activity;
 

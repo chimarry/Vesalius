@@ -9,7 +9,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-import pro.arste.centralr.errorhandling.CrResultMessage;
 import pro.artse.user.errorhandling.SUResultMessage;
 import pro.artse.user.util.Mapper;
 
@@ -25,16 +24,17 @@ public class CustomTsDeserializer<T> implements JsonDeserializer<SUResultMessage
 	@Override
 	public SUResultMessage<T> deserialize(JsonElement json, Type arg1, JsonDeserializationContext arg2)
 			throws JsonParseException {
+
 		JsonObject jsonObject = json.getAsJsonObject();
-		JsonElement resultElement = jsonObject.get("result");
 		String status = jsonObject.get("status").getAsString();
 		JsonElement messageElement = jsonObject.get("message");
 		String message = null;
 		if (messageElement != null)
 			message = messageElement.getAsString();
-		Gson gson = new Gson();
-		T result = (T) gson.fromJson(resultElement, resultType);
-		return new SUResultMessage(result, Mapper.mapTsStatus(status), message);
-	}
 
+		Gson gson = new Gson();
+		JsonElement resultJson = jsonObject.get("result");
+		T resultElementRaw = (T) gson.fromJson(resultJson, resultType);
+		return new SUResultMessage<T>(resultElementRaw, Mapper.mapTsStatus(status), message);
+	}
 }

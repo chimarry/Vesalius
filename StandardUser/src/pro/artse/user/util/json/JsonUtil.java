@@ -10,17 +10,6 @@ import com.google.gson.*;
 import pro.artse.centralr.models.ActivityLogWrapper;
 
 public class JsonUtil {
-
-	public static final JsonSerializer<ActivityLogWrapper> ACTIVITY_LOG_SERIALIZER = new JsonSerializer<ActivityLogWrapper>() {
-		@Override
-		public JsonElement serialize(ActivityLogWrapper src, Type typeOfSrc, JsonSerializationContext context) {
-			JsonObject serialized = new JsonObject();
-			serialized.addProperty("logInAt", src.getLogInAt().toString());
-			serialized.addProperty("logOutAt", src.getLogOutAt().toString());
-			return serialized;
-		}
-	};
-
 	/**
 	 * Parses java string as JSON array.
 	 * 

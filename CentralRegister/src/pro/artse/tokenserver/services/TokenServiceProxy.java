@@ -44,16 +44,22 @@ public class TokenServiceProxy implements pro.artse.tokenserver.services.TokenSe
     return tokenService;
   }
   
-  public java.lang.String generateToken(java.lang.String firstName, java.lang.String lastName, java.lang.String ubn) throws java.rmi.RemoteException{
+  public java.lang.String getAll() throws java.rmi.RemoteException{
     if (tokenService == null)
       _initTokenServiceProxy();
-    return tokenService.generateToken(firstName, lastName, ubn);
+    return tokenService.getAll();
   }
   
   public java.lang.String isValidToken(java.lang.String token) throws java.rmi.RemoteException{
     if (tokenService == null)
       _initTokenServiceProxy();
     return tokenService.isValidToken(token);
+  }
+  
+  public java.lang.String generateToken(java.lang.String firstName, java.lang.String lastName, java.lang.String ubn) throws java.rmi.RemoteException{
+    if (tokenService == null)
+      _initTokenServiceProxy();
+    return tokenService.generateToken(firstName, lastName, ubn);
   }
   
   

@@ -1,15 +1,21 @@
 package pro.artse.dal.managers.redis;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import com.sun.org.apache.bcel.internal.Const;
 
 import pro.artse.dal.errorhandling.DBResultMessage;
 import pro.artse.dal.errorhandling.DbStatus;
 import pro.artse.dal.errorhandling.ErrorHandler;
 import pro.artse.dal.managers.IUserManager;
-import pro.artse.dal.models.BasicUserInfo;
-import pro.artse.dal.models.User;
+import pro.artse.dal.models.KeyUserInfoDTO;
+import pro.artse.dal.models.UserDTO;
+import pro.artse.dal.models.ActivityLogDTO.ActivityDTO;
 import pro.artse.dal.util.RedisConnector;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Transaction;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
 /**
@@ -20,18 +26,29 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
  */
 public class UserManager implements IUserManager {
 
+	private static final String TOKEN_SET_NAME = "tokens";
+
 	@Override
-	public DBResultMessage<Boolean> add(User user) {
+	public DBResultMessage<Boolean> add(UserDTO user) {
+		// TODO: Add mechanism for deactivating user
 		if (!isValid(user))
 			return new DBResultMessage<Boolean>(DbStatus.INVALID_DATA);
 		try (Jedis jedis = RedisConnector.createConnection().getResource()) {
-			String key = user.getBasicUserInfo().getToken();
-			if (jedis.exists(key) && jedis.hget(key, "isDeactivated").equals("0"))
+			// Save as hash
+			String key = user.getKeyUserInfoDTO().getToken();
+			if (jedis.exists(key))// && jedis.hget(key, "isDeactivated").equals("0"))
 				return new DBResultMessage<Boolean>(DbStatus.EXISTS);
 			jedis.hmset(key, user.mapAttributes());
+
+			// Add to set of tokens
+			jedis.sadd(TOKEN_SET_NAME, user.getKeyUserInfoDTO().toString());
 			return new DBResultMessage<Boolean>(true, DbStatus.SUCCESS);
 		} catch (JedisConnectionException ex) {
 			return ErrorHandler.handle(ex);
+		} catch (ArrayIndexOutOfBoundsException ex) {
+			return ErrorHandler.handle(ex);
+		} catch (Exception e) {
+			return ErrorHandler.handle(e);
 		}
 	}
 
@@ -48,8 +65,14 @@ public class UserManager implements IUserManager {
 	}
 
 	@Override
-	public DBResultMessage<List<BasicUserInfo>> GetAllAllowedInformation() {
-		return null;
+	public DBResultMessage<List<KeyUserInfoDTO>> getAllAllowedInformation() {
+		try (Jedis jedis = RedisConnector.createConnection().getResource()) {
+			List<KeyUserInfoDTO> basicUserInfos = jedis.smembers(TOKEN_SET_NAME).stream()
+					.map(x -> new KeyUserInfoDTO(x)).collect(Collectors.toCollection(ArrayList<KeyUserInfoDTO>::new));
+			return new DBResultMessage<List<KeyUserInfoDTO>>(basicUserInfos, DbStatus.SUCCESS);
+		} catch (JedisConnectionException ex) {
+			return ErrorHandler.handle(ex);
+		}
 	}
 
 	@Override
@@ -67,10 +90,10 @@ public class UserManager implements IUserManager {
 	/**
 	 * Checks if provided data about the user is valid.
 	 * 
-	 * @param user User's information to check
+	 * @param user UserDTO's information to check
 	 * @return True if is valid, false if not.
 	 */
-	private boolean isValid(User user) {
-		return user != null && user.getBasicUserInfo() != null && !user.getBasicUserInfo().getToken().equals("");
+	private boolean isValid(UserDTO user) {
+		return user != null && user.getKeyUserInfoDTO() != null && !user.getKeyUserInfoDTO().getToken().equals("");
 	}
 }

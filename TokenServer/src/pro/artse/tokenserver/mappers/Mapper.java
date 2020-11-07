@@ -2,8 +2,8 @@ package pro.artse.tokenserver.mappers;
 
 import pro.artse.dal.errorhandling.DBResultMessage;
 import pro.artse.dal.errorhandling.DbStatus;
-import pro.artse.dal.models.BasicUserInfo;
-import pro.artse.dal.models.User;
+import pro.artse.dal.models.KeyUserInfoDTO;
+import pro.artse.dal.models.UserDTO;
 import pro.artse.tokenserver.errorhandling.TSResultMessage;
 import pro.artse.tokenserver.errorhandling.TSStatus;
 import pro.artse.tokenserver.models.Credentials;
@@ -20,12 +20,12 @@ public final class Mapper {
 	 * Creates new user using credentials and token. No validation is provided.
 	 * 
 	 * @param credentials Details about the user.
-	 * @param token       User's generated token.
+	 * @param token       UserDTO's generated token.
 	 * @return Created user.
 	 */
-	public static User mapFrom(Credentials credentials, String token) {
-		BasicUserInfo info = new BasicUserInfo(token);
-		User user = new User(info, credentials.getFirstName(), credentials.getLastName(), credentials.getUBN());
+	public static UserDTO mapFrom(Credentials credentials, String token) {
+		KeyUserInfoDTO info = new KeyUserInfoDTO(token, 0);
+		UserDTO user = new UserDTO(info, credentials.getFirstName(), credentials.getLastName(), credentials.getUBN());
 		return user;
 	}
 

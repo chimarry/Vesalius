@@ -3,8 +3,8 @@ package pro.artse.dal.managers;
 import java.util.List;
 
 import pro.artse.dal.errorhandling.DBResultMessage;
-import pro.artse.dal.models.BasicUserInfo;
-import pro.artse.dal.models.User;
+import pro.artse.dal.models.KeyUserInfoDTO;
+import pro.artse.dal.models.UserDTO;
 
 /**
  * @author Marija Declares methods responsible for working with user's data.
@@ -18,7 +18,7 @@ public interface IUserManager {
 	 *             mandatory.
 	 * @return True if user is added, false if not.
 	 */
-	DBResultMessage<Boolean> add(User user);
+	DBResultMessage<Boolean> add(UserDTO user);
 
 	/**
 	 * Deactivates user's token.
@@ -41,5 +41,5 @@ public interface IUserManager {
 	 * 
 	 * @return List of all active tokens.
 	 */
-	DBResultMessage<List<BasicUserInfo>> GetAllAllowedInformation();
+	DBResultMessage<List<KeyUserInfoDTO>> getAllAllowedInformation();
 }

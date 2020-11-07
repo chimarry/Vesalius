@@ -1,7 +1,5 @@
 package pro.artse.dal.util;
 
-import java.time.Duration;
-
 import redis.clients.jedis.*;
 
 /**
@@ -38,9 +36,9 @@ public class RedisConnector {
 		poolConfig.setTestOnBorrow(true);
 		poolConfig.setTestOnReturn(true);
 		poolConfig.setTestWhileIdle(true);
-		poolConfig.setMinEvictableIdleTimeMillis(Duration.ofSeconds(60).toMillis());
-		poolConfig.setTimeBetweenEvictionRunsMillis(Duration.ofSeconds(30).toMillis());
-		poolConfig.setNumTestsPerEvictionRun(3);
+		poolConfig.setMinEvictableIdleTimeMillis(60000);
+		poolConfig.setTimeBetweenEvictionRunsMillis(30000);
+		poolConfig.setNumTestsPerEvictionRun(-1);
 		poolConfig.setBlockWhenExhausted(true);
 		return poolConfig;
 	}

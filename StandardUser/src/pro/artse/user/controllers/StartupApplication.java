@@ -29,8 +29,9 @@ public class StartupApplication extends Application {
 		Thread.setDefaultUncaughtExceptionHandler(UserAlert::showExceptionError);
 
 		Pane mainPane = null;
+		// TODO: Change to true
 		if (Preferences.userRoot().get("token", null) != null)
-			isRegistered = true;
+			isRegistered = false;
 		if (!isRegistered)
 			mainPane = (GridPane) FXMLLoader.load(getClass().getResource("/pro/artse/user/fxml/RegisterForm.fxml"));
 		else

@@ -11,12 +11,12 @@ import java.util.Map;
  * 
  *         Represents information about user that are kept in storage.
  */
-public class User {
+public class UserDTO {
 
 	/**
 	 * Information about the user that can be displayed to the public.
 	 */
-	private BasicUserInfo basicUserInfo;
+	private KeyUserInfoDTO keyUserInfoDTO;
 
 	/**
 	 * Represents first name of the user. If user has many names, they should be
@@ -38,20 +38,21 @@ public class User {
 	/**
 	 * Created user object with default values.
 	 */
-	public User() {
+	public UserDTO() {
 
 	}
 
 	/**
 	 * Creates user object.
-	 * @param basicUserInfo Public information about the user.
-	 * @param firstName First name of the user.
-	 * @param lastName Last name of the user.
-	 * @param uBN Unique birth number of the user.
+	 * 
+	 * @param keyUserInfoDTO Public information about the user.
+	 * @param firstName      First name of the user.
+	 * @param lastName       Last name of the user.
+	 * @param uBN            Unique birth number of the user.
 	 */
-	public User(BasicUserInfo basicUserInfo, String firstName, String lastName, String uBN) {
+	public UserDTO(KeyUserInfoDTO basicUserInfo, String firstName, String lastName, String uBN) {
 		super();
-		this.basicUserInfo = basicUserInfo;
+		this.keyUserInfoDTO = basicUserInfo;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		UBN = uBN;
@@ -104,17 +105,17 @@ public class User {
 	/**
 	 * @return Basic information about the user.
 	 */
-	public BasicUserInfo getBasicUserInfo() {
-		return basicUserInfo;
+	public KeyUserInfoDTO getKeyUserInfoDTO() {
+		return keyUserInfoDTO;
 	}
 
 	/**
 	 * Sets basic information about the user.
 	 * 
-	 * @param basicUserInfo Information containing token and person's type.
+	 * @param keyUserInfoDTO Information containing token and person's type.
 	 */
-	public void setBasicUserInfo(BasicUserInfo basicUserInfo) {
-		this.basicUserInfo = basicUserInfo;
+	public void setKeyUserInfoDTO(KeyUserInfoDTO keyUserInfoDTO) {
+		this.keyUserInfoDTO = keyUserInfoDTO;
 	}
 
 	/**
@@ -127,9 +128,9 @@ public class User {
 		attributes.put("firstName", firstName);
 		attributes.put("lastName", lastName);
 		attributes.put("UBN", UBN);
-		attributes.put("isDeactivated", String.valueOf(basicUserInfo.isDeactivatedInt()));
-		attributes.put("token", basicUserInfo.getToken());
-		attributes.put("personType", String.valueOf(basicUserInfo.getPersonType()));
+		attributes.put("token", keyUserInfoDTO.getToken());
+		attributes.put("isDeactivated", "0");
+		attributes.put("personType", String.valueOf(keyUserInfoDTO.getPersonType()));
 		return attributes;
 	}
 }

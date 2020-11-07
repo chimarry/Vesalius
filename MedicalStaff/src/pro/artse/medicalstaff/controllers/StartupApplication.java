@@ -1,14 +1,20 @@
 package pro.artse.medicalstaff.controllers;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class StartupApplication extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		// TODO Auto-generated method stub
-
+		GridPane mainPane = (GridPane) FXMLLoader
+				.load(getClass().getResource("/pro/artse/medicalstaff/fxml/MedicalStaffMainForm.fxml"));
+		Scene scene = new Scene(mainPane);
+		primaryStage.setScene(scene);
+		primaryStage.show();
 	}
 
 	/**

@@ -5,4 +5,5 @@ public final class ApiPaths {
 	public static final String GET_ALL_ACTIVITIES = API_PREFIX + "activities";
 	public static final String POST_ACTIVITY = API_PREFIX + "activities";
 	public static final String PUT_UNREGISTER = API_PREFIX + "users";
+	public static final String GET_ALL_USERS = API_PREFIX+"users";
 }

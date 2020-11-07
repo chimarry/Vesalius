@@ -10,15 +10,17 @@
       <parameter name="className" value="pro.artse.tokenserver.services.TokenService"/>
       <parameter name="wsdlPortType" value="TokenService"/>
       <parameter name="typeMappingVersion" value="1.2"/>
+      <operation xmlns:operNS="http://services.tokenserver.artse.pro" xmlns:retNS="http://services.tokenserver.artse.pro" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="getAll" qname="operNS:getAll" returnQName="retNS:getAllReturn" returnType="rtns:string" soapAction="">
+      </operation>
+      <operation xmlns:operNS="http://services.tokenserver.artse.pro" xmlns:retNS="http://services.tokenserver.artse.pro" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="isValidToken" qname="operNS:isValidToken" returnQName="retNS:isValidTokenReturn" returnType="rtns:string" soapAction="">
+        <parameter xmlns:pns="http://services.tokenserver.artse.pro" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:token" type="tns:string"/>
+      </operation>
       <operation xmlns:operNS="http://services.tokenserver.artse.pro" xmlns:retNS="http://services.tokenserver.artse.pro" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="generateToken" qname="operNS:generateToken" returnQName="retNS:generateTokenReturn" returnType="rtns:string" soapAction="">
         <parameter xmlns:pns="http://services.tokenserver.artse.pro" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:firstName" type="tns:string"/>
         <parameter xmlns:pns="http://services.tokenserver.artse.pro" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:lastName" type="tns:string"/>
         <parameter xmlns:pns="http://services.tokenserver.artse.pro" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:ubn" type="tns:string"/>
       </operation>
-      <operation xmlns:operNS="http://services.tokenserver.artse.pro" xmlns:retNS="http://services.tokenserver.artse.pro" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="isValidToken" qname="operNS:isValidToken" returnQName="retNS:isValidTokenReturn" returnType="rtns:string" soapAction="">
-        <parameter xmlns:pns="http://services.tokenserver.artse.pro" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:token" type="tns:string"/>
-      </operation>
-      <parameter name="allowedMethods" value="generateToken isValidToken"/>
+      <parameter name="allowedMethods" value="getAll generateToken isValidToken"/>
 
   </service>
 </deployment>

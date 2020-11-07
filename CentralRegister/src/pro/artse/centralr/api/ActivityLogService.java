@@ -21,7 +21,7 @@ public class ActivityLogService extends BaseService {
 	 * Adds new activity, if user has privilege to do so.
 	 * 
 	 * @param newActivity Data to be added.
-	 * @param token       User's identifier.
+	 * @param token       UserDTO's identifier.
 	 * @return Wrapper result with correct HTTP status code. @see HttpResultMessage
 	 */
 	@POST

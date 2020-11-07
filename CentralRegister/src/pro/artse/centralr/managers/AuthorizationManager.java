@@ -20,7 +20,7 @@ public class AuthorizationManager implements IAuthorizationManager {
 	/**
 	 * Authorizes user if the token is valid (exist and is active).
 	 * 
-	 * @param token User's token used for validation.
+	 * @param token UserDTO's token used for validation.
 	 * @return True if valid, false if not.
 	 */
 	@Override
