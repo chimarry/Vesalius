@@ -78,8 +78,6 @@ public class RegisterController implements Initializable {
 				jsonResultString = tokenService.generateToken(firstNameBox.getText(), lastNameBox.getText(),
 						ubnBox.getText());
 				SUResultMessage<String> token = pro.artse.user.util.Mapper.mapFromTs(jsonResultString, String.class);
-				System.out.println(jsonResultString);
-				System.out.println(token.getStatus());
 				// TODO: Save token
 				// Preferences userPreferences = Preferences.userRoot();
 				// userPreferences.put("token", token.getResult());

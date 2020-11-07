@@ -16,29 +16,28 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="628.0" prefWidth="957.0" style="-fx-background-color: #04121c;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pro.artse.medicalstaff.controllers.MedicalStaffMainController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="649.0" prefWidth="1017.0" style="-fx-background-color: #04121c;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pro.artse.medicalstaff.controllers.MedicalStaffMainController">
   <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="835.0" minWidth="10.0" prefWidth="652.0" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="696.0" minWidth="10.0" prefWidth="305.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="835.0" minWidth="10.0" prefWidth="719.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="696.0" minWidth="10.0" prefWidth="298.0" />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="594.0" prefWidth="273.0" style="-fx-border-color: #725438; -fx-border-width: 3;" GridPane.columnIndex="1">
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="594.0" prefWidth="290.0" style="-fx-border-color: #725438; -fx-border-width: 3;" GridPane.columnIndex="1">
          <padding>
             <Insets left="20.0" />
          </padding>
          <children>
-            <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="27.0" prefWidth="245.0" style="-fx-text-fill: white;" stylesheets="@../../../../../../Design/LabelCss.css" text="Chat" />
-            <TabPane layoutX="14.0" layoutY="60.0" prefHeight="443.0" prefWidth="245.0" style="-fx-background-color: #a67a53;" tabClosingPolicy="UNAVAILABLE">
+            <Label alignment="CENTER" layoutX="21.0" layoutY="14.0" prefHeight="27.0" prefWidth="245.0" style="-fx-text-fill: white;" stylesheets="@../../../../../../Design/LabelCss.css" text="Chat" />
+            <TabPane layoutX="21.0" layoutY="58.0" prefHeight="443.0" prefWidth="245.0" style="-fx-background-color: #a67a53;" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab fx:id="standardUserTab" style="-fx-text-fill: white;" text="Standard user">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TextArea fx:id="SandardUserTextArea" prefHeight="415.0" prefWidth="245.0" />
-                              <TextArea fx:id="standardUserTextArea" layoutX="10.0" layoutY="10.0" prefHeight="415.0" prefWidth="245.0" />
+                              <TextArea fx:id="standardUserTextArea" prefHeight="415.0" prefWidth="245.0" />
                            </children>
                         </AnchorPane>
                   </content>
@@ -54,23 +53,23 @@
                 </Tab>
               </tabs>
             </TabPane>
-            <Button fx:id="stopButton" layoutX="38.0" layoutY="515.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="77.0" stylesheets="@../../../../../../Design/CancelButtonCss.css" text="Stop" />
-            <Button fx:id="sendButton" layoutX="161.0" layoutY="515.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="77.0" stylesheets="@../../../../../../Design/ButtonCss.css" text="Send" />
+            <Button fx:id="stopButton" layoutX="21.0" layoutY="515.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="77.0" stylesheets="@../../../../../../Design/CancelButtonCss.css" text="Stop" />
+            <Button fx:id="sendButton" layoutX="189.0" layoutY="515.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="77.0" stylesheets="@../../../../../../Design/ButtonCss.css" text="Send" />
          </children>
       </AnchorPane>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="592.0" prefWidth="632.0" style="-fx-border-color: #725438; -fx-border-width: 3;">
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="592.0" prefWidth="689.0" style="-fx-border-color: #725438; -fx-border-width: 3;">
          <GridPane.margin>
             <Insets left="10.0" right="10.0" />
          </GridPane.margin>
          <children>
             <Label alignment="CENTER" layoutX="24.0" layoutY="14.0" prefHeight="27.0" prefWidth="356.0" style="-fx-text-fill: white;" stylesheets="@../../../../../../Design/LabelCss.css" text="Registered users" />
-            <TableView fx:id="usersTableView" layoutX="24.0" layoutY="100.0" prefHeight="495.0" prefWidth="356.0" stylesheets="@../../../../../../Design/tableCss.css">
+            <TableView fx:id="usersTableView" layoutX="24.0" layoutY="100.0" prefHeight="483.0" prefWidth="473.0" stylesheets="@../../../../../../Design/tableCss.css">
               <columns>
-                <TableColumn fx:id="tokenColumn" prefWidth="256.0" text="Token" />
-                  <TableColumn fx:id="statusColumn" prefWidth="98.0" text="Status" />
+                <TableColumn fx:id="tokenColumn" prefWidth="286.0" text="Token" />
+                  <TableColumn fx:id="statusColumn" prefWidth="186.0" text="Status" />
               </columns>
             </TableView>
-            <VBox layoutX="431.0" layoutY="135.0" prefHeight="318.0" prefWidth="131.0">
+            <VBox layoutX="525.0" layoutY="137.0" prefHeight="318.0" prefWidth="131.0">
                <children>
                   <Button fx:id="locationsButton" mnemonicParsing="false" prefHeight="0.0" prefWidth="130.0" stylesheets="@../../../../../../Design/ButtonCss.css" text="Locations">
                      <VBox.margin>
@@ -87,7 +86,7 @@
                         <Insets bottom="20.0" />
                      </VBox.margin>
                   </Button>
-                  <CheckBox fx:id="infectedChechBox" mnemonicParsing="false" prefHeight="17.0" prefWidth="122.0" text="Infected">
+                  <CheckBox fx:id="infectedCheckBox" mnemonicParsing="false" prefHeight="17.0" prefWidth="122.0" text="Infected">
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin>
@@ -100,8 +99,8 @@
                   <CheckBox fx:id="notInfectedCheckBox" mnemonicParsing="false" prefHeight="17.0" prefWidth="115.0" text="Not infected" />
                </children>
             </VBox>
-            <TextField fx:id="searchTokenTextField" layoutX="24.0" layoutY="75.0" prefHeight="25.0" prefWidth="206.0" promptText="Search by token" />
-            <Button fx:id="searchButton" layoutX="230.0" layoutY="75.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" style="-fx-background-image: @../../../../../../Design/search.png; -fx-background-color: transparent;" />
+            <TextField fx:id="searchTokenTextField" layoutX="24.0" layoutY="75.0" prefHeight="25.0" prefWidth="245.0" promptText="Search by token" />
+            <Button fx:id="searchButton" layoutX="269.0" layoutY="75.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="38.0" style="-fx-background-image: @../../../../../../Design/search.png; -fx-background-color: transparent;" />
          </children>
       </AnchorPane>
    </children>

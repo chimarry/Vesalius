@@ -7,6 +7,7 @@ import java.util.prefs.Preferences;
 import javax.swing.JComboBox.KeySelectionManager;
 
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -74,6 +75,9 @@ public class MedicalStaffMainController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		disableOptions(true);
+
+		// Get users
 		searchButton.setGraphic(new ImageView("file:../Design/search.png"));
 		tokenColumn.setCellValueFactory(new PropertyValueFactory<>("Token"));
 		statusColumn.setCellValueFactory(new PropertyValueFactory<>("CovidStatus"));
@@ -97,9 +101,63 @@ public class MedicalStaffMainController implements Initializable {
 			MedicalStaffAlert.alert(AlertType.ERROR, "Connection with Central register failed.");
 		});
 		new Thread(task).start();
-		// TODO: Get users
+
+		usersTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+			if (newSelection != null)
+				disableOptions(false);
+			else
+				disableOptions(true);
+		});
+		notInfectedCheckBox.setOnAction(this::chooseNotInfected);
+		infectedCheckBox.setOnAction(this::chooseInfected);
+		potInfectedCheckBox.setOnAction(this::choosePotInfected);
 		// TODO: Implement search mechanism
-		// TODO: When user is clicked, enable options
 		// TODO: Enable chat
+	}
+
+	private void chooseInfected(ActionEvent event) {
+		if (infectedCheckBox.isSelected()) {
+			potInfectedCheckBox.setSelected(false);
+			notInfectedCheckBox.setSelected(false);
+		}
+		changeCovidStatus();
+	}
+
+	private void chooseNotInfected(ActionEvent event) {
+		if (notInfectedCheckBox.isSelected()) {
+			potInfectedCheckBox.setSelected(false);
+			infectedCheckBox.setSelected(false);
+		}
+		changeCovidStatus();
+	}
+
+	private void choosePotInfected(ActionEvent event) {
+		if (potInfectedCheckBox.isSelected()) {
+			infectedCheckBox.setSelected(false);
+			notInfectedCheckBox.setSelected(false);
+		}
+		changeCovidStatus();
+	}
+
+	private void changeCovidStatus() {
+		// TODO: Change user's covid status
+		if (notInfectedCheckBox.isSelected()) {
+			infectedCheckBox.setSelected(false);
+			potInfectedCheckBox.setSelected(false);
+		} else if (infectedCheckBox.isSelected()) {
+
+		} else if (potInfectedCheckBox.isSelected()) {
+			notInfectedCheckBox.setSelected(false);
+			infectedCheckBox.setSelected(false);
+		}
+	}
+
+	private void disableOptions(boolean isDisabled) {
+		locationsButton.setDisable(isDisabled);
+		blockUserButton.setDisable(isDisabled);
+		documentsButton.setDisable(isDisabled);
+		infectedCheckBox.setDisable(isDisabled);
+		potInfectedCheckBox.setDisable(isDisabled);
+		notInfectedCheckBox.setDisable(isDisabled);
 	}
 }
