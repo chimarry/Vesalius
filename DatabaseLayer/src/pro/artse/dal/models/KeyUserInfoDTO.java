@@ -17,22 +17,42 @@ public class KeyUserInfoDTO {
 	private int personType;
 
 	/**
+	 * Did medical staff block user? 0 - no, 1 - yes
+	 */
+	private int isBlocked;
+
+	/**
 	 * Creates basic user's information, where all the values accept a token has
 	 * default value.
 	 * 
 	 * @param token UserDTO's token.
 	 */
 
-	public KeyUserInfoDTO(String token, int personType) {
-		super();
-		this.token = token;
-		this.personType = personType;
+	public static KeyUserInfoDTO parse(String line) {
+		String[] values = line.split(SEPARATOR);
+		KeyUserInfoDTO userInfoDTO = new KeyUserInfoDTO(values[0]);
+		userInfoDTO.setPersonType(Integer.parseInt(values[1]));
+		userInfoDTO.setIsBlocked(0);
+		return userInfoDTO;
 	}
 
-	public KeyUserInfoDTO(String line) {
-		String[] values = line.split(SEPARATOR);
-		this.token = values[0];
-		this.personType = Integer.parseInt(values[1]);
+	public KeyUserInfoDTO(String token) {
+		super();
+		this.token = token;
+		this.personType = 0;
+		this.isBlocked = 0;
+	}
+
+	public void setIsBlocked(int blocked) {
+		isBlocked = blocked > 0 ? 1 : 0;
+	}
+
+	public int getIsBlocked() {
+		return isBlocked;
+	}
+
+	public boolean isBlocked() {
+		return isBlocked == 0 ? false : true;
 	}
 
 	/**

@@ -4,12 +4,16 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
-import javax.swing.JComboBox.KeySelectionManager;
-
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Side;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -24,6 +28,9 @@ import pro.artse.medicalstaff.models.KeyUserInfo;
 public class MedicalStaffMainController implements Initializable {
 
 	private final IUserService userService = ManagersFactory.getUserService();
+
+	@FXML
+	private PieChart statisticChart;
 
 	@FXML
 	private Button searchButton;
@@ -92,25 +99,38 @@ public class MedicalStaffMainController implements Initializable {
 		};
 		task.setOnSucceeded(e -> {
 			MSResultMessage<KeyUserInfo[]> resultMessage = task.getValue();
-			if (resultMessage.isSuccess())
+			if (resultMessage.isSuccess()) {
 				usersTableView.getItems().setAll(resultMessage.getResult());
-			else
+				usersTableView.getSelectionModel().selectedItemProperty()
+						.addListener((obs, oldSelection, newSelection) -> {
+							if (newSelection != null)
+								disableOptions(false);
+							else
+								disableOptions(true);
+						});
+				setRowColor();
+			} else
 				MedicalStaffAlert.processResult(resultMessage);
+
 		});
 		task.setOnFailed(e -> {
 			MedicalStaffAlert.alert(AlertType.ERROR, "Connection with Central register failed.");
 		});
 		new Thread(task).start();
 
-		usersTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-			if (newSelection != null)
-				disableOptions(false);
-			else
-				disableOptions(true);
-		});
+		// Add action handlers
 		notInfectedCheckBox.setOnAction(this::chooseNotInfected);
 		infectedCheckBox.setOnAction(this::chooseInfected);
 		potInfectedCheckBox.setOnAction(this::choosePotInfected);
+
+		// Show statistics
+		PieChart.Data infectedData = new PieChart.Data("Infected", 13);
+		PieChart.Data notInfectedData = new PieChart.Data("Not infected", 25);
+		PieChart.Data potInfectedData = new PieChart.Data("Potentially infected", 10);
+		// Add statistics
+		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(infectedData, notInfectedData,
+				potInfectedData);
+		statisticChart.setData(pieChartData);
 		// TODO: Implement search mechanism
 		// TODO: Enable chat
 	}
@@ -120,7 +140,7 @@ public class MedicalStaffMainController implements Initializable {
 			potInfectedCheckBox.setSelected(false);
 			notInfectedCheckBox.setSelected(false);
 		}
-		changeCovidStatus();
+		changeCovidStatus(CovidStatus.INFECTED);
 	}
 
 	private void chooseNotInfected(ActionEvent event) {
@@ -128,7 +148,7 @@ public class MedicalStaffMainController implements Initializable {
 			potInfectedCheckBox.setSelected(false);
 			infectedCheckBox.setSelected(false);
 		}
-		changeCovidStatus();
+		changeCovidStatus(CovidStatus.NOT_INFECTED);
 	}
 
 	private void choosePotInfected(ActionEvent event) {
@@ -136,20 +156,22 @@ public class MedicalStaffMainController implements Initializable {
 			infectedCheckBox.setSelected(false);
 			notInfectedCheckBox.setSelected(false);
 		}
-		changeCovidStatus();
+		changeCovidStatus(CovidStatus.POTENTIALLY_INFECTED);
 	}
 
-	private void changeCovidStatus() {
-		// TODO: Change user's covid status
-		if (notInfectedCheckBox.isSelected()) {
-			infectedCheckBox.setSelected(false);
-			potInfectedCheckBox.setSelected(false);
-		} else if (infectedCheckBox.isSelected()) {
+	private void changeCovidStatus(CovidStatus covidStatus) {
 
-		} else if (potInfectedCheckBox.isSelected()) {
-			notInfectedCheckBox.setSelected(false);
-			infectedCheckBox.setSelected(false);
-		}
+	}
+
+	private void setRowColor() {
+		usersTableView.setRowFactory(tv -> {
+			TableRow<KeyUserInfo> row = new TableRow<>();
+			BooleanBinding notInfected = row.itemProperty().isEqualTo(new KeyUserInfo("", 0));
+			BooleanBinding infected = row.itemProperty().isEqualTo(new KeyUserInfo("", 1));
+			row.styleProperty().bind(Bindings.when(infected).then("-fx-background-color: red ;").otherwise(
+					Bindings.when(notInfected).then("-fx-background-color: lightgreen ;").otherwise("grey")));
+			return row;
+		});
 	}
 
 	private void disableOptions(boolean isDisabled) {

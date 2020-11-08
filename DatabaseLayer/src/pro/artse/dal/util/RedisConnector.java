@@ -13,6 +13,7 @@ public class RedisConnector {
 	public static final JedisPoolConfig POOL_CONFIG = buildPoolConfig();
 	public static final int ERROR = 0;
 	public static final int SUCCESS = 1;
+	public static final String OK = "OK";
 
 	/**
 	 * Configures Jedis pool.

@@ -12,6 +12,11 @@ public class KeyUserInfoWrapper {
 	private int personType;
 
 	/**
+	 * Did medical staff block this user?
+	 */
+	private int isBloked;
+
+	/**
 	 * Creates basic user's information, where all the values accept a token has
 	 * default value.
 	 * 
@@ -22,6 +27,7 @@ public class KeyUserInfoWrapper {
 		super();
 		this.token = token;
 		this.personType = personType;
+		this.isBloked = 0;
 	}
 
 	/**
@@ -57,4 +63,11 @@ public class KeyUserInfoWrapper {
 		this.personType = personType;
 	}
 
+	public int getIsBloked() {
+		return isBloked;
+	}
+
+	public void setIsBloked(int isBloked) {
+		this.isBloked = isBloked;
+	}
 }

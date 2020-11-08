@@ -42,4 +42,6 @@ public interface IUserManager {
 	 * @return List of all active tokens.
 	 */
 	DBResultMessage<List<KeyUserInfoDTO>> getAllAllowedInformation();
+
+	DBResultMessage<String> search(String token);
 }

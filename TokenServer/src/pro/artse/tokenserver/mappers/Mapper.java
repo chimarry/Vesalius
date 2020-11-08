@@ -24,7 +24,8 @@ public final class Mapper {
 	 * @return Created user.
 	 */
 	public static UserDTO mapFrom(Credentials credentials, String token) {
-		KeyUserInfoDTO info = new KeyUserInfoDTO(token, 0);
+		// TODO: Covid status
+		KeyUserInfoDTO info = new KeyUserInfoDTO(token);
 		UserDTO user = new UserDTO(info, credentials.getFirstName(), credentials.getLastName(), credentials.getUBN());
 		return user;
 	}
