@@ -14,7 +14,7 @@ public class KeyUserInfoDTO {
 	/**
 	 * Type of a person (infected, potentially infected, not infected).
 	 */
-	private int personType;
+	private int covidStatus;
 
 	/**
 	 * Did medical staff block user? 0 - no, 1 - yes
@@ -31,7 +31,7 @@ public class KeyUserInfoDTO {
 	public static KeyUserInfoDTO parse(String line) {
 		String[] values = line.split(SEPARATOR);
 		KeyUserInfoDTO userInfoDTO = new KeyUserInfoDTO(values[0]);
-		userInfoDTO.setPersonType(Integer.parseInt(values[1]));
+		userInfoDTO.setCovidStatus(Integer.parseInt(values[1]));
 		userInfoDTO.setIsBlocked(0);
 		return userInfoDTO;
 	}
@@ -39,7 +39,7 @@ public class KeyUserInfoDTO {
 	public KeyUserInfoDTO(String token) {
 		super();
 		this.token = token;
-		this.personType = 0;
+		this.covidStatus = 0;
 		this.isBlocked = 0;
 	}
 
@@ -74,22 +74,22 @@ public class KeyUserInfoDTO {
 	/**
 	 * @return Number that indicates what type of a person does user belong to.
 	 */
-	public int getPersonType() {
-		return personType;
+	public int getCovidStatus() {
+		return covidStatus;
 	}
 
 	/**
 	 * Sets type of a person.
 	 * 
-	 * @param personType Number that indicates what type of a person does user
+	 * @param covidStatus Number that indicates what type of a person does user
 	 *                   belong to.
 	 */
-	public void setPersonType(int personType) {
-		this.personType = personType;
+	public void setCovidStatus(int personType) {
+		this.covidStatus = personType;
 	}
 
 	@Override
 	public String toString() {
-		return token + SEPARATOR + personType;
+		return token + SEPARATOR + covidStatus;
 	}
 }

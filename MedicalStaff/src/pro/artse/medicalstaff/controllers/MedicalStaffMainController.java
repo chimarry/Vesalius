@@ -87,7 +87,7 @@ public class MedicalStaffMainController implements Initializable {
 		// Get users
 		searchButton.setGraphic(new ImageView("file:../Design/search.png"));
 		tokenColumn.setCellValueFactory(new PropertyValueFactory<>("Token"));
-		statusColumn.setCellValueFactory(new PropertyValueFactory<>("CovidStatus"));
+		statusColumn.setCellValueFactory(new PropertyValueFactory<>("CovidStatusName"));
 
 		Task<MSResultMessage<KeyUserInfo[]>> task = new Task<MSResultMessage<KeyUserInfo[]>>() {
 			@Override

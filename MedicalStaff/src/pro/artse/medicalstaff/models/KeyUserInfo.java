@@ -7,14 +7,14 @@ public class KeyUserInfo implements Serializable {
 	private String token;
 
 	// TODO: Maybe use CovidStatus - nicer
-	private int personType;
+	private int covidStatus;
 
 	private int isBlocked;
 
 	public KeyUserInfo(String token, int status) {
 		this();
 		setToken(token);
-		setPersonType(status);
+		setCovidStatus(status);
 	}
 
 	public KeyUserInfo() {
@@ -29,12 +29,12 @@ public class KeyUserInfo implements Serializable {
 		this.token = token;
 	}
 
-	public int getPersonType() {
-		return personType;
+	public int getCovidStatus() {
+		return covidStatus;
 	}
 
-	public String getCovidStatus() {
-		switch (personType) {
+	public String getCovidStatusName() {
+		switch (covidStatus) {
 		case 0:
 			return "Not infected";
 		case 1:
@@ -46,12 +46,12 @@ public class KeyUserInfo implements Serializable {
 		}
 	}
 
-	public void setPersonType(int personType) {
-		this.personType = personType;
+	public void setCovidStatus(int covidStatus) {
+		this.covidStatus = covidStatus;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		return obj != null && obj instanceof KeyUserInfo && personType == ((KeyUserInfo) obj).getPersonType();
+		return obj != null && obj instanceof KeyUserInfo && covidStatus == ((KeyUserInfo) obj).getCovidStatus();
 	}
 }

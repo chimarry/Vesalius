@@ -25,7 +25,6 @@ public class UserManager implements IUserManager {
 	public CrResultMessage<KeyUserInfoWrapper[]> getAll() throws ServiceException, RemoteException {
 		TokenService tokenService = pro.artse.centralr.managers.ManagerFactory.geTokenService();
 		String allTokens = tokenService.getAll();
-		System.out.println(allTokens);
 		return Mapper.mapFrom(allTokens, KeyUserInfoWrapper[].class);
 	}
 }

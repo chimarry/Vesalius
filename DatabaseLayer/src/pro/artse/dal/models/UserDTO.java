@@ -130,7 +130,7 @@ public class UserDTO {
 		attributes.put("UBN", UBN);
 		attributes.put("token", keyUserInfoDTO.getToken());
 		attributes.put("isBlocked", String.valueOf(keyUserInfoDTO.getIsBlocked()));
-		attributes.put("personType", String.valueOf(keyUserInfoDTO.getPersonType()));
+		attributes.put("covidStatus", String.valueOf(keyUserInfoDTO.getCovidStatus()));
 		return attributes;
 	}
 }

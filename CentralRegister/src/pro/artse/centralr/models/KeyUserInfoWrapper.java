@@ -9,7 +9,7 @@ public class KeyUserInfoWrapper {
 	/**
 	 * Type of a person (infected, potentially infected, not infected).
 	 */
-	private int personType;
+	private int covidStatus;
 
 	/**
 	 * Did medical staff block this user?
@@ -23,10 +23,10 @@ public class KeyUserInfoWrapper {
 	 * @param token UserDTO's token.
 	 */
 
-	public KeyUserInfoWrapper(String token, int personType) {
+	public KeyUserInfoWrapper(String token, int covidStatus) {
 		super();
 		this.token = token;
-		this.personType = personType;
+		this.covidStatus = covidStatus;
 		this.isBloked = 0;
 	}
 
@@ -49,18 +49,18 @@ public class KeyUserInfoWrapper {
 	/**
 	 * @return Number that indicates what type of a person does user belong to.
 	 */
-	public int getPersonType() {
-		return personType;
+	public int getCovidStatus() {
+		return covidStatus;
 	}
 
 	/**
 	 * Sets type of a person.
 	 * 
-	 * @param personType Number that indicates what type of a person does user
+	 * @param covidStatus Number that indicates what type of a person does user
 	 *                   belong to.
 	 */
-	public void setPersonType(int personType) {
-		this.personType = personType;
+	public void setCovidStatus(int covidStatus) {
+		this.covidStatus = covidStatus;
 	}
 
 	public int getIsBloked() {
