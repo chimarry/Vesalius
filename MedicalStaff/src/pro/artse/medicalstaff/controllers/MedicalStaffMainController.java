@@ -127,7 +127,8 @@ public class MedicalStaffMainController implements Initializable {
 		PieChart.Data infectedData = new PieChart.Data("Infected", 13);
 		PieChart.Data notInfectedData = new PieChart.Data("Not infected", 25);
 		PieChart.Data potInfectedData = new PieChart.Data("Potentially infected", 10);
-		// Add statistics
+
+		// TODO: Add statistics
 		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(infectedData, notInfectedData,
 				potInfectedData);
 		statisticChart.setData(pieChartData);
