@@ -22,10 +22,12 @@ import pro.artse.centralr.api.ApiPaths;
 import pro.artse.medicalstaff.centralr.services.IUserService;
 import pro.artse.medicalstaff.centralr.services.ManagersFactory;
 import pro.artse.medicalstaff.errorhandling.MSResultMessage;
+import pro.artse.medicalstaff.errorhandling.MSStatus;
 import pro.artse.medicalstaff.errorhandling.MedicalStaffAlert;
 import pro.artse.medicalstaff.models.CovidStatus;
 import pro.artse.medicalstaff.models.KeyUserInfo;
 import pro.artse.medicalstaff.util.RestApiUtil;
+import sun.net.www.content.audio.x_aiff;
 
 public class MedicalStaffMainController implements Initializable {
 
@@ -91,6 +93,29 @@ public class MedicalStaffMainController implements Initializable {
 		tokenColumn.setCellValueFactory(new PropertyValueFactory<>("Token"));
 		statusColumn.setCellValueFactory(new PropertyValueFactory<>("CovidStatusName"));
 
+		getUsers();
+
+		// Add action handlers
+		notInfectedCheckBox.setOnAction(this::chooseNotInfected);
+		infectedCheckBox.setOnAction(this::chooseInfected);
+		potInfectedCheckBox.setOnAction(this::choosePotInfected);
+
+		searchButton.setOnAction(this::search);
+		blockUserButton.setOnAction(this::blockUser);
+
+		// Show statistics
+		PieChart.Data infectedData = new PieChart.Data("Infected", 13);
+		PieChart.Data notInfectedData = new PieChart.Data("Not infected", 25);
+		PieChart.Data potInfectedData = new PieChart.Data("Potentially infected", 10);
+
+		// TODO: Add statistics
+		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(infectedData, notInfectedData,
+				potInfectedData);
+		statisticChart.setData(pieChartData);
+		// TODO: Enable chat
+	}
+
+	private void getUsers() {
 		Task<MSResultMessage<KeyUserInfo[]>> task = new Task<MSResultMessage<KeyUserInfo[]>>() {
 			@Override
 			public MSResultMessage<KeyUserInfo[]> call() throws Exception {
@@ -118,33 +143,34 @@ public class MedicalStaffMainController implements Initializable {
 			MedicalStaffAlert.alert(AlertType.ERROR, "Connection with Central register failed.");
 		});
 		new Thread(task).start();
-
-		// Add action handlers
-		notInfectedCheckBox.setOnAction(this::chooseNotInfected);
-		infectedCheckBox.setOnAction(this::chooseInfected);
-		potInfectedCheckBox.setOnAction(this::choosePotInfected);
-
-		searchButton.setOnAction(this::search);
-
-		// Show statistics
-		PieChart.Data infectedData = new PieChart.Data("Infected", 13);
-		PieChart.Data notInfectedData = new PieChart.Data("Not infected", 25);
-		PieChart.Data potInfectedData = new PieChart.Data("Potentially infected", 10);
-
-		// TODO: Add statistics
-		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(infectedData, notInfectedData,
-				potInfectedData);
-		statisticChart.setData(pieChartData);
-		// TODO: Enable chat
 	}
 
 	private void blockUser(ActionEvent event) {
+		KeyUserInfo userInfo = usersTableView.getSelectionModel().selectedItemProperty().get();
+		Task<MSResultMessage<Boolean>> task = new Task<MSResultMessage<Boolean>>() {
+			@Override
+			public MSResultMessage<Boolean> call() throws Exception {
+				MSResultMessage<Boolean> data = userService.blockUser(userInfo.getToken());
+				return data;
+			}
+		};
+		task.setOnSucceeded(e -> {
+			MSResultMessage<Boolean> resultMessage = task.getValue();
+			if (resultMessage.isSuccess()) {
+				usersTableView.getItems().removeIf(user -> user.getToken().equals(userInfo.getToken()));
+			} else
+				MedicalStaffAlert.processResult(resultMessage);
 
+		});
+		task.setOnFailed(e -> {
+			MedicalStaffAlert.alert(AlertType.ERROR, "Connection with Central register failed.");
+		});
+		new Thread(task).start();
 	}
 
 	private void search(ActionEvent event) {
 		String searchFor = searchTokenTextField.getText();
-		if (searchFor != null) {
+		if (searchFor != null && !searchFor.equals("")) {
 			Task<MSResultMessage<KeyUserInfo>> task = new Task<MSResultMessage<KeyUserInfo>>() {
 				@Override
 				public MSResultMessage<KeyUserInfo> call() throws Exception {
@@ -164,14 +190,18 @@ public class MedicalStaffMainController implements Initializable {
 									disableOptions(true);
 							});
 					setRowColor();
+				} else if (resultMessage.getStatus() == MSStatus.NOT_FOUND) {
+					MedicalStaffAlert.processResult(resultMessage, AlertType.INFORMATION);
 				} else
-					MedicalStaffAlert.processResult(resultMessage);
+					MedicalStaffAlert.processResult(resultMessage, AlertType.ERROR);
 
 			});
 			task.setOnFailed(e -> {
 				MedicalStaffAlert.alert(AlertType.ERROR, "Connection with Central register failed.");
 			});
 			new Thread(task).start();
+		} else {
+			getUsers();
 		}
 	}
 

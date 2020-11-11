@@ -18,9 +18,9 @@ public class UserService extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response unregister(@HeaderParam("token") String token) {
 		try {
+			// TODO: Add logic
 			authorize(token);
-			CrResultMessage<Boolean> isUnregistered = userManager.unregister(token);
-			return isUnregistered.buildResponse();
+			return null;
 		} catch (Exception ex) {
 			return ErrorHandler.handle(ex).buildResponse();
 		}
@@ -43,6 +43,18 @@ public class UserService extends BaseService {
 	public Response getUser(@PathParam("token") String token) {
 		try {
 			CrResultMessage<KeyUserInfoWrapper> user = userManager.search(token);
+			return user.buildResponse();
+		} catch (Exception ex) {
+			return ErrorHandler.handle(ex).buildResponse();
+		}
+	}
+
+	@DELETE
+	@Path("/{token}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response blockUser(@PathParam("token") String token) {
+		try {
+			CrResultMessage<Boolean> user = userManager.blockUser(token);
 			return user.buildResponse();
 		} catch (Exception ex) {
 			return ErrorHandler.handle(ex).buildResponse();

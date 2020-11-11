@@ -60,7 +60,7 @@ public class UserManager implements IUserManager {
 	}
 
 	@Override
-	public DBResultMessage<Boolean> deactivate(String token) {
+	public DBResultMessage<Boolean> blockUser(String token) {
 		try (Jedis jedis = RedisConnector.createConnection().getResource()) {
 			if (!jedis.exists(token) || jedis.hget(token, "isBlocked").equals("1"))
 				return new DBResultMessage<Boolean>(DbStatus.NOT_FOUND);

@@ -7,4 +7,6 @@ public interface IUserService {
 	MSResultMessage<KeyUserInfo[]> getAll() throws Exception;
 
 	MSResultMessage<KeyUserInfo> search(String token) throws Exception;
+
+	MSResultMessage<Boolean> blockUser(String token) throws Exception;
 }

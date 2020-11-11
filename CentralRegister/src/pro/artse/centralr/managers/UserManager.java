@@ -15,12 +15,6 @@ public class UserManager implements IUserManager {
 	private final pro.artse.dal.managers.IUserManager userManager = ManagerFactory.getUserManager();
 
 	@Override
-	public CrResultMessage<Boolean> unregister(String token) {
-		DBResultMessage<Boolean> isDeactived = userManager.deactivate(token);
-		return Mapper.mapFrom(isDeactived);
-	}
-
-	@Override
 	public CrResultMessage<KeyUserInfoWrapper[]> getAll() throws ServiceException, RemoteException {
 		TokenService tokenService = pro.artse.centralr.managers.ManagerFactory.geTokenService();
 		String allTokens = tokenService.getAll();
@@ -32,5 +26,11 @@ public class UserManager implements IUserManager {
 		TokenService tokenService = pro.artse.centralr.managers.ManagerFactory.geTokenService();
 		String user = tokenService.search(token);
 		return Mapper.mapFrom(user, KeyUserInfoWrapper.class);
+	}
+
+	@Override
+	public CrResultMessage<Boolean> blockUser(String token) {
+		DBResultMessage<Boolean> isBlocked = userManager.blockUser(token);
+		return Mapper.mapFrom(isBlocked);
 	}
 }

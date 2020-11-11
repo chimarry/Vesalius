@@ -34,10 +34,14 @@ public final class MedicalStaffAlert {
 	}
 
 	public static <T> void processResult(MSResultMessage<T> resultMessage) {
+
 		if (resultMessage.isSuccess())
-			MedicalStaffAlert.alert(AlertType.INFORMATION, resultMessage.getStatus().toString(),
-					resultMessage.getMessage());
+			processResult(resultMessage, AlertType.INFORMATION);
 		else
-			MedicalStaffAlert.alert(AlertType.ERROR, resultMessage.getStatus().toString(), resultMessage.getMessage());
+			processResult(resultMessage, AlertType.ERROR);
+	}
+
+	public static <T> void processResult(MSResultMessage<T> resultMessage, AlertType type) {
+		MedicalStaffAlert.alert(type, resultMessage.getStatus().toString(), resultMessage.getMessage());
 	}
 }

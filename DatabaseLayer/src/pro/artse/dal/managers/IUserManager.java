@@ -26,7 +26,7 @@ public interface IUserManager {
 	 * @param token Unique identifier of an user.
 	 * @return True if token is deactivated, false if not.
 	 */
-	DBResultMessage<Boolean> deactivate(String token);
+	DBResultMessage<Boolean> blockUser(String token);
 
 	/**
 	 * Checks if token is valid.

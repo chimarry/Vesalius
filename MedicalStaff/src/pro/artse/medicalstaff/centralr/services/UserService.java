@@ -58,4 +58,24 @@ public class UserService implements IUserService {
 		}
 
 	}
+
+	@Override
+	public MSResultMessage<Boolean> blockUser(String token) throws Exception {
+		String urlPath = RestApiUtil.buildPath(ApiPaths.DELETE_BLOCK_USER, token);
+		HttpURLConnection connection = RestApiUtil.openConnectionJSON(urlPath, "DELETE", false);
+		try (BufferedReader bufferedReader = RestApiUtil.getReader(connection)) {
+			String resultString = bufferedReader.readLine();
+			MSResultMessage<Boolean> isBlocked = Mapper.mapFromCR(resultString, Boolean.class);
+			connection.disconnect();
+			return isBlocked;
+		} catch (IOException e) {
+			// TODO Add logger
+			connection.disconnect();
+			throw e;
+		} catch (Exception e) {
+			// TODO Add logger
+			connection.disconnect();
+			throw e;
+		}
+	}
 }
