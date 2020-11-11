@@ -25,4 +25,12 @@ public interface ITokenService {
 	 * @return Json representation of an array of Users
 	 */
 	String getAll();
+
+	/**
+	 * Finds and returns user based on specified token.
+	 * 
+	 * @return Json representation of basic user information (token and covid
+	 *         status).
+	 */
+	String search(String token);
 }

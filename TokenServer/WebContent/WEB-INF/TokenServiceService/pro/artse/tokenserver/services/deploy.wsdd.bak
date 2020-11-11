@@ -20,6 +20,9 @@
       <parameter name="className" value="pro.artse.tokenserver.services.TokenServiceSoapBindingImpl"/>
       <parameter name="wsdlPortType" value="TokenService"/>
       <parameter name="typeMappingVersion" value="1.2"/>
+      <operation name="search" qname="operNS:search" xmlns:operNS="http://services.tokenserver.artse.pro" returnQName="retNS:searchReturn" xmlns:retNS="http://services.tokenserver.artse.pro" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:token" xmlns:pns="http://services.tokenserver.artse.pro" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
       <operation name="getAll" qname="operNS:getAll" xmlns:operNS="http://services.tokenserver.artse.pro" returnQName="retNS:getAllReturn" xmlns:retNS="http://services.tokenserver.artse.pro" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
       </operation>
       <operation name="isValidToken" qname="operNS:isValidToken" xmlns:operNS="http://services.tokenserver.artse.pro" returnQName="retNS:isValidTokenReturn" xmlns:retNS="http://services.tokenserver.artse.pro" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
@@ -30,7 +33,7 @@
         <parameter qname="pns:lastName" xmlns:pns="http://services.tokenserver.artse.pro" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
         <parameter qname="pns:ubn" xmlns:pns="http://services.tokenserver.artse.pro" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
       </operation>
-      <parameter name="allowedMethods" value="getAll generateToken isValidToken"/>
+      <parameter name="allowedMethods" value="search getAll generateToken isValidToken"/>
 
   </service>
 </deployment>

@@ -4,6 +4,20 @@
 Built on Apr 22, 2006 (06:55:48 PDT)-->
  <wsdl:types>
   <schema elementFormDefault="qualified" targetNamespace="http://services.tokenserver.artse.pro" xmlns="http://www.w3.org/2001/XMLSchema">
+   <element name="search">
+    <complexType>
+     <sequence>
+      <element name="token" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="searchResponse">
+    <complexType>
+     <sequence>
+      <element name="searchReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
    <element name="getAll">
     <complexType/>
    </element>
@@ -87,6 +101,14 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
    </wsdl:message>
 
+   <wsdl:message name="searchResponse">
+
+      <wsdl:part element="impl:searchResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
    <wsdl:message name="getAllResponse">
 
       <wsdl:part element="impl:getAllResponse" name="parameters">
@@ -95,7 +117,27 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
    </wsdl:message>
 
+   <wsdl:message name="searchRequest">
+
+      <wsdl:part element="impl:search" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
    <wsdl:portType name="TokenService">
+
+      <wsdl:operation name="search">
+
+         <wsdl:input message="impl:searchRequest" name="searchRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:searchResponse" name="searchResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
 
       <wsdl:operation name="getAll">
 
@@ -138,6 +180,24 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
    <wsdl:binding name="TokenServiceSoapBinding" type="impl:TokenService">
 
       <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="search">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="searchRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="searchResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
 
       <wsdl:operation name="getAll">
 

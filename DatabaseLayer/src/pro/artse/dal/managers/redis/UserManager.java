@@ -20,6 +20,7 @@ import pro.artse.dal.models.UserDTO;
 import pro.artse.dal.models.ActivityLogDTO.ActivityDTO;
 import pro.artse.dal.util.RedisConnector;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisShardInfo;
 import redis.clients.jedis.ScanParams;
 import redis.clients.jedis.ScanResult;
 import redis.clients.jedis.Transaction;
@@ -75,10 +76,12 @@ public class UserManager implements IUserManager {
 	}
 
 	@Override
-	public DBResultMessage<String> search(String token) {
+	public DBResultMessage<KeyUserInfoDTO> search(String token) {
 		String foundToken = findAnyOrNull(token);
-		return foundToken == null ? new DBResultMessage<String>(DbStatus.NOT_FOUND)
-				: new DBResultMessage<String>(token, DbStatus.SUCCESS);
+		if (foundToken == null)
+			return new DBResultMessage<KeyUserInfoDTO>(DbStatus.NOT_FOUND);
+		KeyUserInfoDTO userInfoDTO = KeyUserInfoDTO.parse(foundToken);
+		return new DBResultMessage<KeyUserInfoDTO>(userInfoDTO, DbStatus.SUCCESS);
 	}
 
 	@Override
@@ -108,13 +111,12 @@ public class UserManager implements IUserManager {
 		try (Jedis jedis = RedisConnector.createConnection().getResource()) {
 			ScanParams scanParams = new ScanParams();
 			scanParams.match(token + "*");
-
 			String cursor = redis.clients.jedis.ScanParams.SCAN_POINTER_START;
 			boolean cycleIsFinished = false;
 			while (!cycleIsFinished) {
-				ScanResult<String> scanResult = jedis.scan(cursor, scanParams);
+				ScanResult<String> scanResult = jedis.sscan(TOKEN_SET_NAME, cursor, scanParams);
 				List<String> result = scanResult.getResult();
-				Optional<String> foundToken = result.parallelStream().filter(x -> x.contains(token)).findFirst();
+				Optional<String> foundToken = result.stream().filter(x -> x.contains(token)).findFirst();
 				if (foundToken.isPresent())
 					return foundToken.get();
 				cursor = scanResult.getStringCursor();

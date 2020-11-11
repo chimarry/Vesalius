@@ -12,4 +12,6 @@ public interface IUserManager {
 	CrResultMessage<Boolean> unregister(String token);
 
 	CrResultMessage<KeyUserInfoWrapper[]> getAll() throws ServiceException, RemoteException;
+
+	CrResultMessage<KeyUserInfoWrapper> search(String token) throws ServiceException, RemoteException;
 }

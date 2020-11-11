@@ -36,4 +36,16 @@ public class UserService extends BaseService {
 			return ErrorHandler.handle(ex).buildResponse();
 		}
 	}
+
+	@GET
+	@Path("/{token}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUser(@PathParam("token") String token) {
+		try {
+			CrResultMessage<KeyUserInfoWrapper> user = userManager.search(token);
+			return user.buildResponse();
+		} catch (Exception ex) {
+			return ErrorHandler.handle(ex).buildResponse();
+		}
+	}
 }

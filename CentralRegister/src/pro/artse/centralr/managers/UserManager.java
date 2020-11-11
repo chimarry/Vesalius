@@ -1,7 +1,6 @@
 package pro.artse.centralr.managers;
 
 import java.rmi.RemoteException;
-import java.util.List;
 
 import javax.xml.rpc.ServiceException;
 
@@ -26,5 +25,12 @@ public class UserManager implements IUserManager {
 		TokenService tokenService = pro.artse.centralr.managers.ManagerFactory.geTokenService();
 		String allTokens = tokenService.getAll();
 		return Mapper.mapFrom(allTokens, KeyUserInfoWrapper[].class);
+	}
+
+	@Override
+	public CrResultMessage<KeyUserInfoWrapper> search(String token) throws ServiceException, RemoteException {
+		TokenService tokenService = pro.artse.centralr.managers.ManagerFactory.geTokenService();
+		String user = tokenService.search(token);
+		return Mapper.mapFrom(user, KeyUserInfoWrapper.class);
 	}
 }

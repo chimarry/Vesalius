@@ -44,6 +44,12 @@ public class TokenServiceProxy implements pro.artse.tokenserver.services.TokenSe
     return tokenService;
   }
   
+  public java.lang.String search(java.lang.String token) throws java.rmi.RemoteException{
+    if (tokenService == null)
+      _initTokenServiceProxy();
+    return tokenService.search(token);
+  }
+  
   public java.lang.String getAll() throws java.rmi.RemoteException{
     if (tokenService == null)
       _initTokenServiceProxy();

@@ -43,5 +43,5 @@ public interface IUserManager {
 	 */
 	DBResultMessage<List<KeyUserInfoDTO>> getAllAllowedInformation();
 
-	DBResultMessage<String> search(String token);
+	DBResultMessage<KeyUserInfoDTO> search(String token);
 }

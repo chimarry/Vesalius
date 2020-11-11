@@ -5,4 +5,6 @@ import pro.artse.medicalstaff.models.KeyUserInfo;
 
 public interface IUserService {
 	MSResultMessage<KeyUserInfo[]> getAll() throws Exception;
+
+	MSResultMessage<KeyUserInfo> search(String token) throws Exception;
 }

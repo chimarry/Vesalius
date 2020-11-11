@@ -6,6 +6,8 @@ import java.io.*;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RestApiUtil {
 	public static int SUCCESS_HTTP_CODE_MAX = 299;
@@ -35,6 +37,18 @@ public class RestApiUtil {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public static String buildPath(String path, Object... parameters) {
+		StringBuilder buildPath = new StringBuilder(path);
+		Pattern paramterPattern = Pattern.compile("\\{([a-zA-Z])*\\}");
+		Matcher matcher = paramterPattern.matcher(path);
+		int count = 0;
+		while (matcher.find()) {
+			String parameter = parameters[count].toString();
+			buildPath.replace(matcher.start(), matcher.end(), parameter);
+		}
+		return buildPath.toString();
 	}
 
 	/**

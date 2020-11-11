@@ -64,6 +64,15 @@ public class TokenService implements ITokenService {
 	}
 
 	@Override
+	public String search(String token) {
+		Gson serializer = new Gson();
+		serializer.serializeNulls();
+
+		DBResultMessage<KeyUserInfoDTO> user = userManager.search(token);
+		return serializer.toJson(Mapper.mapFrom(user));
+	}
+
+	@Override
 	public String getAll() {
 		Gson serializer = new Gson();
 		serializer.serializeNulls();

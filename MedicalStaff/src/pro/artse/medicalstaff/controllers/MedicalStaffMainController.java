@@ -18,12 +18,14 @@ import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import pro.artse.centralr.api.ApiPaths;
 import pro.artse.medicalstaff.centralr.services.IUserService;
 import pro.artse.medicalstaff.centralr.services.ManagersFactory;
 import pro.artse.medicalstaff.errorhandling.MSResultMessage;
 import pro.artse.medicalstaff.errorhandling.MedicalStaffAlert;
 import pro.artse.medicalstaff.models.CovidStatus;
 import pro.artse.medicalstaff.models.KeyUserInfo;
+import pro.artse.medicalstaff.util.RestApiUtil;
 
 public class MedicalStaffMainController implements Initializable {
 
@@ -93,7 +95,6 @@ public class MedicalStaffMainController implements Initializable {
 			@Override
 			public MSResultMessage<KeyUserInfo[]> call() throws Exception {
 				MSResultMessage<KeyUserInfo[]> data = userService.getAll();
-				System.out.println(data.getStatus());
 				return data;
 			}
 		};
@@ -123,6 +124,8 @@ public class MedicalStaffMainController implements Initializable {
 		infectedCheckBox.setOnAction(this::chooseInfected);
 		potInfectedCheckBox.setOnAction(this::choosePotInfected);
 
+		searchButton.setOnAction(this::search);
+
 		// Show statistics
 		PieChart.Data infectedData = new PieChart.Data("Infected", 13);
 		PieChart.Data notInfectedData = new PieChart.Data("Not infected", 25);
@@ -132,8 +135,44 @@ public class MedicalStaffMainController implements Initializable {
 		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(infectedData, notInfectedData,
 				potInfectedData);
 		statisticChart.setData(pieChartData);
-		// TODO: Implement search mechanism
 		// TODO: Enable chat
+	}
+
+	private void blockUser(ActionEvent event) {
+
+	}
+
+	private void search(ActionEvent event) {
+		String searchFor = searchTokenTextField.getText();
+		if (searchFor != null) {
+			Task<MSResultMessage<KeyUserInfo>> task = new Task<MSResultMessage<KeyUserInfo>>() {
+				@Override
+				public MSResultMessage<KeyUserInfo> call() throws Exception {
+					MSResultMessage<KeyUserInfo> data = userService.search(searchFor);
+					return data;
+				}
+			};
+			task.setOnSucceeded(e -> {
+				MSResultMessage<KeyUserInfo> resultMessage = task.getValue();
+				if (resultMessage.isSuccess()) {
+					usersTableView.getItems().setAll(resultMessage.getResult());
+					usersTableView.getSelectionModel().selectedItemProperty()
+							.addListener((obs, oldSelection, newSelection) -> {
+								if (newSelection != null)
+									disableOptions(false);
+								else
+									disableOptions(true);
+							});
+					setRowColor();
+				} else
+					MedicalStaffAlert.processResult(resultMessage);
+
+			});
+			task.setOnFailed(e -> {
+				MedicalStaffAlert.alert(AlertType.ERROR, "Connection with Central register failed.");
+			});
+			new Thread(task).start();
+		}
 	}
 
 	private void chooseInfected(ActionEvent event) {
@@ -170,7 +209,7 @@ public class MedicalStaffMainController implements Initializable {
 			BooleanBinding notInfected = row.itemProperty().isEqualTo(new KeyUserInfo("", 0));
 			BooleanBinding infected = row.itemProperty().isEqualTo(new KeyUserInfo("", 1));
 			row.styleProperty().bind(Bindings.when(infected).then("-fx-background-color: red ;").otherwise(
-					Bindings.when(notInfected).then("-fx-background-color: lightgreen ;").otherwise("grey")));
+					Bindings.when(notInfected).then("-fx-background-color: lightgreen ;").otherwise("gray")));
 			return row;
 		});
 	}
