@@ -2,32 +2,53 @@ package pro.artse.user.controllers;
 
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import pro.artse.user.centralr.services.IActivityLogService;
 import pro.artse.user.centralr.services.ManagersFactory;
+import pro.artse.user.chat.IChatService;
+import pro.artse.user.chat.ISubscriber;
 import pro.artse.user.errorhandling.SUResultMessage;
 import pro.artse.user.errorhandling.UserAlert;
 import pro.artse.user.models.ActivityLog;
 import pro.artse.user.util.StageUtil;
 
-public class StandardUserMainController implements Initializable {
-	private static final IActivityLogService activityService = ManagersFactory.getActivityLogService();
+public class StandardUserMainController implements Initializable, ISubscriber {
+	private final IActivityLogService activityService = ManagersFactory.getActivityLogService();
+	private final IChatService chatService = ManagersFactory.getChatService();
+
+	private ObservableList<Node> medicalStaffMessagesData = FXCollections.<Node>observableArrayList();
 
 	@FXML
 	private MenuBar mainMenu;
 
+	@FXML
+	private Button sendMsgButton;
+
+	@FXML
+	private VBox medicalStaffMessages;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		chatService.register(this);
+
+		Bindings.bindContentBidirectional(medicalStaffMessagesData, medicalStaffMessages.getChildren());
+		medicalStaffMessagesData.add(new TextArea());
+
 		Menu logoutMenu = new Menu("Log out");
 		logoutMenu.setGraphic(new ImageView("file:../Design/logout.png"));
 		logoutMenu.setStyle("-fx-accent: #a67a53");
@@ -55,6 +76,8 @@ public class StandardUserMainController implements Initializable {
 		mainMenu.getMenus().add(logoutMenu);
 		mainMenu.getMenus().add(activitiesMenu);
 		mainMenu.getMenus().add(locationMenu);
+
+		sendMsgButton.setOnAction(this::sendMessage);
 	}
 
 	/**
@@ -73,6 +96,23 @@ public class StandardUserMainController implements Initializable {
 	 */
 	private void unregister(ActionEvent event) {
 
+	}
+
+	/**
+	 * Unregisters user from the application.
+	 * 
+	 * @param event
+	 */
+	private void sendMessage(ActionEvent event) {
+		String text = getMessage();
+		System.out.println("Message su:" + text);
+		medicalStaffMessagesData.add(new TextArea());
+		chatService.sendMessage(text);
+	}
+
+	private String getMessage() {
+		return ((TextArea) medicalStaffMessages.getChildren().get(medicalStaffMessages.getChildren().size() - 1))
+				.getText();
 	}
 
 	/**
@@ -110,5 +150,16 @@ public class StandardUserMainController implements Initializable {
 	 */
 	private void showLocations(ActionEvent event) {
 
+	}
+
+	@Override
+	public void notify(String message) {
+		Platform.runLater(() -> {
+			TextArea textArea = new TextArea();
+			System.out.println("Message accepted: " + message);
+			textArea.setText(message);
+			medicalStaffMessagesData.add(textArea);
+			medicalStaffMessagesData.add(new TextArea());
+		});
 	}
 }

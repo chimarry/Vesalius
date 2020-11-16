@@ -2,8 +2,8 @@ package pro.artse.medicalstaff.controllers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.prefs.Preferences;
 
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
@@ -12,26 +12,37 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Side;
+import javafx.scene.Node;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
-import pro.artse.centralr.api.ApiPaths;
+import javafx.scene.layout.VBox;
+import pro.arste.chat.ChatServer;
 import pro.artse.medicalstaff.centralr.services.IUserService;
 import pro.artse.medicalstaff.centralr.services.ManagersFactory;
+import pro.artse.medicalstaff.chat.IChatService;
+import pro.artse.medicalstaff.chat.ISubscriber;
 import pro.artse.medicalstaff.errorhandling.MSResultMessage;
 import pro.artse.medicalstaff.errorhandling.MSStatus;
 import pro.artse.medicalstaff.errorhandling.MedicalStaffAlert;
 import pro.artse.medicalstaff.models.CovidStatus;
 import pro.artse.medicalstaff.models.KeyUserInfo;
-import pro.artse.medicalstaff.util.RestApiUtil;
-import sun.net.www.content.audio.x_aiff;
 
-public class MedicalStaffMainController implements Initializable {
+public class MedicalStaffMainController implements Initializable, ISubscriber {
 
 	private final IUserService userService = ManagersFactory.getUserService();
+	private final IChatService chatService = ManagersFactory.getChatService();
+
+	private ObservableList<Node> standardUserMessagesData = FXCollections.<Node>observableArrayList();
+	private ObservableList<Node> medicalStaffMessagesData = FXCollections.<Node>observableArrayList();
+
+	@FXML
+	private VBox standardUserMessages;
+
+	@FXML
+	private VBox medicalStaffMessages;
 
 	@FXML
 	private PieChart statisticChart;
@@ -52,16 +63,13 @@ public class MedicalStaffMainController implements Initializable {
 	private Button stopButton;
 
 	@FXML
+	private Button sendButton;
+
+	@FXML
 	private Tab medicalStaffTab;
 
 	@FXML
 	private Tab standardUserTab;
-
-	@FXML
-	private TextArea standardUserTextArea;
-
-	@FXML
-	private TextArea medicalStaffTextArea;
 
 	@FXML
 	private TableView<KeyUserInfo> usersTableView;
@@ -86,7 +94,13 @@ public class MedicalStaffMainController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+
+		chatService.register(this);
+		chatService.makeAvailable();
 		disableOptions(true);
+
+		Bindings.bindContentBidirectional(standardUserMessagesData, standardUserMessages.getChildren());
+		Bindings.bindContentBidirectional(medicalStaffMessagesData, medicalStaffMessages.getChildren());
 
 		// Get users
 		searchButton.setGraphic(new ImageView("file:../Design/search.png"));
@@ -103,6 +117,9 @@ public class MedicalStaffMainController implements Initializable {
 		searchButton.setOnAction(this::search);
 		blockUserButton.setOnAction(this::blockUser);
 
+		sendButton.setOnAction(this::send);
+		stopButton.setOnAction(this::stop);
+
 		// Show statistics
 		PieChart.Data infectedData = new PieChart.Data("Infected", 13);
 		PieChart.Data notInfectedData = new PieChart.Data("Not infected", 25);
@@ -113,6 +130,40 @@ public class MedicalStaffMainController implements Initializable {
 				potInfectedData);
 		statisticChart.setData(pieChartData);
 		// TODO: Enable chat
+	}
+
+	@Override
+	public void notify(String message) {
+		Platform.runLater(() -> {
+			System.out.println("Primljena poruka: " + message);
+			TextArea textArea = new TextArea();
+			textArea.setText(message);
+			standardUserMessagesData.add(textArea);
+			addMessageSpace(standardUserMessagesData);
+		});
+	}
+
+	private void addMessageSpace(ObservableList<Node> messages) {
+		TextArea messageArea = new TextArea();
+		messageArea.setMinHeight(80);
+		messages.add(messageArea);
+	}
+
+	private void send(ActionEvent event) {
+		// TODO: Check which tab is selected
+		String text = getMessage();
+		addMessageSpace(standardUserMessagesData);
+		chatService.sendMessage(text);
+	}
+
+	private String getMessage() {
+		return ((TextArea) standardUserMessages.getChildren().get(standardUserMessages.getChildren().size() - 1))
+				.getText();
+	}
+
+	private void stop(ActionEvent event) {
+		// TODO: Check which tab is selected
+		chatService.terminate();
 	}
 
 	private void getUsers() {

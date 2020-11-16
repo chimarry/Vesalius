@@ -31,7 +31,7 @@ public class StartupApplication extends Application {
 		Pane mainPane = null;
 		// TODO: Change to true
 		if (Preferences.userRoot().get("token", null) != null)
-			isRegistered = false;
+			isRegistered = true;
 		if (!isRegistered)
 			mainPane = (GridPane) FXMLLoader.load(getClass().getResource("/pro/artse/user/fxml/RegisterForm.fxml"));
 		else
