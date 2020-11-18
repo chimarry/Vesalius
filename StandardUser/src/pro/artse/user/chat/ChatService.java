@@ -28,7 +28,6 @@ public class ChatService implements IChatService {
 		}
 		if (!isFinished) {
 			printWriter.println(text);
-			printWriter.flush();
 		}
 	}
 
@@ -71,7 +70,10 @@ public class ChatService implements IChatService {
 			client = new Socket(address, sendPort);
 			bufferedReader = StreamUtil.getReader(client);
 			printWriter = StreamUtil.getWriter(client);
-			new Thread(() -> receiveMessage()).start();
+			new Thread(() -> {
+				while (!isFinished)
+					receiveMessage();
+			}).start();
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

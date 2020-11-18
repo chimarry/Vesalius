@@ -31,7 +31,10 @@ public class ChatService implements IChatService {
 			client = new Socket(address, port);
 			writer = StreamUtil.getWriter(client);
 			reader = StreamUtil.getReader(client);
-			new Thread(() -> receiveMessage()).start();
+			new Thread(() -> {
+				while (true)
+					receiveMessage();
+			}).start();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -41,8 +44,8 @@ public class ChatService implements IChatService {
 
 	@Override
 	public void sendMessage(String text) {
+		System.out.println(writer + " " + text);
 		writer.println(text);
-		writer.flush();
 	}
 
 	@Override

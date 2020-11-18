@@ -13,6 +13,7 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -45,9 +46,7 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		chatService.register(this);
-
-		Bindings.bindContentBidirectional(medicalStaffMessagesData, medicalStaffMessages.getChildren());
-		medicalStaffMessagesData.add(new TextArea());
+		initializeChatSpace();
 
 		Menu logoutMenu = new Menu("Log out");
 		logoutMenu.setGraphic(new ImageView("file:../Design/logout.png"));
@@ -104,15 +103,30 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 	 * @param event
 	 */
 	private void sendMessage(ActionEvent event) {
-		String text = getMessage();
-		System.out.println("Message su:" + text);
-		medicalStaffMessagesData.add(new TextArea());
+		String text = ((TextArea) medicalStaffMessagesData.get(0)).getText();
+		TextArea sentMessageArea = new TextArea();
+		sentMessageArea.setText("You[sent]: " + text);
+		medicalStaffMessagesData.add(sentMessageArea);
 		chatService.sendMessage(text);
 	}
 
-	private String getMessage() {
-		return ((TextArea) medicalStaffMessages.getChildren().get(medicalStaffMessages.getChildren().size() - 1))
-				.getText();
+	private void initializeChatSpace() {
+		Bindings.bindContentBidirectional(medicalStaffMessagesData, medicalStaffMessages.getChildren());
+		TextArea workingSpaceArea = new TextArea();
+		workingSpaceArea.setMinHeight(20);
+		medicalStaffMessagesData.add(workingSpaceArea);
+		Separator workingSpaceSeparator = new Separator(Orientation.HORIZONTAL);
+		workingSpaceArea.setMinHeight(3);
+		medicalStaffMessagesData.add(workingSpaceSeparator);
+	}
+
+	@Override
+	public void notify(String message) {
+		Platform.runLater(() -> {
+			TextArea textArea = new TextArea();
+			textArea.setText("Medical staff[response]: " + message);
+			medicalStaffMessagesData.add(textArea);
+		});
 	}
 
 	/**
@@ -150,16 +164,5 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 	 */
 	private void showLocations(ActionEvent event) {
 
-	}
-
-	@Override
-	public void notify(String message) {
-		Platform.runLater(() -> {
-			TextArea textArea = new TextArea();
-			System.out.println("Message accepted: " + message);
-			textArea.setText(message);
-			medicalStaffMessagesData.add(textArea);
-			medicalStaffMessagesData.add(new TextArea());
-		});
 	}
 }

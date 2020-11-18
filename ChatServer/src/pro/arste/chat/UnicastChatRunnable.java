@@ -51,6 +51,7 @@ public class UnicastChatRunnable implements Runnable {
 					printWriter.println(message);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
+					e.printStackTrace();
 					closeSockets();
 				}
 			}
@@ -73,11 +74,10 @@ public class UnicastChatRunnable implements Runnable {
 				try {
 					message = bufferedReader.readLine();
 					printWriter.println(message);
-					if (message.equals(ConfigurationUtil.get("endFlag"))) {
-						isFinished = true;
+					if (message.equals(ConfigurationUtil.get("endFlag")))
 						closeSockets();
-					}
 				} catch (IOException e) {
+					e.printStackTrace();
 					closeSockets();
 				}
 			}
@@ -96,6 +96,7 @@ public class UnicastChatRunnable implements Runnable {
 				standardUserSocket.close();
 				System.out.println("Standard user is closed. " + LocalDate.now());
 			}
+			isFinished = true;
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println("Error when closing");

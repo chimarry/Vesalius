@@ -12,6 +12,7 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
@@ -95,12 +96,12 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
+		// Initialize chat
+		initializeChatSpace();
 		chatService.register(this);
 		chatService.makeAvailable();
-		disableOptions(true);
 
-		Bindings.bindContentBidirectional(standardUserMessagesData, standardUserMessages.getChildren());
-		Bindings.bindContentBidirectional(medicalStaffMessagesData, medicalStaffMessages.getChildren());
+		disableOptions(true);
 
 		// Get users
 		searchButton.setGraphic(new ImageView("file:../Design/search.png"));
@@ -135,30 +136,32 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 	@Override
 	public void notify(String message) {
 		Platform.runLater(() -> {
-			System.out.println("Primljena poruka: " + message);
 			TextArea textArea = new TextArea();
-			textArea.setText(message);
+			textArea.setText("Standard user: " + message);
 			standardUserMessagesData.add(textArea);
-			addMessageSpace(standardUserMessagesData);
 		});
 	}
 
-	private void addMessageSpace(ObservableList<Node> messages) {
-		TextArea messageArea = new TextArea();
-		messageArea.setMinHeight(80);
-		messages.add(messageArea);
+	private void initializeChatSpace() {
+		Bindings.bindContentBidirectional(standardUserMessagesData, standardUserMessages.getChildren());
+		Bindings.bindContentBidirectional(medicalStaffMessagesData, medicalStaffMessages.getChildren());
+		addMessageSpace(standardUserMessagesData);
+		addMessageSpace(medicalStaffMessagesData);
+	}
+
+	private void addMessageSpace(ObservableList<Node> list) {
+		TextArea workingSpaceArea = new TextArea();
+		workingSpaceArea.setMinHeight(20);
+		list.add(workingSpaceArea);
+		Separator workingSpaceSeparator = new Separator(Orientation.HORIZONTAL);
+		workingSpaceArea.setMinHeight(3);
+		list.add(workingSpaceSeparator);
 	}
 
 	private void send(ActionEvent event) {
 		// TODO: Check which tab is selected
-		String text = getMessage();
-		addMessageSpace(standardUserMessagesData);
+		String text = ((TextArea) standardUserMessagesData.get(0)).getText();
 		chatService.sendMessage(text);
-	}
-
-	private String getMessage() {
-		return ((TextArea) standardUserMessages.getChildren().get(standardUserMessages.getChildren().size() - 1))
-				.getText();
 	}
 
 	private void stop(ActionEvent event) {
