@@ -20,6 +20,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import pro.arste.chat.ChatServer;
 import pro.artse.medicalstaff.centralr.services.IUserService;
 import pro.artse.medicalstaff.centralr.services.ManagersFactory;
@@ -34,7 +36,7 @@ import pro.artse.medicalstaff.models.KeyUserInfo;
 public class MedicalStaffMainController implements Initializable, ISubscriber {
 
 	private final IUserService userService = ManagersFactory.getUserService();
-	private final IChatService chatService = ManagersFactory.getChatService();
+	private final static IChatService chatService = ManagersFactory.getChatService();
 
 	private ObservableList<Node> standardUserMessagesData = FXCollections.<Node>observableArrayList();
 	private ObservableList<Node> medicalStaffMessagesData = FXCollections.<Node>observableArrayList();
@@ -93,13 +95,16 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 	@FXML
 	private TextField searchTokenTextField;
 
+	public static void onClose(WindowEvent event) {
+		chatService.closeConnection();
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
 		// Initialize chat
 		initializeChatSpace();
 		chatService.register(this);
-		chatService.makeAvailable();
+		chatService.openConnection();
 
 		disableOptions(true);
 
@@ -161,12 +166,15 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 	private void send(ActionEvent event) {
 		// TODO: Check which tab is selected
 		String text = ((TextArea) standardUserMessagesData.get(0)).getText();
+		TextArea sentMessageArea = new TextArea();
+		sentMessageArea.setText("You[sent]: " + text);
+		medicalStaffMessagesData.add(sentMessageArea);
 		chatService.sendMessage(text);
 	}
 
 	private void stop(ActionEvent event) {
 		// TODO: Check which tab is selected
-		chatService.terminate();
+		chatService.makeAvailable();
 	}
 
 	private void getUsers() {

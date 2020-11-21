@@ -21,8 +21,16 @@ public class ChatService implements IChatService {
 
 	private ISubscriber subscriber;
 
+	private Boolean isFinished = false;
+
 	@Override
 	public void makeAvailable() {
+		closeConnection();
+		openConnection();
+	}
+
+	@Override
+	public void openConnection() {
 		// For queue
 		int port = Integer.parseInt(ConfigurationUtil.get("chatServerPort2"));
 		String address = ConfigurationUtil.get("chatServerAddress");
@@ -31,9 +39,11 @@ public class ChatService implements IChatService {
 			client = new Socket(address, port);
 			writer = StreamUtil.getWriter(client);
 			reader = StreamUtil.getReader(client);
+			isFinished = false;
 			new Thread(() -> {
-				while (true)
+				while (!isFinished) {
 					receiveMessage();
+				}
 			}).start();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -44,24 +54,18 @@ public class ChatService implements IChatService {
 
 	@Override
 	public void sendMessage(String text) {
-		System.out.println(writer + " " + text);
 		writer.println(text);
 	}
 
 	@Override
-	public void terminate() {
+	public void closeConnection() {
 		// TODO: Fix error handling
 		// TODO: Fix this
 		sendMessage(ConfigurationUtil.get("endFlag"));
-		try {
-			writer.close();
-			reader.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// TODO: Some optimization
-		makeAvailable();
+		isFinished = true;
+		System.out.println("Closed: " + isFinished);
+		// writer.close();
+		// reader.close();
 	}
 
 	@Override

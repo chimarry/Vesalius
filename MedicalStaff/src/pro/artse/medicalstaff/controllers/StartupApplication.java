@@ -14,6 +14,7 @@ public class StartupApplication extends Application {
 				.load(getClass().getResource("/pro/artse/medicalstaff/fxml/MedicalStaffMainForm.fxml"));
 		Scene scene = new Scene(mainPane);
 		primaryStage.setScene(scene);
+		primaryStage.setOnHidden(MedicalStaffMainController::onClose);
 		primaryStage.show();
 	}
 

@@ -24,7 +24,6 @@ public class ChatService implements IChatService {
 	public void sendMessage(String text) {
 		if (isNewCommunication || client.isClosed()) {
 			openConnection();
-			System.out.println("Connection opened: " + client);
 		}
 		if (!isFinished) {
 			printWriter.println(text);
@@ -37,11 +36,13 @@ public class ChatService implements IChatService {
 		try {
 			message = bufferedReader.readLine();
 			if (message.equals(ConfigurationUtil.get("endFlag"))) {
+				printWriter.println(message);
 				closeConnection();
 				subscriber.notify("");
-			}
-			subscriber.notify(message);
+			} else
+				subscriber.notify(message);
 		} catch (IOException e) {
+			closeConnection();
 			// TODO Handle exception
 			e.printStackTrace();
 		}
@@ -51,13 +52,8 @@ public class ChatService implements IChatService {
 		isFinished = true;
 		isNewCommunication = true;
 		// TODO: Fix error handling
-		try {
-			bufferedReader.close();
-			printWriter.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		// bufferedReader.close();
+		// printWriter.close();
 	}
 
 	private void openConnection() {

@@ -24,6 +24,7 @@ public class AvailabilityRunnable implements Runnable {
 				medicalStaffManager.makeAvailable(medicalStaffMember);
 			}
 		} catch (Exception ex) {
+			// TODO: Add error handler: BindException
 			ex.printStackTrace();
 		}
 	}
