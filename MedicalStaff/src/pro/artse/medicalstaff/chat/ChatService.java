@@ -25,8 +25,7 @@ public class ChatService implements IChatService {
 
 	@Override
 	public void makeAvailable() {
-		closeConnection();
-		openConnection();
+		sendMessage(ConfigurationUtil.get("endFlag"));
 	}
 
 	@Override
@@ -40,11 +39,18 @@ public class ChatService implements IChatService {
 			writer = StreamUtil.getWriter(client);
 			reader = StreamUtil.getReader(client);
 			isFinished = false;
-			new Thread(() -> {
+			Thread receiveThread = new Thread(() -> {
 				while (!isFinished) {
-					receiveMessage();
+					try {
+						receiveMessage();
+					} catch (IOException e) {
+						isFinished = true;
+						e.printStackTrace();
+						// TODO: handle exception
+					}
 				}
-			}).start();
+			});
+			receiveThread.start();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -61,27 +67,36 @@ public class ChatService implements IChatService {
 	public void closeConnection() {
 		// TODO: Fix error handling
 		// TODO: Fix this
-		sendMessage(ConfigurationUtil.get("endFlag"));
 		isFinished = true;
-		System.out.println("Closed: " + isFinished);
-		// writer.close();
-		// reader.close();
 	}
 
 	@Override
-	public void receiveMessage() {
+	public void receiveMessage() throws IOException {
 		String message;
 		try {
 			message = reader.readLine();
-			subscriber.notify(message);
+			System.out.println(message);
+			if (isFlag(message)) {
+				writer.println(message);
+			} else if (message.equals(ConfigurationUtil.get("closeFlag"))) {
+				closeConnection();
+				openConnection();
+			} else
+				subscriber.notify(message);
 		} catch (IOException e) {
 			// TODO Handle exception
 			e.printStackTrace();
+			throw e;
 		}
 	}
 
 	@Override
 	public void register(ISubscriber subscriber) {
 		this.subscriber = subscriber;
+	}
+
+	private Boolean isFlag(String message) {
+		return message == null || message.equals(ConfigurationUtil.get("endFlag"))
+				|| message.equals(ConfigurationUtil.get("errorFlag"));
 	}
 }

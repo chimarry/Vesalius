@@ -168,7 +168,7 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 		String text = ((TextArea) standardUserMessagesData.get(0)).getText();
 		TextArea sentMessageArea = new TextArea();
 		sentMessageArea.setText("You[sent]: " + text);
-		medicalStaffMessagesData.add(sentMessageArea);
+		standardUserMessagesData.add(sentMessageArea);
 		chatService.sendMessage(text);
 	}
 

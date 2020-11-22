@@ -1,5 +1,7 @@
 package pro.artse.medicalstaff.chat;
 
+import java.io.IOException;
+
 public interface IChatService extends IObserver {
 	void openConnection();
 	
@@ -9,5 +11,5 @@ public interface IChatService extends IObserver {
 
 	void closeConnection();
 	
-	void receiveMessage();
+	void receiveMessage() throws IOException;
 }

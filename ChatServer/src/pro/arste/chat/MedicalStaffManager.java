@@ -24,7 +24,10 @@ public class MedicalStaffManager implements IMedicalStaffManager {
 	public Socket getAvailable() {
 		if (medicalStaff.isEmpty())
 			return null;
-		return medicalStaff.poll();
+		Socket socket = medicalStaff.poll();
+		if (socket.isClosed())
+			return null;
+		return socket;
 	}
 
 }

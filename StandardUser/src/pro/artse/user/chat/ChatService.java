@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import pro.artse.chat.util.ConfigurationUtil;
@@ -30,30 +31,9 @@ public class ChatService implements IChatService {
 		}
 	}
 
-	@Override
-	public void receiveMessage() {
-		String message;
-		try {
-			message = bufferedReader.readLine();
-			if (message.equals(ConfigurationUtil.get("endFlag"))) {
-				printWriter.println(message);
-				closeConnection();
-				subscriber.notify("");
-			} else
-				subscriber.notify(message);
-		} catch (IOException e) {
-			closeConnection();
-			// TODO Handle exception
-			e.printStackTrace();
-		}
-	}
-
 	private void closeConnection() {
 		isFinished = true;
 		isNewCommunication = true;
-		// TODO: Fix error handling
-		// bufferedReader.close();
-		// printWriter.close();
 	}
 
 	private void openConnection() {
@@ -67,8 +47,14 @@ public class ChatService implements IChatService {
 			bufferedReader = StreamUtil.getReader(client);
 			printWriter = StreamUtil.getWriter(client);
 			new Thread(() -> {
-				while (!isFinished)
-					receiveMessage();
+				try {
+					while (!isFinished)
+						receiveMessage();
+				} catch (IOException e) {
+					closeConnection();
+					e.printStackTrace();
+					// TODO: Handle exception
+				}
 			}).start();
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
@@ -80,7 +66,32 @@ public class ChatService implements IChatService {
 	}
 
 	@Override
+	public void receiveMessage() throws IOException {
+		String message;
+		try {
+			message = bufferedReader.readLine();
+			System.out.println(message);
+			if (isFlag(message)) {
+				printWriter.println(message);
+			} else if (message.equals(ConfigurationUtil.get("closeFlag"))) {
+				closeConnection();
+			} else
+				subscriber.notify(message);
+		} catch (IOException e) {
+			closeConnection();
+			e.printStackTrace();
+			throw e;
+			// TODO Handle exception
+		}
+	}
+
+	@Override
 	public void register(ISubscriber subscriber) {
 		this.subscriber = subscriber;
+	}
+
+	private Boolean isFlag(String message) {
+		return message == null || message.equals(ConfigurationUtil.get("endFlag"))
+				|| message.equals(ConfigurationUtil.get("errorFlag"));
 	}
 }

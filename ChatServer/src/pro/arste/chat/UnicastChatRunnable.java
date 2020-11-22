@@ -40,18 +40,15 @@ public class UnicastChatRunnable implements Runnable {
 						message = suBufferedReader.readLine();
 						System.out.println("SU: " + message);
 						msPrintWriter.println(message);
-						if (message.equals(ConfigurationUtil.get("endFlag"))) {
+						if (isFlag(message))
 							isFinished = true;
-							System.out.println("is finshed su: " + isFinished);
-						}
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
+						isFinished = true;
+						msPrintWriter.println(ConfigurationUtil.get("errorFlag"));
 						e.printStackTrace();
-						// closeSockets();
 					}
 				}
-				if (isFinished)
-					System.out.println("su is finished");
+				System.out.println("Channel 1 is finished");
 			});
 
 			// Channel 2
@@ -62,21 +59,22 @@ public class UnicastChatRunnable implements Runnable {
 						message = msBufferedReader.readLine();
 						System.out.println("MS: " + message);
 						suPrintWriter.println(message);
-						if (message.equals(ConfigurationUtil.get("endFlag"))) {
+						if (isFlag(message))
 							isFinished = true;
-							System.out.println("is finshed ms: " + isFinished);
-						}
 					} catch (Exception e) {
+						isFinished = true;
+						suPrintWriter.println(ConfigurationUtil.get("errorFlag"));
 						e.printStackTrace();
-						// closeSockets();
 					}
 				}
+				System.out.println("Channel 2 is finished");
 			});
+
 			channel1.start();
 			channel2.start();
 			channel1.join();
 			channel2.join();
-			closeSockets();
+			closeSockets(suPrintWriter, msPrintWriter);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -84,10 +82,15 @@ public class UnicastChatRunnable implements Runnable {
 
 	}
 
-	private void closeSockets() {
+	private Boolean isFlag(String message) {
+		return message.equals(ConfigurationUtil.get("endFlag")) || message.equals(ConfigurationUtil.get("errorFlag"));
+	}
+
+	private void closeSockets(PrintWriter suPrintWriter, PrintWriter msPrintWriter) {
 		try {
-			System.out.println("Closing is called");
 			isFinished = true;
+			suPrintWriter.println(ConfigurationUtil.get("closeFlag"));
+			msPrintWriter.println(ConfigurationUtil.get("closeFlag"));
 			if (!medicalStaffSocket.isClosed()) {
 				medicalStaffSocket.close();
 				System.out.println("Medical staff is closed. " + LocalDateTime.now());
