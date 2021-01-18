@@ -10,6 +10,6 @@ package pro.artse.tokenserver.services;
 public interface TokenService extends java.rmi.Remote {
     public java.lang.String search(java.lang.String token) throws java.rmi.RemoteException;
     public java.lang.String getAll() throws java.rmi.RemoteException;
-    public java.lang.String isValidToken(java.lang.String token) throws java.rmi.RemoteException;
     public java.lang.String generateToken(java.lang.String firstName, java.lang.String lastName, java.lang.String ubn) throws java.rmi.RemoteException;
+    public java.lang.String isValidToken(java.lang.String token) throws java.rmi.RemoteException;
 }

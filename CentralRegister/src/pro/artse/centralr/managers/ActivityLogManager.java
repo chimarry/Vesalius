@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
 import pro.arste.centralr.errorhandling.CrResultMessage;
 import pro.artse.centralr.models.ActivityLogWrapper;
 import pro.artse.centralr.util.Mapper;

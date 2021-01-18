@@ -2,27 +2,15 @@ package pro.artse.user.centralr.services;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.prefs.Preferences;
-
-import javax.xml.ws.Response;
-
-import pro.arste.centralr.errorhandling.CrResultMessage;
 import pro.artse.centralr.api.ApiPaths;
 import pro.artse.centralr.models.ActivityLogWrapper;
-import pro.artse.centralr.util.Mapper;
 import pro.artse.user.errorhandling.ErrorHandler;
 import pro.artse.user.errorhandling.SUResultMessage;
-import pro.artse.user.errorhandling.SUStatus;
 import pro.artse.user.models.ActivityLog;
 import pro.artse.user.util.RestApiUtil;
 import pro.artse.user.util.json.JsonUtil;
-import sun.management.counter.Variability;
 
 public class ActivityLogService implements IActivityLogService {
 

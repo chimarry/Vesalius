@@ -44,17 +44,6 @@ public class TokenServiceSoapBindingStub extends org.apache.axis.client.Stub imp
         _operations[1] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
-        oper.setName("isValidToken");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://services.tokenserver.artse.pro", "token"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
-        oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        oper.setReturnClass(java.lang.String.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("http://services.tokenserver.artse.pro", "isValidTokenReturn"));
-        oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
-        oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[2] = oper;
-
-        oper = new org.apache.axis.description.OperationDesc();
         oper.setName("generateToken");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://services.tokenserver.artse.pro", "firstName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
@@ -65,6 +54,17 @@ public class TokenServiceSoapBindingStub extends org.apache.axis.client.Stub imp
         oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         oper.setReturnClass(java.lang.String.class);
         oper.setReturnQName(new javax.xml.namespace.QName("http://services.tokenserver.artse.pro", "generateTokenReturn"));
+        oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
+        oper.setUse(org.apache.axis.constants.Use.LITERAL);
+        _operations[2] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("isValidToken");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://services.tokenserver.artse.pro", "token"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        oper.setReturnClass(java.lang.String.class);
+        oper.setReturnQName(new javax.xml.namespace.QName("http://services.tokenserver.artse.pro", "isValidTokenReturn"));
         oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
         _operations[3] = oper;
@@ -190,7 +190,7 @@ public class TokenServiceSoapBindingStub extends org.apache.axis.client.Stub imp
 }
     }
 
-    public java.lang.String isValidToken(java.lang.String token) throws java.rmi.RemoteException {
+    public java.lang.String generateToken(java.lang.String firstName, java.lang.String lastName, java.lang.String ubn) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -202,11 +202,11 @@ public class TokenServiceSoapBindingStub extends org.apache.axis.client.Stub imp
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("http://services.tokenserver.artse.pro", "isValidToken"));
+        _call.setOperationName(new javax.xml.namespace.QName("http://services.tokenserver.artse.pro", "generateToken"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {token});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {firstName, lastName, ubn});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -224,7 +224,7 @@ public class TokenServiceSoapBindingStub extends org.apache.axis.client.Stub imp
 }
     }
 
-    public java.lang.String generateToken(java.lang.String firstName, java.lang.String lastName, java.lang.String ubn) throws java.rmi.RemoteException {
+    public java.lang.String isValidToken(java.lang.String token) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -236,11 +236,11 @@ public class TokenServiceSoapBindingStub extends org.apache.axis.client.Stub imp
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("http://services.tokenserver.artse.pro", "generateToken"));
+        _call.setOperationName(new javax.xml.namespace.QName("http://services.tokenserver.artse.pro", "isValidToken"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {firstName, lastName, ubn});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {token});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;

@@ -5,25 +5,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.apache.catalina.ant.FindLeaksTask;
-
-import com.sun.org.apache.bcel.internal.Const;
-
-import jdk.nashorn.internal.ir.ReturnNode;
-import jdk.nashorn.internal.runtime.regexp.joni.SearchAlgorithm;
 import pro.artse.dal.errorhandling.DBResultMessage;
 import pro.artse.dal.errorhandling.DbStatus;
 import pro.artse.dal.errorhandling.ErrorHandler;
 import pro.artse.dal.managers.IUserManager;
 import pro.artse.dal.models.KeyUserInfoDTO;
 import pro.artse.dal.models.UserDTO;
-import pro.artse.dal.models.ActivityLogDTO.ActivityDTO;
 import pro.artse.dal.util.RedisConnector;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisShardInfo;
 import redis.clients.jedis.ScanParams;
 import redis.clients.jedis.ScanResult;
-import redis.clients.jedis.Transaction;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
 /**
@@ -119,7 +110,7 @@ public class UserManager implements IUserManager {
 				Optional<String> foundToken = result.stream().filter(x -> x.contains(token)).findFirst();
 				if (foundToken.isPresent())
 					return foundToken.get();
-				cursor = scanResult.getStringCursor();
+				cursor = scanResult.getCursor();
 				if (cursor.equals(redis.clients.jedis.ScanParams.SCAN_POINTER_START)) {
 					cycleIsFinished = true;
 					return null;
