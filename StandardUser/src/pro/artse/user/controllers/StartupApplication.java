@@ -29,13 +29,7 @@ public class StartupApplication extends Application {
 		Thread.setDefaultUncaughtExceptionHandler(UserAlert::showExceptionError);
 
 		Pane mainPane = null;
-		// TODO: Change to true
-		if (Preferences.userRoot().get("token", null) != null)
-			isRegistered = true;
-		if (!isRegistered)
 			mainPane = (GridPane) FXMLLoader.load(getClass().getResource("/pro/artse/user/fxml/RegisterForm.fxml"));
-		else
-			mainPane = (AnchorPane) FXMLLoader.load(getClass().getResource("/pro/artse/user/fxml/LoginForm.fxml"));
 
 		Scene scene = new Scene(mainPane);
 		primaryStage.setScene(scene);

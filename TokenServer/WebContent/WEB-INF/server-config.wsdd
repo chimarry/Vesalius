@@ -7,8 +7,8 @@
   <ns1:parameter name="dotNetSoapEncFix" value="true"/>
   <ns1:parameter name="enableNamespacePrefixOptimization" value="false"/>
   <ns1:parameter name="sendXMLDeclaration" value="true"/>
-  <ns1:parameter name="sendXsiTypes" value="true"/>
   <ns1:parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
+  <ns1:parameter name="sendXsiTypes" value="true"/>
   <ns1:requestFlow>
    <ns1:handler type="java:org.apache.axis.handlers.JWSHandler">
     <ns1:parameter name="scope" value="session"/>
@@ -37,13 +37,13 @@
    <ns2:parameter qname="ns1:token" type="xsd:string"/>
   </ns2:operation>
   <ns1:operation name="getAll" qname="ns2:getAll" returnQName="ns2:getAllReturn" returnType="xsd:string" soapAction="" xmlns:ns2="http://services.tokenserver.artse.pro" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-  <ns1:operation name="isValidToken" qname="ns3:isValidToken" returnQName="ns3:isValidTokenReturn" returnType="xsd:string" soapAction="" xmlns:ns3="http://services.tokenserver.artse.pro" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-   <ns1:parameter qname="ns3:token" type="xsd:string"/>
+  <ns1:operation name="generateToken" qname="ns3:generateToken" returnQName="ns3:generateTokenReturn" returnType="xsd:string" soapAction="" xmlns:ns3="http://services.tokenserver.artse.pro" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns3:firstName" type="xsd:string"/>
+   <ns1:parameter qname="ns3:lastName" type="xsd:string"/>
+   <ns1:parameter qname="ns3:ubn" type="xsd:string"/>
   </ns1:operation>
-  <ns1:operation name="generateToken" qname="ns4:generateToken" returnQName="ns4:generateTokenReturn" returnType="xsd:string" soapAction="" xmlns:ns4="http://services.tokenserver.artse.pro" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-   <ns1:parameter qname="ns4:firstName" type="xsd:string"/>
-   <ns1:parameter qname="ns4:lastName" type="xsd:string"/>
-   <ns1:parameter qname="ns4:ubn" type="xsd:string"/>
+  <ns1:operation name="isValidToken" qname="ns4:isValidToken" returnQName="ns4:isValidTokenReturn" returnType="xsd:string" soapAction="" xmlns:ns4="http://services.tokenserver.artse.pro" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns4:token" type="xsd:string"/>
   </ns1:operation>
   <ns1:parameter name="allowedMethods" value="search getAll generateToken isValidToken"/>
   <ns1:parameter name="typeMappingVersion" value="1.2"/>

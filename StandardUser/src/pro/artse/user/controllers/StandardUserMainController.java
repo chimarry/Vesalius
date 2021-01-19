@@ -26,6 +26,7 @@ import pro.artse.user.chat.ISubscriber;
 import pro.artse.user.errorhandling.SUResultMessage;
 import pro.artse.user.errorhandling.UserAlert;
 import pro.artse.user.models.ActivityLog;
+import pro.artse.user.models.User;
 import pro.artse.user.util.StageUtil;
 
 public class StandardUserMainController implements Initializable, ISubscriber {
@@ -135,8 +136,7 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 	 * @param event
 	 */
 	private void logout(ActionEvent event) {
-		LocalDateTime logInAt = LocalDateTime
-				.parse(Preferences.userRoot().get("logInAt", LocalDateTime.MIN.toString()));
+		LocalDateTime logInAt = User.getInstance().getLoggedInAt();
 		LocalDateTime logOutAt = LocalDateTime.now().plusHours(2);
 		ActivityLog activityLog = new ActivityLog(logInAt, logOutAt);
 
@@ -145,7 +145,7 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 			public SUResultMessage<Boolean> call() throws Exception {
 
 				SUResultMessage<Boolean> isAdded = activityService.add(activityLog,
-						Preferences.userRoot().get("token", null));
+						User.getInstance().getToken());
 				return isAdded;
 			}
 		};

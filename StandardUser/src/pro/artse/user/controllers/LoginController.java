@@ -11,10 +11,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import pro.artse.user.errorhandling.UserAlert;
 import pro.artse.user.errorhandling.Validator;
+import pro.artse.user.managers.ILoginManager;
+import pro.artse.user.managers.ManagersFactory;
 import pro.artse.user.util.StageUtil;
 
 /**
@@ -25,6 +28,8 @@ import pro.artse.user.util.StageUtil;
  */
 public class LoginController implements Initializable {
 
+	private final ILoginManager loginManager = ManagersFactory.getLoginManager();
+
 	@FXML
 	private PasswordField passwordBox;
 
@@ -32,7 +37,7 @@ public class LoginController implements Initializable {
 	private Button loginButton;
 
 	@FXML
-	private Label tokenDisplay;
+	private TextField tokenField;
 
 	@FXML
 	private AnchorPane loginPane;
@@ -40,7 +45,6 @@ public class LoginController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		loginButton.setOnAction(this::login);
-		tokenDisplay.setText(Preferences.userRoot().get("token", "No related token"));
 	}
 
 	/**
@@ -49,14 +53,17 @@ public class LoginController implements Initializable {
 	 * @param event
 	 */
 	private void login(ActionEvent event) {
-		if (Validator.IsNullOrEmpty(passwordBox.getText()))
+		if (Validator.AreNullOrEmpty(passwordBox.getText(), tokenField.getText()))
 			UserAlert.alert(AlertType.ERROR, UserAlert.REQUIRED_FIELDS);
-		else if (!Preferences.userRoot().get("password", "").equals(passwordBox.getText())) {
-			UserAlert.alert(AlertType.ERROR, "Password is invalid.");
-			passwordBox.setText("");
-		} else {
-			Preferences.userRoot().put("logInAt", LocalDateTime.now().toString());
-			StageUtil.switchStage(loginButton, "/pro/artse/user/fxml/StandardUserMainForm.fxml");
+		else {
+			boolean loggedIn = loginManager.login(tokenField.getText(), passwordBox.getText());
+			if (loggedIn)
+				StageUtil.switchStage(loginButton, "/pro/artse/user/fxml/StandardUserMainForm.fxml");
+			else {
+				UserAlert.alert(AlertType.ERROR, "Password or token is invalid.");
+				passwordBox.setText("");
+				tokenField.setText("");
+			}
 		}
 	}
 }

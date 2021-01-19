@@ -3,21 +3,16 @@ package pro.artse.user.controllers;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
-import java.util.prefs.Preferences;
 
 import javax.xml.rpc.ServiceException;
-
-import com.google.gson.Gson;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.GridPane;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import pro.arste.centralr.errorhandling.CrResultMessage;
-import pro.artse.centralr.util.Mapper;
+import javafx.scene.layout.GridPane;
 import pro.artse.tokenserver.services.TokenService;
 import pro.artse.user.errorhandling.SUResultMessage;
 import pro.artse.user.errorhandling.UserAlert;
@@ -37,6 +32,9 @@ public class RegisterController implements Initializable {
 
 	@FXML
 	private Button registerButton;
+	
+	@FXML
+	private Button alreadyRegisteredButton;
 
 	@FXML
 	private TextArea lastNameBox;
@@ -61,6 +59,7 @@ public class RegisterController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		registerButton.setOnAction(this::register);
+		alreadyRegisteredButton.setOnAction(this::alreadyRegistered);
 	}
 
 	/**
@@ -79,9 +78,9 @@ public class RegisterController implements Initializable {
 						ubnBox.getText());
 				SUResultMessage<String> token = pro.artse.user.util.Mapper.mapFromTs(jsonResultString, String.class);
 				// TODO: Save token
-				// Preferences userPreferences = Preferences.userRoot();
-				// userPreferences.put("token", token.getResult());
+
 				if (token.isSuccess()) {
+					UserAlert.alert(AlertType.CONFIRMATION, "Successful registration", "Token:\n" + token.getResult());
 					StageUtil.switchStage(registerButton, "/pro/artse/user/fxml/LoginDialog.fxml");
 				} else
 					UserAlert.alert(AlertType.ERROR, token.getStatus().toString(),
@@ -89,11 +88,14 @@ public class RegisterController implements Initializable {
 			} catch (RemoteException e) {
 				// TODO: Add logger
 				e.printStackTrace();
-				UserAlert.alert(AlertType.ERROR, "Unable to connect to server.");
+				UserAlert.alert(AlertType.ERROR, "Unable to connect to a server.");
 			}
 		}
 	}
-
+	
+	private void alreadyRegistered(ActionEvent action) {
+		StageUtil.switchStage(registerButton, "/pro/artse/user/fxml/LoginForm.fxml");
+	}
 	/**
 	 * Check if field are valid.
 	 * 

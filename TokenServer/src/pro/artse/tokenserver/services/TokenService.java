@@ -6,16 +6,15 @@ import java.util.List;
 import java.util.UUID;
 
 import com.google.gson.Gson;
-import com.sun.org.apache.xml.internal.serialize.Serializer;
 
 import pro.arste.common.result.OperationStatus;
 import pro.arste.common.result.ResultMessage;
 import pro.artse.dal.errorhandling.DBResultMessage;
-import pro.artse.dal.errorhandling.ErrorHandler;
 import pro.artse.dal.factory.ManagerFactory;
 import pro.artse.dal.managers.IUserManager;
 import pro.artse.dal.models.KeyUserInfoDTO;
 import pro.artse.dal.models.UserDTO;
+import pro.artse.tokenserver.errorhandling.TSResultMessage;
 import pro.artse.tokenserver.mappers.Mapper;
 import pro.artse.tokenserver.models.Credentials;
 
@@ -51,7 +50,8 @@ public class TokenService implements ITokenService {
 		// Save information about the user
 		UserDTO user = Mapper.mapFrom(new Credentials(firstName, lastName, ubn), token);
 		DBResultMessage<Boolean> isAdded = userManager.add(user);
-		return serializer.toJson(Mapper.mapFrom(isAdded));
+		TSResultMessage<Boolean> resultMessage = Mapper.mapFrom(isAdded);
+		return serializer.toJson(new TSResultMessage<String>(token, resultMessage.getStatus(),resultMessage.getMessage()));
 	}
 
 	@Override

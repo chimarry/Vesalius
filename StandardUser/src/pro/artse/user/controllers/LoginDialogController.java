@@ -1,7 +1,6 @@
 package pro.artse.user.controllers;
 
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
@@ -12,8 +11,11 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import pro.artse.user.errorhandling.UserAlert;
 import pro.artse.user.errorhandling.Validator;
+import pro.artse.user.managers.ILoginManager;
+import pro.artse.user.managers.ManagersFactory;
 import pro.artse.user.util.StageUtil;
 
 /**
@@ -23,6 +25,8 @@ import pro.artse.user.util.StageUtil;
  *
  */
 public class LoginDialogController implements Initializable {
+
+	private final ILoginManager loginManager = ManagersFactory.getLoginManager();
 
 	@FXML
 	private Button loginButton;
@@ -37,13 +41,15 @@ public class LoginDialogController implements Initializable {
 	private PasswordField repeatPasswordField;
 
 	@FXML
+	private TextField tokenField;
+
+	@FXML
 	private AnchorPane loginPane;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		loginButton.setOnAction(this::login);
 		cancelButton.setOnAction(this::cancel);
-		UserAlert.alert(AlertType.CONFIRMATION, Preferences.userRoot().get("token", "No token"));
 	}
 
 	/**
@@ -52,13 +58,15 @@ public class LoginDialogController implements Initializable {
 	 * @param event
 	 */
 	private void login(ActionEvent event) {
-		if (!areValidPasswords()) {
-			UserAlert.alert(AlertType.ERROR, "Passwords do not match.");
+		if (!areValidPasswords() || Validator.IsNullOrEmpty(tokenField.getText())) {
+			UserAlert.alert(AlertType.ERROR, "Data is invalid.");
 			repeatPasswordField.setText("");
 		} else {
-			Preferences.userRoot().put("password", passwordField.getText());
-			Preferences.userRoot().put("logInAt", LocalDateTime.now().toString());
-			StageUtil.switchStage(loginButton, "/pro/artse/user/fxml/StandardUserMainForm.fxml");
+			boolean isUserSaved = loginManager.saveUser(tokenField.getText(), passwordField.getText());
+			if (isUserSaved) {
+				StageUtil.switchStage(loginButton, "/pro/artse/user/fxml/StandardUserMainForm.fxml");
+			} else
+				UserAlert.alert(AlertType.ERROR, "Credentials are not saved");
 		}
 	}
 

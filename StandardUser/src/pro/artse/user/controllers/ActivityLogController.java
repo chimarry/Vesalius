@@ -17,6 +17,7 @@ import pro.artse.user.centralr.services.ManagersFactory;
 import pro.artse.user.errorhandling.SUResultMessage;
 import pro.artse.user.errorhandling.UserAlert;
 import pro.artse.user.models.ActivityLog;
+import pro.artse.user.models.User;
 
 /**
  * Interacts with activity log view.
@@ -49,7 +50,7 @@ public class ActivityLogController implements Initializable {
 		Task<SUResultMessage<ActivityLog[]>> task = new Task<SUResultMessage<ActivityLog[]>>() {
 			@Override
 			public SUResultMessage<ActivityLog[]> call() throws Exception {
-				SUResultMessage<ActivityLog[]> data = activityService.getAll(Preferences.userRoot().get("token", null));
+				SUResultMessage<ActivityLog[]> data = activityService.getAll(User.getInstance().getToken());
 				return data;
 			}
 		};
