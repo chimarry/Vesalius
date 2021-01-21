@@ -15,7 +15,7 @@ public class LoginManager implements ILoginManager {
 
 	@Override
 	public boolean login(String token, String password) {
-		try (BufferedReader reader = new BufferedReader(new FileReader(token+".txt"))) {
+		try (BufferedReader reader = new BufferedReader(new FileReader(token + ".txt"))) {
 			if (reader.lines().anyMatch(credentials -> check(token, password, credentials))) {
 				User user = User.getInstance();
 				user.setToken(token);
@@ -35,7 +35,7 @@ public class LoginManager implements ILoginManager {
 	public boolean saveUser(String token, String password) {
 		synchronized (changeLocalCredentialsFileLocker) {
 			try {
-				File file = new File(token+".txt");
+				File file = new File(token + ".txt");
 				file.createNewFile();
 				try (PrintWriter fileStream = new PrintWriter(new FileOutputStream(file), true)) {
 					fileStream.println(token + "#" + getHash(password));
@@ -85,7 +85,7 @@ public class LoginManager implements ILoginManager {
 
 	@Override
 	public boolean removeUser() {
-		File file = new File(User.getInstance().getToken()+".txt");
+		File file = new File(User.getInstance().getToken() + ".txt");
 		try {
 			Files.deleteIfExists(file.toPath());
 			logout();
@@ -95,5 +95,34 @@ public class LoginManager implements ILoginManager {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	@Override
+	public boolean changePassword(String oldPassword, String newPassword) {
+		User currentUser = User.getInstance();
+
+		// Check if credentials match
+		if (!currentUser.getPasswordHash().equals(getHash(oldPassword)))
+			return false;
+
+		// Delete old information
+		File file = new File(currentUser.getToken() + ".txt");
+		try {
+			Files.deleteIfExists(file.toPath());
+			file.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		// Update password
+		try (PrintWriter fileStream = new PrintWriter(new FileOutputStream(file), true)) {
+			fileStream.println(currentUser.getToken() + "#" + getHash(newPassword));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		}
+		currentUser.setPasswordHash(getHash(newPassword));
+		return true;
 	}
 }

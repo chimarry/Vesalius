@@ -14,8 +14,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import pro.artse.user.errorhandling.UserAlert;
 import pro.artse.user.errorhandling.Validator;
+import pro.artse.user.factories.ManagersFactory;
 import pro.artse.user.managers.ILoginManager;
-import pro.artse.user.managers.ManagersFactory;
 import pro.artse.user.util.StageUtil;
 
 /**

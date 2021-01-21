@@ -8,4 +8,5 @@ public interface ILoginManager {
 	boolean saveUser(String token, String password);
 	void logout();
 	boolean removeUser();
+	boolean changePassword(String oldPassword, String newPassword);
 }

@@ -16,8 +16,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import pro.artse.user.errorhandling.UserAlert;
 import pro.artse.user.errorhandling.Validator;
+import pro.artse.user.factories.ManagersFactory;
 import pro.artse.user.managers.ILoginManager;
-import pro.artse.user.managers.ManagersFactory;
 import pro.artse.user.util.StageUtil;
 
 /**

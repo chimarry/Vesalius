@@ -73,10 +73,18 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 		locationItem.setOnAction(this::showLocations);
 		locationMenu.getItems().add(locationItem);
 
+		Menu changePasswordMenu = new Menu("Change password");
+		changePasswordMenu.setGraphic(new ImageView("file:../Design/passwordChange.png"));
+		changePasswordMenu.setStyle("-fx-accent: #a67a53");
+		MenuItem changePasswordItem = new MenuItem("New password");
+		changePasswordItem.setOnAction(this::changePassword);
+		changePasswordMenu.getItems().add(changePasswordItem);
+		
 		mainMenu.getMenus().add(logoutMenu);
 		mainMenu.getMenus().add(activitiesMenu);
 		mainMenu.getMenus().add(locationMenu);
-
+		mainMenu.getMenus().add(changePasswordMenu);
+		
 		sendMsgButton.setOnAction(this::sendMessage);
 	}
 
@@ -89,6 +97,10 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 		StageUtil.showDialog("/pro/artse/user/fxml/ActivityLogDialog.fxml");
 	}
 
+	private void changePassword(ActionEvent event) {
+		StageUtil.showDialog("/pro/artse/user/fxml/ChangePasswordDialog.fxml");
+	}
+	
 	/**
 	 * Unregisters user from the application.
 	 * 
@@ -149,9 +161,6 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 				return isAdded;
 			}
 		};
-		task.setOnSucceeded(e -> {
-			UserAlert.processResult(task.getValue());
-		});
 		task.setOnFailed(e -> UserAlert.alert(AlertType.ERROR, UserAlert.CENTRAL_REGISTER_CONNECTION_PROBLEM));
 		new Thread(task).start();
 		StageUtil.switchStage(mainMenu, "/pro/artse/user/fxml/LoginForm.fxml");
