@@ -44,6 +44,9 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 	@FXML
 	private VBox medicalStaffMessages;
 
+	@FXML
+	private Button uploadDocsButton;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		chatService.register(this);
@@ -79,13 +82,14 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 		MenuItem changePasswordItem = new MenuItem("New password");
 		changePasswordItem.setOnAction(this::changePassword);
 		changePasswordMenu.getItems().add(changePasswordItem);
-		
+
 		mainMenu.getMenus().add(logoutMenu);
 		mainMenu.getMenus().add(activitiesMenu);
 		mainMenu.getMenus().add(locationMenu);
 		mainMenu.getMenus().add(changePasswordMenu);
-		
+
 		sendMsgButton.setOnAction(this::sendMessage);
+		uploadDocsButton.setOnAction(this::uploadDocuments);
 	}
 
 	/**
@@ -100,7 +104,7 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 	private void changePassword(ActionEvent event) {
 		StageUtil.showDialog("/pro/artse/user/fxml/ChangePasswordDialog.fxml");
 	}
-	
+
 	/**
 	 * Unregisters user from the application.
 	 * 
@@ -156,8 +160,7 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 			@Override
 			public SUResultMessage<Boolean> call() throws Exception {
 
-				SUResultMessage<Boolean> isAdded = activityService.add(activityLog,
-						User.getInstance().getToken());
+				SUResultMessage<Boolean> isAdded = activityService.add(activityLog, User.getInstance().getToken());
 				return isAdded;
 			}
 		};
@@ -173,5 +176,9 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 	 */
 	private void showLocations(ActionEvent event) {
 
+	}
+
+	private void uploadDocuments(ActionEvent event) {
+		StageUtil.switchStage(mainMenu, "/pro/artse/user/fxml/SendFilesForm.fxml");
 	}
 }

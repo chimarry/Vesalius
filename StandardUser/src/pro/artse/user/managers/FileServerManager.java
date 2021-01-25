@@ -37,7 +37,7 @@ public class FileServerManager implements IFileServerManager {
 			Registry registry;
 			registry = LocateRegistry.getRegistry(1099);
 			IFileShare fileShare = (IFileShare) registry.lookup(name);
-			files.parallelStream().forEach(x -> {
+			files.forEach(x -> {
 				try {
 					byte[] data = Files.readAllBytes(Paths.get(x.getAbsolutePath()));
 					FSResultMessage<Boolean> isUploaded = fileShare.uploadFile(new BasicFileInfo(x.getName()), data,
