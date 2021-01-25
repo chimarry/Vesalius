@@ -8,6 +8,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import pro.artse.centralr.models.ActivityLogWrapper;
+import pro.artse.fileserver.errorhandling.FSResultMessage;
 import pro.artse.user.errorhandling.*;
 import pro.artse.user.models.ActivityLog;
 import pro.artse.user.util.json.*;
@@ -32,6 +33,14 @@ public final class Mapper {
 		Gson customGson = gsonBuilder.create();
 		return customGson.fromJson(resultMessage, new TypeToken<SUResultMessage<T>>() {
 		}.getType());
+	}
+
+	public static final <T> SUResultMessage<T> mapFromFS(FSResultMessage<T> original) {
+		SUResultMessage<T> copy = new SUResultMessage<T>();
+		copy.setResult(original.getResult());
+		copy.setMessage(original.getMessage());
+		copy.setStatus(mapFSStatus(original.getStatus().toString()));
+		return copy;
 	}
 
 	public static final <T> SUResultMessage<T> mapFromTs(String resultMessage, Type resultType) {
@@ -63,6 +72,23 @@ public final class Mapper {
 	}
 
 	public static SUStatus mapTsStatus(String status) {
+		switch (status.toUpperCase()) {
+		case "SERVER_ERROR":
+			return SUStatus.SERVER_ERROR;
+		case "SUCCESS":
+			return SUStatus.SUCCESS;
+		case "NOT_FOUND":
+			return SUStatus.NOT_FOUND;
+		case "EXISTS":
+			return SUStatus.EXISTS;
+		case "INVALID_DATA":
+			return SUStatus.INVALID_DATA;
+		default:
+			return SUStatus.SERVER_ERROR;
+		}
+	}
+
+	public static SUStatus mapFSStatus(String status) {
 		switch (status.toUpperCase()) {
 		case "SERVER_ERROR":
 			return SUStatus.SERVER_ERROR;
