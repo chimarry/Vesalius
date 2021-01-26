@@ -5,6 +5,9 @@ import javafx.scene.control.Alert.AlertType;
 
 public final class MedicalStaffAlert {
 
+	public static final String REMOTE_CONNECTION_PROBLEM = "There has been a problem with connection to remote server";
+	public static final String CENTRAL_REGISTER_CONNECTION_PROBLEM = "Connection with central register could not been established.";
+
 	/**
 	 * Alerts user about actions.
 	 * 

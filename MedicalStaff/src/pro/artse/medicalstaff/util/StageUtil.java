@@ -31,6 +31,29 @@ public final class StageUtil {
 	}
 
 	/**
+	 * Switches stage. Closes current, and opens new stage.
+	 * 
+	 * @param currentPane Main element of the scene that needs to be closed.
+	 * @param resource    Path to new view.
+	 */
+	public static void switchStage(Node currentPane, String resource, String token) {
+		try {
+			Stage currentStage = (Stage) currentPane.getParent().getScene().getWindow();
+			currentStage.close();
+			FXMLLoader loader = new FXMLLoader(StageUtil.class.getResource(resource));
+			Pane pane = (Pane) loader.load();
+			ITokenSetup controller = (ITokenSetup) loader.getController();
+			controller.setToken(token);
+			Stage newStage = new Stage();
+			newStage.setScene(new Scene(pane));
+			newStage.show();
+		} catch (Exception e) {
+			e.printStackTrace();
+			MedicalStaffAlert.alert(AlertType.ERROR, "Unable to open new window");
+		}
+	}
+
+	/**
 	 * Shows dialog.
 	 * 
 	 * @param resource Path to the dialog.

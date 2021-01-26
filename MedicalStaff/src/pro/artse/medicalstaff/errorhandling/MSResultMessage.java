@@ -1,6 +1,9 @@
 package pro.artse.medicalstaff.errorhandling;
 
-public class MSResultMessage<T> {
+import java.io.Serializable;
+
+public class MSResultMessage<T> implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private T result;
 	private MSStatus status;
 	private String message = "";

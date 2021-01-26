@@ -22,7 +22,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.WindowEvent;
 import pro.artse.medicalstaff.centralr.services.IUserService;
-import pro.artse.medicalstaff.centralr.services.ManagersFactory;
+import pro.artse.medicalstaff.centralr.services.WebServiceFactory;
 import pro.artse.medicalstaff.chat.IChatService;
 import pro.artse.medicalstaff.chat.ISubscriber;
 import pro.artse.medicalstaff.errorhandling.MSResultMessage;
@@ -30,11 +30,12 @@ import pro.artse.medicalstaff.errorhandling.MSStatus;
 import pro.artse.medicalstaff.errorhandling.MedicalStaffAlert;
 import pro.artse.medicalstaff.models.CovidStatus;
 import pro.artse.medicalstaff.models.KeyUserInfo;
+import pro.artse.medicalstaff.util.StageUtil;
 
 public class MedicalStaffMainController implements Initializable, ISubscriber {
 
-	private final IUserService userService = ManagersFactory.getUserService();
-	private final static IChatService chatService = ManagersFactory.getChatService();
+	private final IUserService userService = WebServiceFactory.getUserService();
+	private final static IChatService chatService = WebServiceFactory.getChatService();
 
 	private ObservableList<Node> standardUserMessagesData = FXCollections.<Node>observableArrayList();
 	private ObservableList<Node> medicalStaffMessagesData = FXCollections.<Node>observableArrayList();
@@ -134,6 +135,8 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 				potInfectedData);
 		statisticChart.setData(pieChartData);
 		// TODO: Enable chat
+
+		documentsButton.setOnAction(this::viewDocuments);
 	}
 
 	@Override
@@ -311,5 +314,11 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 		infectedCheckBox.setDisable(isDisabled);
 		potInfectedCheckBox.setDisable(isDisabled);
 		notInfectedCheckBox.setDisable(isDisabled);
+	}
+
+	private void viewDocuments(ActionEvent event) {
+		KeyUserInfo info = usersTableView.getSelectionModel().getSelectedItem();
+		String token = info.getToken();
+		StageUtil.switchStage(blockUserButton, "/pro/artse/medicalstaff/fxml/DocumentsForm.fxml", token);
 	}
 }
