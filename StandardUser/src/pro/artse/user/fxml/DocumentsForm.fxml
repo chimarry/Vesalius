@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="645.0" prefWidth="541.0" style="-fx-background-color: #a67a53;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pro.artse.user.controllers.DocumentsController">
+   <children>
+      <Separator layoutX="22.0" layoutY="42.0" prefHeight="6.0" prefWidth="508.0" />
+      <Label layoutX="205.0" layoutY="6.0" prefHeight="31.0" prefWidth="101.0" stylesheets="@../../../../../../Design/LabelCss.css" text="Documents" />
+      <TableView fx:id="documents" layoutX="6.0" layoutY="96.0" prefHeight="461.0" prefWidth="529.0" stylesheets="@../../../../../../Design/tableCss.css">
+         <columns>
+            <TableColumn fx:id="link" prefWidth="171.0" text="File" />
+            <TableColumn fx:id="createdOn" prefWidth="272.0" text="Created on" />
+            <TableColumn fx:id="size" prefWidth="93.0" text="Size [KB]" />
+         </columns>
+      </TableView>
+      <Button fx:id="downloadButton" layoutX="426.0" layoutY="579.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="101.0" stylesheets="@../../../../../../Design/ButtonCss.css" text="Download" />
+      <Label fx:id="downloadProgressLabel" layoutX="28.0" layoutY="581.0" prefHeight="31.0" prefWidth="341.0" style="-fx-font-family: Baskerville Old Face;" textFill="#71e46f">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

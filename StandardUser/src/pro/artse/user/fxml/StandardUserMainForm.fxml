@@ -96,14 +96,9 @@
                         <Insets bottom="10.0" />
                      </VBox.margin>
                   </Button>
-                  <ListView fx:id="documentsList" prefHeight="331.0" prefWidth="248.0">
+                   <Button fx:id="viewDocsButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="247.0" stylesheets="@../../../../../../Design/ButtonCss.css" text="View documents">
                      <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </ListView>
-                  <Button fx:id="sendDocsButton" mnemonicParsing="false" prefHeight="35.0" prefWidth="200.0" stylesheets="@../../../../../../Design/ButtonCss.css" text="Send documents">
-                     <VBox.margin>
-                        <Insets bottom="20.0" left="30.0" right="20.0" top="10.0" />
+                        <Insets bottom="10.0" />
                      </VBox.margin>
                   </Button>
                </children>

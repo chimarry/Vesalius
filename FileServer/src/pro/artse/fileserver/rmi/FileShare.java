@@ -51,6 +51,7 @@ public class FileShare implements IFileShare {
 			throws RemoteException {
 		boolean isSaved = false;
 		String userDirectoryPath = DirectoryStructureBuilder.buildUserDirectoryPath(token);
+		System.out.println(userDirectoryPath);
 		File userDirectory = new File(userDirectoryPath);
 		if (!userDirectory.exists())
 			userDirectory.mkdir();

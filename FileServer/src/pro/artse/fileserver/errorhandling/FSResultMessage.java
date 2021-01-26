@@ -1,6 +1,9 @@
 package pro.artse.fileserver.errorhandling;
 
-public class FSResultMessage<T> {
+import java.io.Serializable;
+
+public class FSResultMessage<T> implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private T result;
 	private FSStatus status;
 	private String message = "";

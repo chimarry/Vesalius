@@ -9,13 +9,19 @@ import com.google.gson.reflect.TypeToken;
 
 import pro.artse.centralr.models.ActivityLogWrapper;
 import pro.artse.fileserver.errorhandling.FSResultMessage;
+import pro.artse.fileserver.models.BasicFileInfo;
 import pro.artse.user.errorhandling.*;
 import pro.artse.user.models.ActivityLog;
+import pro.artse.user.models.MedicalDocument;
 import pro.artse.user.util.json.*;
 
 public final class Mapper {
 	public static final ActivityLog mapFrom(ActivityLogWrapper wrapper) {
 		return new ActivityLog(LocalDateTime.parse(wrapper.getLogInAt()), LocalDateTime.parse(wrapper.getLogOutAt()));
+	}
+
+	public static final MedicalDocument mapFrom(BasicFileInfo file) {
+		return new MedicalDocument(file.getFileName(), file.getSizeInBytes(), file.getSavedOn());
 	}
 
 	public static final ActivityLogWrapper mapToWrapper(ActivityLog activityLog) {

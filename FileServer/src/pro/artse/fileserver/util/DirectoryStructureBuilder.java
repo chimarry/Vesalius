@@ -1,11 +1,12 @@
 package pro.artse.fileserver.util;
 
+import java.io.File;
 import java.nio.file.Path;
 
 public class DirectoryStructureBuilder {
 	public static final String ROOT_DIRECTORY_PATH = ConfigurationUtil.get("rootDirectoryPath");
-	public static final String USER_DIRECTORY_PATH_FORMAT = "%s//%s";
-	public static final String USER_FILE_PATH_FORMAT = "%s//%s";
+	public static final String USER_DIRECTORY_PATH_FORMAT = "%s" + File.separator + "%s";
+	public static final String USER_FILE_PATH_FORMAT = "%s" + File.separator + "%s";
 	public static final String FILE_NAME_FORMAT = "%s";
 
 	public static String buildUserDirectoryPath(String token) {

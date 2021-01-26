@@ -3,7 +3,6 @@ package pro.artse.user.controllers;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
-import java.util.prefs.Preferences;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -46,6 +45,9 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 
 	@FXML
 	private Button uploadDocsButton;
+
+	@FXML
+	private Button viewDocsButton;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -90,6 +92,7 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 
 		sendMsgButton.setOnAction(this::sendMessage);
 		uploadDocsButton.setOnAction(this::uploadDocuments);
+		viewDocsButton.setOnAction(this::viewDocuments);
 	}
 
 	/**
@@ -180,5 +183,9 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 
 	private void uploadDocuments(ActionEvent event) {
 		StageUtil.switchStage(mainMenu, "/pro/artse/user/fxml/SendFilesForm.fxml");
+	}
+
+	private void viewDocuments(ActionEvent event) {
+		StageUtil.switchStage(mainMenu, "/pro/artse/user/fxml/DocumentsForm.fxml");
 	}
 }
