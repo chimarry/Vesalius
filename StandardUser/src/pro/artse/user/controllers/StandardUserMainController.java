@@ -182,10 +182,10 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 	}
 
 	private void uploadDocuments(ActionEvent event) {
-		StageUtil.switchStage(mainMenu, "/pro/artse/user/fxml/SendFilesForm.fxml");
+		StageUtil.showDialog("/pro/artse/user/fxml/SendFilesForm.fxml");
 	}
 
 	private void viewDocuments(ActionEvent event) {
-		StageUtil.switchStage(mainMenu, "/pro/artse/user/fxml/DocumentsForm.fxml");
+		StageUtil.showDialog("/pro/artse/user/fxml/DocumentsForm.fxml");
 	}
 }

@@ -1,7 +1,9 @@
 package pro.artse.user.util;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
+import java.util.zip.DataFormatException;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -10,6 +12,7 @@ import com.google.gson.reflect.TypeToken;
 import pro.artse.centralr.models.ActivityLogWrapper;
 import pro.artse.fileserver.errorhandling.FSResultMessage;
 import pro.artse.fileserver.models.BasicFileInfo;
+import pro.artse.fileserver.util.Compressor;
 import pro.artse.user.errorhandling.*;
 import pro.artse.user.models.ActivityLog;
 import pro.artse.user.models.MedicalDocument;

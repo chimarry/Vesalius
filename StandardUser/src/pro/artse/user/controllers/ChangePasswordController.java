@@ -46,7 +46,7 @@ public class ChangePasswordController implements Initializable {
 		Stage currentStage = (Stage) cancelButton.getParent().getScene().getWindow();
 		currentStage.close();
 	}
-	
+
 	private void changePassword(ActionEvent event) {
 		if (!areValidPasswords()) {
 			UserAlert.alert(AlertType.ERROR, "Data is invalid.");
@@ -54,17 +54,17 @@ public class ChangePasswordController implements Initializable {
 			newPasswordField.setText("");
 			oldPasswordField.setText("");
 		} else {
-			boolean isPasswordChanged = loginManager.changePassword(oldPasswordField.getText(), newPasswordField.getText());
-			if (isPasswordChanged) {
-				Stage currentStage = (Stage) changePasswordButton.getParent().getScene().getWindow();
-				currentStage.close();
-			} else
+			boolean isPasswordChanged = loginManager.changePassword(oldPasswordField.getText(),
+					newPasswordField.getText());
+			if (isPasswordChanged)
+				StageUtil.closeDialog(cancelButton);
+			else
 				UserAlert.alert(AlertType.ERROR, "Password is not changed");
 		}
 	}
-	
+
 	private boolean areValidPasswords() {
-		return !Validator.AreNullOrEmpty(oldPasswordField.getText(),newPasswordField.getText(), repeatPasswordField.getText())
-				&& newPasswordField.getText().equals(repeatPasswordField.getText());
+		return !Validator.AreNullOrEmpty(oldPasswordField.getText(), newPasswordField.getText(),
+				repeatPasswordField.getText()) && newPasswordField.getText().equals(repeatPasswordField.getText());
 	}
 }

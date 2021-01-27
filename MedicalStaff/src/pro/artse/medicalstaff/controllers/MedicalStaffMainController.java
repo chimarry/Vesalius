@@ -319,6 +319,6 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 	private void viewDocuments(ActionEvent event) {
 		KeyUserInfo info = usersTableView.getSelectionModel().getSelectedItem();
 		String token = info.getToken();
-		StageUtil.switchStage(blockUserButton, "/pro/artse/medicalstaff/fxml/DocumentsForm.fxml", token);
+		StageUtil.showDialog("/pro/artse/medicalstaff/fxml/DocumentsForm.fxml", token);
 	}
 }

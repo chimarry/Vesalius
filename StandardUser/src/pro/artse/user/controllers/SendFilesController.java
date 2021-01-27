@@ -84,10 +84,14 @@ public class SendFilesController implements Initializable {
 			}
 		};
 		task.setOnFailed(e -> UserAlert.alert(AlertType.ERROR, "Uploading failed."));
-		task.setOnSucceeded(e -> UserAlert.alert(AlertType.INFORMATION,
-				"Number of files uploaded: " + task.getValue().getResult()));
+		task.setOnSucceeded(e -> {
+			SUResultMessage<Integer> resultMessage = task.getValue();
+			StageUtil.closeDialog(sendFilesButton);
+			int filesCount = resultMessage.getResult() == null ? 0 : resultMessage.getResult();
+			String message = "Number of files uploaded: " + (filesCount == 0 ? "none" : filesCount);
+			UserAlert.alert(AlertType.INFORMATION, message);
+		});
 		new Thread(task).start();
-		StageUtil.switchStage(sendFilesButton, "/pro/artse/user/fxml/StandardUserMainForm.fxml");
 	}
 
 	private void addFile(ActionEvent event) {

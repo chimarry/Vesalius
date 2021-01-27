@@ -12,10 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.zip.DataFormatException;
 
 import pro.artse.fileserver.errorhandling.FSResultMessage;
 import pro.artse.fileserver.models.BasicFileInfo;
 import pro.artse.fileserver.rmi.IFileShare;
+import pro.artse.fileserver.util.Compressor;
+import pro.artse.user.errorhandling.ErrorHandler;
 import pro.artse.user.errorhandling.SUResultMessage;
 import pro.artse.user.errorhandling.SUStatus;
 import pro.artse.user.models.MedicalDocument;
@@ -40,8 +43,8 @@ public class FileServerManager implements IFileServerManager {
 			files.forEach(x -> {
 				try {
 					byte[] data = Files.readAllBytes(Paths.get(x.getAbsolutePath()));
-					FSResultMessage<Boolean> isUploaded = fileShare.uploadFile(new BasicFileInfo(x.getName()), data,
-							token);
+					FSResultMessage<Boolean> isUploaded = fileShare.uploadFile(new BasicFileInfo(x.getName()),
+							Compressor.compress(data), token, true);
 					if (isUploaded.isSuccess())
 						numberOfAddedFiles.incrementAndGet();
 				} catch (IOException e) {
@@ -86,9 +89,12 @@ public class FileServerManager implements IFileServerManager {
 			Registry registry;
 			registry = LocateRegistry.getRegistry(1099);
 			IFileShare fileShare = (IFileShare) registry.lookup(name);
-			FSResultMessage<byte[]> data = fileShare.downloadFile(fileName, token);
-			return Mapper.mapFromFS(data);
-		} catch (RemoteException | NotBoundException e) {
+			FSResultMessage<byte[]> data = fileShare.downloadFile(fileName, token, true);
+			SUResultMessage<byte[]> compressedData = Mapper.mapFromFS(data);
+			// Decompress bytes
+			compressedData.setResult(Compressor.decompress(data.getResult()));
+			return compressedData;
+		} catch (IOException | NotBoundException | DataFormatException e) {
 			return pro.artse.user.errorhandling.ErrorHandler.handle(e);
 		}
 	}

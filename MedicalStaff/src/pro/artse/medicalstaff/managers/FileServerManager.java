@@ -1,6 +1,7 @@
 package pro.artse.medicalstaff.managers;
 
 import java.io.File;
+import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -8,10 +9,12 @@ import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.zip.DataFormatException;
 
 import pro.artse.fileserver.errorhandling.FSResultMessage;
 import pro.artse.fileserver.models.BasicFileInfo;
 import pro.artse.fileserver.rmi.IFileShare;
+import pro.artse.fileserver.util.Compressor;
 import pro.artse.medicalstaff.errorhandling.ErrorHandler;
 import pro.artse.medicalstaff.errorhandling.MSResultMessage;
 import pro.artse.medicalstaff.models.MedicalDocument;
@@ -53,9 +56,11 @@ public class FileServerManager implements IFileServerManager {
 			Registry registry;
 			registry = LocateRegistry.getRegistry(1099);
 			IFileShare fileShare = (IFileShare) registry.lookup(name);
-			FSResultMessage<byte[]> data = fileShare.downloadFile(fileName, token);
-			return Mapper.mapFromFS(data);
-		} catch (RemoteException | NotBoundException e) {
+			FSResultMessage<byte[]> data = fileShare.downloadFile(fileName, token, true);
+			MSResultMessage<byte[]> compressedData = Mapper.mapFromFS(data);
+			compressedData.setResult(Compressor.decompress(data.getResult()));
+			return compressedData;
+		} catch (IOException | NotBoundException | DataFormatException e) {
 			return ErrorHandler.handle(e);
 		}
 	}

@@ -36,10 +36,8 @@ public final class StageUtil {
 	 * @param currentPane Main element of the scene that needs to be closed.
 	 * @param resource    Path to new view.
 	 */
-	public static void switchStage(Node currentPane, String resource, String token) {
+	public static void showDialog(String resource, String token) {
 		try {
-			Stage currentStage = (Stage) currentPane.getParent().getScene().getWindow();
-			currentStage.close();
 			FXMLLoader loader = new FXMLLoader(StageUtil.class.getResource(resource));
 			Pane pane = (Pane) loader.load();
 			ITokenSetup controller = (ITokenSetup) loader.getController();

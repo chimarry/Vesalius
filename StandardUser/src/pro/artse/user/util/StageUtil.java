@@ -37,6 +37,16 @@ public final class StageUtil {
 	}
 
 	/**
+	 * Closes dialog.
+	 * 
+	 * @param currentNode Some element of the scene that needs to be closed.
+	 */
+	public static void closeDialog(Node currentNode) {
+		Stage currentStage = (Stage) currentNode.getParent().getScene().getWindow();
+		currentStage.close();
+	}
+
+	/**
 	 * Shows dialog.
 	 * 
 	 * @param resource Path to the dialog.

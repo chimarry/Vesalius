@@ -12,11 +12,13 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 import pro.artse.fileserver.errorhandling.ErrorHandler;
 import pro.artse.fileserver.errorhandling.FSResultMessage;
 import pro.artse.fileserver.errorhandling.FSStatus;
 import pro.artse.fileserver.models.BasicFileInfo;
+import pro.artse.fileserver.util.Compressor;
 import pro.artse.fileserver.util.DirectoryStructureBuilder;
 
 public class FileShare implements IFileShare {
@@ -47,7 +49,7 @@ public class FileShare implements IFileShare {
 	}
 
 	@Override
-	public FSResultMessage<Boolean> uploadFile(BasicFileInfo fileInfo, byte[] data, String token)
+	public FSResultMessage<Boolean> uploadFile(BasicFileInfo fileInfo, byte[] data, String token, boolean isCompressed)
 			throws RemoteException {
 		boolean isSaved = false;
 		String userDirectoryPath = DirectoryStructureBuilder.buildUserDirectoryPath(token);
@@ -62,13 +64,15 @@ public class FileShare implements IFileShare {
 			boolean isCreated = fileToSave.createNewFile();
 			if (!isCreated)
 				return new FSResultMessage<Boolean>(false, FSStatus.UNKNOWN_ERROR, "File could not been created.");
-			isSaved = zipAndSaveFile(fileToSave, data);
-		} catch (IOException e) {
+			byte[] dataToSave = data;
+			if (isCompressed)
+				dataToSave = Compressor.decompress(data);
+			isSaved = saveFile(fileToSave, dataToSave);
+		} catch (IOException | DataFormatException e) {
 			return ErrorHandler.handle(e, false);
 		}
 		if (!isSaved)
-			return new FSResultMessage<Boolean>(false, FSStatus.SERVER_ERROR, "Data is not saved");
-
+			return new FSResultMessage<Boolean>(false, FSStatus.SERVER_ERROR, "Data is not saved.");
 		return new FSResultMessage<Boolean>(FSStatus.SUCCESS);
 	}
 
@@ -95,18 +99,19 @@ public class FileShare implements IFileShare {
 	}
 
 	@Override
-	public FSResultMessage<byte[]> downloadFile(String fileName, String token) throws RemoteException {
+	public FSResultMessage<byte[]> downloadFile(String fileName, String token, boolean compress)
+			throws RemoteException {
 		String userDirectoryPath = DirectoryStructureBuilder.buildUserDirectoryPath(token);
 		String filePath = DirectoryStructureBuilder.buildPathForFile(userDirectoryPath, fileName, token);
 		try {
 			byte[] data = Files.readAllBytes(Paths.get(filePath));
-			return new FSResultMessage<byte[]>(data, FSStatus.SUCCESS);
+			return new FSResultMessage<byte[]>(Compressor.compress(data), FSStatus.SUCCESS);
 		} catch (IOException e) {
 			return ErrorHandler.handle(e);
 		}
 	}
 
-	private boolean zipAndSaveFile(File file, byte[] data) throws IOException {
+	private boolean saveFile(File file, byte[] data) throws IOException {
 		// Write data
 		try (FileOutputStream fos = new FileOutputStream(file, true)) {
 			fos.write(data);
