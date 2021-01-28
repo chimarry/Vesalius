@@ -5,9 +5,6 @@ import java.net.HttpURLConnection;
 import java.rmi.RemoteException;
 import java.util.zip.DataFormatException;
 
-import pro.artse.medicalstaff.errorhandling.MSResultMessage;
-import pro.artse.medicalstaff.errorhandling.MSStatus;
-
 public class ErrorHandler {
 	public static <T> SUResultMessage<T> handle(Exception ex, HttpURLConnection connection, T result) {
 		SUResultMessage<T> resultMessage = handle(ex, connection);

@@ -4,6 +4,13 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
+import com.sothawo.mapjfx.Coordinate;
+import com.sothawo.mapjfx.MapView;
+import com.sothawo.mapjfx.XYZParam;
+import com.sothawo.mapjfx.event.MapLabelEvent;
+import com.sothawo.mapjfx.event.MapViewEvent;
+import com.sothawo.mapjfx.event.MarkerEvent;
+
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -35,6 +42,9 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 	private ObservableList<Node> medicalStaffMessagesData = FXCollections.<Node>observableArrayList();
 
 	@FXML
+	private MapView mapView;
+
+	@FXML
 	private MenuBar mainMenu;
 
 	@FXML
@@ -48,6 +58,12 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 
 	@FXML
 	private Button viewDocsButton;
+
+	@FXML
+	private TextArea longitudeBox;
+
+	@FXML
+	private TextArea latitudeBox;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -93,6 +109,8 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 		sendMsgButton.setOnAction(this::sendMessage);
 		uploadDocsButton.setOnAction(this::uploadDocuments);
 		viewDocsButton.setOnAction(this::viewDocuments);
+
+		initializeMap();
 	}
 
 	/**
@@ -187,5 +205,17 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 
 	private void viewDocuments(ActionEvent event) {
 		StageUtil.showDialog("/pro/artse/user/fxml/DocumentsForm.fxml");
+	}
+
+	private void initializeMap() {
+		Coordinate banjaLukaCenterCoordinates = new Coordinate(44.77777556721956, 17.191052994189608);
+		mapView.setCenter(banjaLukaCenterCoordinates);
+
+		mapView.addEventHandler(MapViewEvent.MAP_CLICKED, event -> {
+			event.consume();
+			latitudeBox.setText(event.getCoordinate().getLatitude().toString());
+			longitudeBox.setText(event.getCoordinate().getLongitude().toString());
+		});
+		mapView.initialize();
 	}
 }
