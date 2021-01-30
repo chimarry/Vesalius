@@ -12,7 +12,7 @@ import pro.artse.tokenserver.services.TokenService;
 
 public class AuthorizationManager implements IAuthorizationManager {
 
-	private final TokenService tokenService = ManagerFactory.geTokenService();
+	private final TokenService tokenService = ManagerFactory.getTokenService();
 
 	public AuthorizationManager() throws ServiceException {
 	}

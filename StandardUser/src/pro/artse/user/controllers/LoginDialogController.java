@@ -58,7 +58,7 @@ public class LoginDialogController implements Initializable {
 	 * @param event
 	 */
 	private void login(ActionEvent event) {
-		if (!areValidPasswords() || Validator.IsNullOrEmpty(tokenField.getText())) {
+		if (!areValidPasswords() || Validator.isNullOrEmpty(tokenField.getText())) {
 			UserAlert.alert(AlertType.ERROR, "Data is invalid.");
 			repeatPasswordField.setText("");
 		} else {
@@ -80,7 +80,7 @@ public class LoginDialogController implements Initializable {
 	}
 
 	private boolean areValidPasswords() {
-		return !Validator.AreNullOrEmpty(passwordField.getText(), repeatPasswordField.getText())
+		return !Validator.areNullOrEmpty(passwordField.getText(), repeatPasswordField.getText())
 				&& passwordField.getText().equals(repeatPasswordField.getText());
 	}
 }

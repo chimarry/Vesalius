@@ -1,8 +1,12 @@
 package pro.artse.dal.managers;
 
+import java.util.List;
+
 import pro.artse.dal.errorhandling.DBResultMessage;
-import pro.artse.dal.models.LocationData;
+import pro.artse.dal.models.LocationDTO;
 
 public interface ILocationManager {
-	DBResultMessage<Boolean> saveLocation(String token, LocationData locationData);
+	DBResultMessage<Boolean> saveLocation(String token, LocationDTO locationData);
+
+	DBResultMessage<List<LocationDTO>> getLocations(String token, int timeIntervalInDays);
 }

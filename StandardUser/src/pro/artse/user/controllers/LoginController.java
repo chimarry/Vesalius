@@ -53,7 +53,7 @@ public class LoginController implements Initializable {
 	 * @param event
 	 */
 	private void login(ActionEvent event) {
-		if (Validator.AreNullOrEmpty(passwordBox.getText(), tokenField.getText()))
+		if (Validator.areNullOrEmpty(passwordBox.getText(), tokenField.getText()))
 			UserAlert.alert(AlertType.ERROR, UserAlert.REQUIRED_FIELDS);
 		else {
 			boolean loggedIn = loginManager.login(tokenField.getText(), passwordBox.getText());

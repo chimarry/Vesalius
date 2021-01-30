@@ -16,14 +16,14 @@ public class UserManager implements IUserManager {
 
 	@Override
 	public CrResultMessage<KeyUserInfoWrapper[]> getAll() throws ServiceException, RemoteException {
-		TokenService tokenService = pro.artse.centralr.managers.ManagerFactory.geTokenService();
+		TokenService tokenService = pro.artse.centralr.managers.ManagerFactory.getTokenService();
 		String allTokens = tokenService.getAll();
 		return Mapper.mapFrom(allTokens, KeyUserInfoWrapper[].class);
 	}
 
 	@Override
 	public CrResultMessage<KeyUserInfoWrapper> search(String token) throws ServiceException, RemoteException {
-		TokenService tokenService = pro.artse.centralr.managers.ManagerFactory.geTokenService();
+		TokenService tokenService = pro.artse.centralr.managers.ManagerFactory.getTokenService();
 		String user = tokenService.search(token);
 		return Mapper.mapFrom(user, KeyUserInfoWrapper.class);
 	}

@@ -1,11 +1,16 @@
 package pro.artse.user.controllers;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import com.sothawo.mapjfx.Coordinate;
 import com.sothawo.mapjfx.MapView;
+import com.sothawo.mapjfx.Marker;
 import com.sothawo.mapjfx.XYZParam;
 import com.sothawo.mapjfx.event.MapLabelEvent;
 import com.sothawo.mapjfx.event.MapViewEvent;
@@ -23,21 +28,29 @@ import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.VBox;
 import pro.artse.user.centralr.services.IActivityLogService;
+import pro.artse.user.centralr.services.ILocationService;
 import pro.artse.user.centralr.services.ManagersFactory;
 import pro.artse.user.chat.IChatService;
 import pro.artse.user.chat.ISubscriber;
 import pro.artse.user.errorhandling.SUResultMessage;
 import pro.artse.user.errorhandling.UserAlert;
+import pro.artse.user.errorhandling.Validator;
 import pro.artse.user.models.ActivityLog;
+import pro.artse.user.models.Location;
 import pro.artse.user.models.User;
 import pro.artse.user.util.StageUtil;
 
 public class StandardUserMainController implements Initializable, ISubscriber {
 	private final IActivityLogService activityService = ManagersFactory.getActivityLogService();
 	private final IChatService chatService = ManagersFactory.getChatService();
+	private final ILocationService locationService = ManagersFactory.getLocationService();
 
 	private ObservableList<Node> medicalStaffMessagesData = FXCollections.<Node>observableArrayList();
 
@@ -60,10 +73,25 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 	private Button viewDocsButton;
 
 	@FXML
+	private Button sendLocationButton;
+
+	@FXML
 	private TextArea longitudeBox;
 
 	@FXML
 	private TextArea latitudeBox;
+
+	@FXML
+	private DatePicker sinceDatePicker;
+
+	@FXML
+	private DatePicker untilDatePicker;
+
+	@FXML
+	private TextField sinceTimeTextField;
+
+	@FXML
+	private TextField untilTimeTextField;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -109,6 +137,7 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 		sendMsgButton.setOnAction(this::sendMessage);
 		uploadDocsButton.setOnAction(this::uploadDocuments);
 		viewDocsButton.setOnAction(this::viewDocuments);
+		sendLocationButton.setOnAction(this::sendLocation);
 
 		initializeMap();
 	}
@@ -190,13 +219,35 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 		StageUtil.switchStage(mainMenu, "/pro/artse/user/fxml/LoginForm.fxml");
 	}
 
+	private void sendLocation(ActionEvent event) {
+		Location location = buildLocation();
+		if (location != null) {
+			Task<SUResultMessage<Boolean>> task = new Task<SUResultMessage<Boolean>>() {
+				@Override
+				public SUResultMessage<Boolean> call() throws Exception {
+					SUResultMessage<Boolean> isAdded = locationService.add(location, User.getInstance().getToken());
+					return isAdded;
+				}
+			};
+			task.setOnFailed(e -> UserAlert.alert(AlertType.ERROR, UserAlert.CENTRAL_REGISTER_CONNECTION_PROBLEM));
+			task.setOnSucceeded(e -> {
+				if (task.getValue().isSuccess()) {
+					Marker newLocation = Marker.createProvided(Marker.Provided.BLUE)
+							.setPosition(new Coordinate(location.getLongitude(), location.getLatitude()));
+					mapView.addMarker(newLocation);
+				}
+			});
+			new Thread(task).start();
+		}
+	}
+
 	/**
 	 * Action that shows window with locations user registered at the time.
 	 * 
 	 * @param event
 	 */
 	private void showLocations(ActionEvent event) {
-
+		StageUtil.showDialog("/pro/artse/user/fxml/LocationsForm.fxml");
 	}
 
 	private void uploadDocuments(ActionEvent event) {
@@ -217,5 +268,29 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 			longitudeBox.setText(event.getCoordinate().getLongitude().toString());
 		});
 		mapView.initialize();
+	}
+
+	private Location buildLocation() {
+		LocalDate since = sinceDatePicker.getValue();
+		LocalDate until = untilDatePicker.getValue();
+		String sinceTimeString = sinceTimeTextField.getText();
+		String untilTimeString = untilTimeTextField.getText();
+		String longitudeString = longitudeBox.getText();
+		String latitudeString = latitudeBox.getText();
+
+		if (Validator.areNullOrEmpty(sinceTimeString, untilTimeString, longitudeString, latitudeString)) {
+			UserAlert.alert(AlertType.ERROR, UserAlert.REQUIRED_FIELDS);
+			return null;
+		}
+		if (!Validator.areValidDates(since, until)) {
+			UserAlert.alert(AlertType.ERROR, "Wrong since or until date. Since cannot be greater than until.");
+			return null;
+		}
+		double longitude = Double.parseDouble(longitudeBox.getText());
+		double latitude = Double.parseDouble(latitudeBox.getText());
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+		LocalDateTime sinceLocalDateTime = LocalDateTime.of(since, LocalTime.parse(sinceTimeString, formatter));
+		LocalDateTime untilLocalDateTime = LocalDateTime.of(until, LocalTime.parse(untilTimeString, formatter));
+		return new Location(longitude, latitude, sinceLocalDateTime, untilLocalDateTime);
 	}
 }

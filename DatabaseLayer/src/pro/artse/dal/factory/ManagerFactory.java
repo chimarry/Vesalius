@@ -18,10 +18,18 @@ public final class ManagerFactory {
 	}
 
 	/**
-	 * @return Manager for manipulation information about user.
+	 * @return Manager for manipulating information about user.
 	 * @see UserManager
 	 */
 	public static IUserManager getUserManager() {
 		return new UserManager();
+	}
+
+	/**
+	 * @return Manager for manipulating locations.
+	 * @see LocationManager
+	 */
+	public static ILocationManager getLocationManager() {
+		return new LocationManager();
 	}
 }

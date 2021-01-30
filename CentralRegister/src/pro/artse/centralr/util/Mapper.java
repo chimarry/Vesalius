@@ -9,10 +9,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import pro.arste.centralr.errorhandling.CrResultMessage;
 import pro.artse.centralr.models.ActivityLogWrapper;
+import pro.artse.centralr.models.LocationWrapper;
 import pro.artse.dal.errorhandling.DBResultMessage;
 import pro.artse.dal.errorhandling.DbStatus;
 import pro.artse.dal.models.ActivityLogDTO;
 import pro.artse.dal.models.ActivityLogDTO.ActivityDTO;
+import pro.artse.dal.models.LocationDTO;
 
 /**
  * Maper between layers and tiers.
@@ -28,6 +30,16 @@ public class Mapper {
 
 	public static ActivityLogWrapper mapToWrapper(ActivityDTO dto) {
 		return new ActivityLogWrapper(dto.getLogInAt(), dto.getLogOutAt());
+	}
+
+	public static LocationDTO mapToDTO(LocationWrapper location) {
+		return new LocationDTO(location.getLongitude(), location.getLatitude(),
+				LocalDateTime.parse(location.getSince()), LocalDateTime.parse(location.getUntil()));
+	}
+
+	public static LocationWrapper mapToWrapper(LocationDTO location) {
+		return new LocationWrapper(location.getLongitude(), location.getLatitude(), location.getSince(),
+				location.getUntil());
 	}
 
 	public static <T> CrResultMessage<T> mapFrom(String resultMessage, Type resultType) {

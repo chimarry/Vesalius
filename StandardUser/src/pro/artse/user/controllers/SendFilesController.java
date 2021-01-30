@@ -107,16 +107,16 @@ public class SendFilesController implements Initializable {
 	}
 
 	private void showFilePath(String filePath) {
-		if (Validator.IsNullOrEmpty(label1.getText())) {
+		if (Validator.isNullOrEmpty(label1.getText())) {
 			label1.setText(filePath);
 			addFile1Button.setDisable(true);
-		} else if (Validator.IsNullOrEmpty(label2.getText())) {
+		} else if (Validator.isNullOrEmpty(label2.getText())) {
 			label2.setText(filePath);
 			addFile2Button.setDisable(true);
-		} else if (Validator.IsNullOrEmpty(label3.getText())) {
+		} else if (Validator.isNullOrEmpty(label3.getText())) {
 			label3.setText(filePath);
 			addFile3Button.setDisable(true);
-		} else if (Validator.IsNullOrEmpty(label4.getText())) {
+		} else if (Validator.isNullOrEmpty(label4.getText())) {
 			label4.setText(filePath);
 			addFile4Button.setDisable(true);
 		} else {

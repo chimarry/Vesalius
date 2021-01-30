@@ -26,7 +26,7 @@ public final class ManagerFactory {
 	 * Creates implementation for IAuthorizationManager.
 	 * 
 	 * @return @see AuthorizationManager
-	 * @throws ServiceException 
+	 * @throws ServiceException
 	 */
 	public static IAuthorizationManager getAuthorizationManager() throws ServiceException {
 		return new AuthorizationManager();
@@ -42,11 +42,20 @@ public final class ManagerFactory {
 	}
 
 	/**
+	 * Creates implementation for ILocationManager;
+	 * 
+	 * @return @see LocationManager
+	 */
+	public static ILocationManager getLocationManager() {
+		return new LocationManager();
+	}
+
+	/**
 	 * 
 	 * @return Configured token service.
 	 * @throws ServiceException
 	 */
-	public static TokenService geTokenService() throws ServiceException {
+	public static TokenService getTokenService() throws ServiceException {
 		TokenServiceServiceLocator locator = new TokenServiceServiceLocator();
 		return locator.getTokenService();
 	}

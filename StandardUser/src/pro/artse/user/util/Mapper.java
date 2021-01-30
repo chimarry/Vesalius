@@ -10,11 +10,13 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import pro.artse.centralr.models.ActivityLogWrapper;
+import pro.artse.centralr.models.LocationWrapper;
 import pro.artse.fileserver.errorhandling.FSResultMessage;
 import pro.artse.fileserver.models.BasicFileInfo;
 import pro.artse.fileserver.util.Compressor;
 import pro.artse.user.errorhandling.*;
 import pro.artse.user.models.ActivityLog;
+import pro.artse.user.models.Location;
 import pro.artse.user.models.MedicalDocument;
 import pro.artse.user.util.json.*;
 
@@ -61,6 +63,11 @@ public final class Mapper {
 		Gson customGson = gsonBuilder.create();
 		return customGson.fromJson(resultMessage, new TypeToken<SUResultMessage<T>>() {
 		}.getType());
+	}
+
+	public static LocationWrapper mapToWrapper(Location location) {
+		return new LocationWrapper(location.getLongitude(), location.getLatitude(), location.getSince(),
+				location.getUntil());
 	}
 
 	public static SUStatus mapHttpStatus(String status) {

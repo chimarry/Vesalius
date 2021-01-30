@@ -10,4 +10,8 @@ public class ManagersFactory {
 	public static IChatService getChatService() {
 		return new ChatService();
 	}
+
+	public static ILocationService getLocationService() {
+		return new LocationService();
+	}
 }

@@ -102,6 +102,6 @@ public class RegisterController implements Initializable {
 	 * @return True if are valid, false if not.
 	 */
 	private boolean areValidFields() {
-		return !Validator.AreNullOrEmpty(firstNameBox.getText(), lastNameBox.getText(), ubnBox.getText());
+		return !Validator.areNullOrEmpty(firstNameBox.getText(), lastNameBox.getText(), ubnBox.getText());
 	}
 }

@@ -64,7 +64,7 @@ public class ChangePasswordController implements Initializable {
 	}
 
 	private boolean areValidPasswords() {
-		return !Validator.AreNullOrEmpty(oldPasswordField.getText(), newPasswordField.getText(),
+		return !Validator.areNullOrEmpty(oldPasswordField.getText(), newPasswordField.getText(),
 				repeatPasswordField.getText()) && newPasswordField.getText().equals(repeatPasswordField.getText());
 	}
 }
