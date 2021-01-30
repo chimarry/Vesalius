@@ -1,9 +1,11 @@
 package pro.artse.user.controllers;
 
+import java.awt.Button;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.sothawo.mapjfx.Coordinate;
@@ -15,9 +17,14 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 import pro.artse.user.centralr.services.ILocationService;
 import pro.artse.user.centralr.services.ManagersFactory;
@@ -53,6 +60,11 @@ public class LocationController implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		// create a text input dialog
+		TextInputDialog td = new TextInputDialog("12");
+		td.setHeaderText("Enter number of days");
+		Optional<String> daysAsString = td.showAndWait();
+
 		longitude.setCellValueFactory(new PropertyValueFactory<>("Longitude"));
 		latitude.setCellValueFactory(new PropertyValueFactory<>("Latitude"));
 		since.setCellValueFactory(location -> {
@@ -81,7 +93,7 @@ public class LocationController implements Initializable {
 		Task<SUResultMessage<Location[]>> task = new Task<SUResultMessage<Location[]>>() {
 			@Override
 			public SUResultMessage<Location[]> call() throws Exception {
-				return locationService.getAll(User.getInstance().getToken(), 30);
+				return locationService.getAll(User.getInstance().getToken(), Integer.parseInt(daysAsString.get()));
 			}
 		};
 		task.setOnSucceeded(e -> {
