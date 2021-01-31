@@ -10,4 +10,8 @@ public final class WebServiceFactory {
 	public static IChatService getChatService() {
 		return new ChatService();
 	}
+
+	public static ILocationService getLocationService() {
+		return new LocationService();
+	}
 }

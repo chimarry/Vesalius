@@ -10,4 +10,5 @@ public final class ApiPaths {
 	public static final String DELETE_BLOCK_USER = API_PREFIX + "users" + "/{token}";
 	public static final String POST_LOCATION = API_PREFIX + "locations";
 	public static final String GET_LOCATIONS = API_PREFIX + "locations";
+	public static final String GET_USER_LOCATIONS = GET_ONE_USER + "/locations";
 }

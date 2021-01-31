@@ -136,7 +136,8 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 		statisticChart.setData(pieChartData);
 		// TODO: Enable chat
 
-		documentsButton.setOnAction(this::viewDocuments);
+		documentsButton.setOnAction(this::showDocuments);
+		locationsButton.setOnAction(this::showLocations);
 	}
 
 	@Override
@@ -316,9 +317,15 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 		notInfectedCheckBox.setDisable(isDisabled);
 	}
 
-	private void viewDocuments(ActionEvent event) {
+	private void showDocuments(ActionEvent event) {
 		KeyUserInfo info = usersTableView.getSelectionModel().getSelectedItem();
 		String token = info.getToken();
 		StageUtil.showDialog("/pro/artse/medicalstaff/fxml/DocumentsForm.fxml", token);
+	}
+
+	private void showLocations(ActionEvent event) {
+		KeyUserInfo info = usersTableView.getSelectionModel().getSelectedItem();
+		String token = info.getToken();
+		StageUtil.showDialog("/pro/artse/medicalstaff/fxml/LocationsForm.fxml", token);
 	}
 }

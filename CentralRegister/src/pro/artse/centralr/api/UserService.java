@@ -1,18 +1,23 @@
 package pro.artse.centralr.api;
 
+import java.util.List;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import pro.arste.centralr.errorhandling.CrResultMessage;
 import pro.arste.centralr.errorhandling.ErrorHandler;
+import pro.artse.centralr.managers.ILocationManager;
 import pro.artse.centralr.managers.IUserManager;
 import pro.artse.centralr.managers.ManagerFactory;
 import pro.artse.centralr.models.KeyUserInfoWrapper;
+import pro.artse.centralr.models.LocationWrapper;
 
 @Path("users")
 public class UserService extends BaseService {
 	private final IUserManager userManager = ManagerFactory.getUserManager();
+	private final ILocationManager locationManager = ManagerFactory.getLocationManager();
 
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
@@ -56,6 +61,18 @@ public class UserService extends BaseService {
 		try {
 			CrResultMessage<Boolean> user = userManager.blockUser(token);
 			return user.buildResponse();
+		} catch (Exception ex) {
+			return ErrorHandler.handle(ex).buildResponse();
+		}
+	}
+
+	@GET
+	@Path("/{token}/locations")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getLocations(@QueryParam("days") int days, @PathParam("token") String token) {
+		try {
+			CrResultMessage<List<LocationWrapper>> locations = locationManager.getAll(token, days);
+			return locations.buildResponse();
 		} catch (Exception ex) {
 			return ErrorHandler.handle(ex).buildResponse();
 		}
