@@ -92,7 +92,6 @@ public class UserService extends BaseService {
 	@Path("/{token}/infected")
 	public Response markAsInfected(LocationWrapper location, @PathParam("token") String token) {
 		try {
-			authorize(token);
 			CrResultMessage<Boolean> resultMessage = userManager.markUserAsInfected(token, location);
 			return resultMessage.buildResponse();
 		} catch (Exception e) {

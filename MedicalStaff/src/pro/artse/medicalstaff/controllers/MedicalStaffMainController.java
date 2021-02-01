@@ -300,6 +300,8 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 			MedicalStaffAlert.alert(AlertType.ERROR, "Connection with Central register failed.");
 		});
 		new Thread(task).start();
+		clearCheckboxes();
+		getUsers();
 	}
 
 	private void chooseNotInfected(ActionEvent event) {
@@ -319,16 +321,19 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 	}
 
 	private void changeCovidStatus(CovidStatus covidStatus) {
-
 	}
 
 	private void setRowColor() {
 		usersTableView.setRowFactory(tv -> {
 			TableRow<KeyUserInfo> row = new TableRow<>();
 			BooleanBinding notInfected = row.itemProperty().isEqualTo(new KeyUserInfo("", 0));
-			BooleanBinding infected = row.itemProperty().isEqualTo(new KeyUserInfo("", 1));
-			row.styleProperty().bind(Bindings.when(infected).then("-fx-background-color: red ;").otherwise(
-					Bindings.when(notInfected).then("-fx-background-color: lightgreen ;").otherwise("gray")));
+			BooleanBinding infected = row.itemProperty().isEqualTo(new KeyUserInfo("", 2));
+			BooleanBinding potInfected = row.itemProperty().isEqualTo(new KeyUserInfo("", 1));
+			row.styleProperty()
+					.bind(Bindings.when(infected).then("-fx-background-color: red ;")
+							.otherwise(Bindings.when(notInfected).then("-fx-background-color: lightgreen ;")
+									.otherwise(Bindings.when(potInfected).then("-fx-background-color: yellow")
+											.otherwise("-fx-background-color: white"))));
 			return row;
 		});
 	}
@@ -352,5 +357,11 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 		KeyUserInfo info = usersTableView.getSelectionModel().getSelectedItem();
 		String token = info.getToken();
 		StageUtil.showDialog("/pro/artse/medicalstaff/fxml/LocationsForm.fxml", token);
+	}
+
+	private void clearCheckboxes() {
+		potInfectedCheckBox.setSelected(false);
+		notInfectedCheckBox.setSelected(false);
+		infectedCheckBox.setSelected(false);
 	}
 }

@@ -72,8 +72,9 @@ public final class Mapper {
 
 	public static SUStatus mapHttpStatus(String status) {
 		switch (status.toUpperCase()) {
-		case "Internal_SERVER_ERROR":
+		case "INTERNAL_SERVER_ERROR":
 			return SUStatus.SERVER_ERROR;
+		case "OK":
 		case "ACCEPTED":
 			return SUStatus.SUCCESS;
 		case "NO_CONTENT":

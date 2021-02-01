@@ -38,9 +38,9 @@ public class KeyUserInfo implements Serializable {
 		case 0:
 			return "Not infected";
 		case 1:
-			return "Infected";
+			return "Potentially Infected";
 		case 2:
-			return "Potentially infected";
+			return "Infected";
 		default:
 			return "Unknown";
 		}

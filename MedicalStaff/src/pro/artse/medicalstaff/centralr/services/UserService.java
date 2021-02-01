@@ -87,7 +87,6 @@ public class UserService implements IUserService {
 
 	@Override
 	public MSResultMessage<Boolean> markUserAsInfected(String token, Location location) throws IOException {
-
 		String urlPath = RestApiUtil.buildPath(ApiPaths.POST_USER_IS_INFECTED, token);
 		HttpURLConnection connection = RestApiUtil.openConnectionJSON(urlPath, "POST", true);
 		connection.setRequestProperty("Content-Type", "application/json");

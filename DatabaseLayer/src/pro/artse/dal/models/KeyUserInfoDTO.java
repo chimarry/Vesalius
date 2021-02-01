@@ -12,7 +12,7 @@ public class KeyUserInfoDTO {
 	private String token;
 
 	/**
-	 * Type of a person (infected, potentially infected, not infected).
+	 * Type of a person (not infected, potentially infected, infected).
 	 */
 	private int covidStatus;
 
@@ -82,7 +82,7 @@ public class KeyUserInfoDTO {
 	 * Sets type of a person.
 	 * 
 	 * @param covidStatus Number that indicates what type of a person does user
-	 *                   belong to.
+	 *                    belong to.
 	 */
 	public void setCovidStatus(int personType) {
 		this.covidStatus = personType;

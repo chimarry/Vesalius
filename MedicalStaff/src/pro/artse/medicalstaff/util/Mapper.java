@@ -44,10 +44,12 @@ public final class Mapper {
 
 	public static MSStatus mapHttpStatus(String status) {
 		switch (status.toUpperCase()) {
-		case "Internal_SERVER_ERROR":
-			return MSStatus.SERVER_ERROR;
+		case "OK":
+			return MSStatus.SUCCESS;
 		case "ACCEPTED":
 			return MSStatus.SUCCESS;
+		case "INTERNAL_SERVER_ERROR":
+			return MSStatus.SERVER_ERROR;
 		case "NO_CONTENT":
 			return MSStatus.NOT_FOUND;
 		case "FOUND":

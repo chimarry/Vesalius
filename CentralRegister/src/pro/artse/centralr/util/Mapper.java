@@ -63,7 +63,7 @@ public class Mapper {
 		case SERVER_ERROR:
 			return Status.INTERNAL_SERVER_ERROR;
 		case SUCCESS:
-			return Status.ACCEPTED;
+			return Status.OK;
 		case NOT_FOUND:
 			return Status.NO_CONTENT;
 		case EXISTS:
@@ -82,7 +82,7 @@ public class Mapper {
 		case "SERVER_ERROR":
 			return Status.INTERNAL_SERVER_ERROR;
 		case "SUCCESS":
-			return Status.ACCEPTED;
+			return Status.OK;
 		case "NOT_FOUND":
 			return Status.NO_CONTENT;
 		case "EXISTS":
