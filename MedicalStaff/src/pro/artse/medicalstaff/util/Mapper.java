@@ -6,14 +6,21 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import pro.artse.centralr.models.LocationWrapper;
 import pro.artse.fileserver.errorhandling.FSResultMessage;
 import pro.artse.fileserver.models.BasicFileInfo;
 import pro.artse.medicalstaff.errorhandling.*;
+import pro.artse.medicalstaff.models.Location;
 import pro.artse.medicalstaff.models.MedicalDocument;
 
 public final class Mapper {
 	public static final MedicalDocument mapFrom(BasicFileInfo file) {
 		return new MedicalDocument(file.getFileName(), file.getSizeInBytes(), file.getSavedOn());
+	}
+
+	public static final LocationWrapper mapToWrapper(Location location) {
+		return new LocationWrapper(location.getLongitude(), location.getLatitude(), location.getSince(),
+				location.getUntil());
 	}
 
 	public static final <T> MSResultMessage<T> mapFromFS(FSResultMessage<T> original) {

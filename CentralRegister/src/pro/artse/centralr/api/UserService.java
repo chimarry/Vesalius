@@ -77,4 +77,25 @@ public class UserService extends BaseService {
 			return ErrorHandler.handle(ex).buildResponse();
 		}
 	}
+
+	/**
+	 * Adds user location with time information, if an user has a privilege to do
+	 * so.
+	 * 
+	 * @param newLocation Data to be added.
+	 * @param token       UserDTO's identifier.
+	 * @return Wrapper result with correct HTTP status code. @see HttpResultMessage
+	 */
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response markAsInfected(LocationWrapper location, @PathParam("token") String token) {
+		try {
+			authorize(token);
+			CrResultMessage<Boolean> resultMessage = userManager.markUserAsInfected(token, location);
+			return resultMessage.buildResponse();
+		} catch (Exception e) {
+			return ErrorHandler.handle(e).buildResponse();
+		}
+	}
 }

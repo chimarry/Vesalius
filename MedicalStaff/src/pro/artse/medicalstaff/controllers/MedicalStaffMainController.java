@@ -30,6 +30,7 @@ import pro.artse.medicalstaff.errorhandling.MSStatus;
 import pro.artse.medicalstaff.errorhandling.MedicalStaffAlert;
 import pro.artse.medicalstaff.models.CovidStatus;
 import pro.artse.medicalstaff.models.KeyUserInfo;
+import pro.artse.medicalstaff.models.Location;
 import pro.artse.medicalstaff.util.StageUtil;
 
 public class MedicalStaffMainController implements Initializable, ISubscriber {
@@ -274,7 +275,29 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 			potInfectedCheckBox.setSelected(false);
 			notInfectedCheckBox.setSelected(false);
 		}
-		changeCovidStatus(CovidStatus.INFECTED);
+		Location location = new Location();
+		Task<MSResultMessage<Boolean>> task = new Task<MSResultMessage<Boolean>>() {
+			@Override
+			public MSResultMessage<Boolean> call() throws Exception {
+				MSResultMessage<Boolean> data = userService
+						.markUserAsInfected(usersTableView.getSelectionModel().getSelectedItem().getToken(), location);
+				return data;
+			}
+		};
+		task.setOnSucceeded(e -> {
+			MSResultMessage<Boolean> resultMessage = task.getValue();
+			if (resultMessage.isSuccess()) {
+				usersTableView.getSelectionModel().selectedItemProperty().get().setCovidStatus(2);
+			} else if (resultMessage.getStatus() == MSStatus.NOT_FOUND) {
+				MedicalStaffAlert.processResult(resultMessage, AlertType.INFORMATION);
+			} else
+				MedicalStaffAlert.processResult(resultMessage, AlertType.ERROR);
+
+		});
+		task.setOnFailed(e -> {
+			MedicalStaffAlert.alert(AlertType.ERROR, "Connection with Central register failed.");
+		});
+		new Thread(task).start();
 	}
 
 	private void chooseNotInfected(ActionEvent event) {

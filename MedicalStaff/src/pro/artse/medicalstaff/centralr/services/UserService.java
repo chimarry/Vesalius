@@ -4,15 +4,21 @@ import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 
 import javax.ws.rs.core.Response;
 
 import pro.artse.centralr.api.ApiPaths;
+import pro.artse.centralr.models.ActivityLogWrapper;
+import pro.artse.centralr.models.LocationWrapper;
+import pro.artse.medicalstaff.errorhandling.ErrorHandler;
 import pro.artse.medicalstaff.errorhandling.MSResultMessage;
 import pro.artse.medicalstaff.errorhandling.MSStatus;
 import pro.artse.medicalstaff.models.KeyUserInfo;
+import pro.artse.medicalstaff.models.Location;
+import pro.artse.medicalstaff.util.JsonUtil;
 import pro.artse.medicalstaff.util.Mapper;
 import pro.artse.medicalstaff.util.RestApiUtil;
 
@@ -76,6 +82,32 @@ public class UserService implements IUserService {
 			// TODO Add logger
 			connection.disconnect();
 			throw e;
+		}
+	}
+
+	@Override
+	public MSResultMessage<Boolean> markUserAsInfected(String token, Location location) throws IOException {
+
+		String urlPath = RestApiUtil.buildPath(ApiPaths.POST_USER_IS_INFECTED, token);
+		HttpURLConnection connection = RestApiUtil.openConnectionJSON(urlPath, "POST", true);
+		connection.setRequestProperty("Content-Type", "application/json");
+		LocationWrapper wrapper = Mapper.mapToWrapper(location);
+		String jsonString = JsonUtil.mapToJson(wrapper);
+		try (OutputStream os = connection.getOutputStream()) {
+			os.write(jsonString.getBytes());
+			os.flush();
+		} catch (Exception e) {
+			// TODO: Add logger
+			return ErrorHandler.handle(e, connection);
+		}
+		try (BufferedReader reader = RestApiUtil.getReader(connection)) {
+			String resultString = reader.readLine();
+			MSResultMessage<Boolean> infectedResult = Mapper.mapFromCR(resultString, Boolean.class);
+			connection.disconnect();
+			return infectedResult;
+		} catch (Exception e) {
+			// TODO: Add logger
+			return ErrorHandler.handle(e, connection);
 		}
 	}
 }

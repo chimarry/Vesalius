@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import pro.artse.dal.errorhandling.DBResultMessage;
@@ -14,6 +15,8 @@ import pro.artse.dal.models.LocationDTO;
 import pro.artse.dal.util.DateTimeUtil;
 import pro.artse.dal.util.RedisConnector;
 import redis.clients.jedis.GeoCoordinate;
+import redis.clients.jedis.GeoRadiusResponse;
+import redis.clients.jedis.GeoUnit;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
@@ -70,5 +73,27 @@ public class LocationManager implements ILocationManager {
 		} catch (JedisConnectionException e) {
 			return ErrorHandler.handle(e);
 		}
+	}
+
+	@Override
+	public LocationDTO isInRange(String locationToken, LocationDTO location, int distanceInMeters, int timeInterval) {
+		LocationDTO potentiallyInfectedOnLocation = null;
+		try (Jedis jedis = RedisConnector.createConnection().getResource()) {
+			Optional<GeoRadiusResponse> hasBeenInContact = jedis.georadius(locationToken, location.getLongitude(),
+					location.getLatitude(), distanceInMeters, GeoUnit.M).stream().filter(x -> {
+						String member = x.getMemberByString();
+						String[] dates = member.split(SEPARATOR);
+						return DateTimeUtil.areOverlapped(location.getSince(), location.getUntil(),
+								LocalDateTime.parse(dates[0]), LocalDateTime.parse(dates[1]), timeInterval);
+					}).findAny();
+			if (hasBeenInContact.isPresent()) {
+				GeoRadiusResponse response = hasBeenInContact.get();
+				String[] dates = response.getMemberByString().split(SEPARATOR);
+				potentiallyInfectedOnLocation = new LocationDTO(response.getCoordinate().getLongitude(),
+						response.getCoordinate().getLatitude(), LocalDateTime.parse(dates[0]),
+						LocalDateTime.parse(dates[1]));
+			}
+		}
+		return potentiallyInfectedOnLocation;
 	}
 }
