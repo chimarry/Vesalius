@@ -89,6 +89,7 @@ public class UserService extends BaseService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{token}/infected")
 	public Response markAsInfected(LocationWrapper location, @PathParam("token") String token) {
 		try {
 			authorize(token);

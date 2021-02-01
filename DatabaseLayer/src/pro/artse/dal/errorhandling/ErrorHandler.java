@@ -21,7 +21,7 @@ public class ErrorHandler {
 		logger.log(ex);
 		ex.printStackTrace();
 		if (ex instanceof JedisConnectionException) {
-			return new DBResultMessage<T>(DbStatus.SERVER_ERROR);
+			return new DBResultMessage<T>(null, DbStatus.SERVER_ERROR, "Jedis connection problem.");
 		} else if (ex instanceof DateTimeParseException) {
 			return new DBResultMessage<T>(DbStatus.INVALID_DATA);
 		} else if (ex instanceof ArrayIndexOutOfBoundsException)

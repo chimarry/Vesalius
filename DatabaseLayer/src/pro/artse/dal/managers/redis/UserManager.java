@@ -3,6 +3,7 @@ package pro.artse.dal.managers.redis;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -31,7 +32,7 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
  */
 public class UserManager implements IUserManager {
 
-	private static final String TOKEN_SUFFIX = "tokens";
+	private static final String TOKENS_KEY = "tokens";
 	private ILocationManager locationManager = ManagerFactory.getLocationManager();
 
 	@Override
@@ -46,7 +47,7 @@ public class UserManager implements IUserManager {
 			jedis.hmset(key, user.mapAttributes());
 
 			// Add token to index
-			jedis.sadd(TOKEN_SUFFIX, user.getKeyUserInfoDTO().toString());
+			jedis.sadd(TOKENS_KEY, user.getKeyUserInfoDTO().getToken());
 			return new DBResultMessage<Boolean>(true, DbStatus.SUCCESS);
 		} catch (JedisConnectionException ex) {
 			return ErrorHandler.handle(ex);
@@ -64,9 +65,7 @@ public class UserManager implements IUserManager {
 				return new DBResultMessage<Boolean>(DbStatus.NOT_FOUND);
 			jedis.hset(token, "isBlocked", "1");
 			// Remove from index
-			String userInSet = findAnyOrNull(token);
-			if (userInSet != null)
-				jedis.srem(TOKEN_SUFFIX, userInSet);
+			jedis.srem(TOKENS_KEY, token);
 			return new DBResultMessage<Boolean>(true, DbStatus.SUCCESS);
 		} catch (JedisConnectionException ex) {
 			return ErrorHandler.handle(ex);
@@ -75,18 +74,25 @@ public class UserManager implements IUserManager {
 
 	@Override
 	public DBResultMessage<KeyUserInfoDTO> search(String token) {
-		String foundToken = findAnyOrNull(token);
-		if (foundToken == null)
-			return new DBResultMessage<KeyUserInfoDTO>(DbStatus.NOT_FOUND);
-		KeyUserInfoDTO userInfoDTO = KeyUserInfoDTO.parse(foundToken);
-		return new DBResultMessage<KeyUserInfoDTO>(userInfoDTO, DbStatus.SUCCESS);
+		try (Jedis jedis = RedisConnector.createConnection().getResource()) {
+			Map<String, String> attributes = jedis.hgetAll(token);
+			if (attributes.isEmpty())
+				return new DBResultMessage<KeyUserInfoDTO>(DbStatus.NOT_FOUND);
+			KeyUserInfoDTO userInfoDTO = new KeyUserInfoDTO(token);
+			userInfoDTO.setCovidStatus(Integer.parseInt(attributes.get("covidStatus")));
+			userInfoDTO.setIsBlocked(Integer.parseInt(attributes.get("isBlocked")));
+			return new DBResultMessage<KeyUserInfoDTO>(userInfoDTO, DbStatus.SUCCESS);
+		}
 	}
 
 	@Override
 	public DBResultMessage<List<KeyUserInfoDTO>> getAllAllowedInformation() {
 		try (Jedis jedis = RedisConnector.createConnection().getResource()) {
-			List<KeyUserInfoDTO> basicUserInfos = jedis.smembers(TOKEN_SUFFIX).stream()
-					.map(x -> KeyUserInfoDTO.parse(x)).collect(Collectors.toCollection(ArrayList<KeyUserInfoDTO>::new));
+			List<KeyUserInfoDTO> basicUserInfos = jedis.smembers(TOKENS_KEY).stream().map(x -> {
+				KeyUserInfoDTO user = new KeyUserInfoDTO(x);
+				user.setCovidStatus(Integer.parseInt(jedis.hget(x, "covidStatus")));
+				return user;
+			}).collect(Collectors.toCollection(ArrayList<KeyUserInfoDTO>::new));
 			return new DBResultMessage<List<KeyUserInfoDTO>>(basicUserInfos, DbStatus.SUCCESS);
 		} catch (JedisConnectionException ex) {
 			return ErrorHandler.handle(ex);
@@ -105,28 +111,6 @@ public class UserManager implements IUserManager {
 		}
 	}
 
-	private String findAnyOrNull(String token) {
-		try (Jedis jedis = RedisConnector.createConnection().getResource()) {
-			ScanParams scanParams = new ScanParams();
-			scanParams.match(token + "*");
-			String cursor = redis.clients.jedis.ScanParams.SCAN_POINTER_START;
-			boolean cycleIsFinished = false;
-			while (!cycleIsFinished) {
-				ScanResult<String> scanResult = jedis.sscan(TOKEN_SUFFIX, cursor, scanParams);
-				List<String> result = scanResult.getResult();
-				Optional<String> foundToken = result.stream().filter(x -> x.contains(token)).findFirst();
-				if (foundToken.isPresent())
-					return foundToken.get();
-				cursor = scanResult.getCursor();
-				if (cursor.equals(redis.clients.jedis.ScanParams.SCAN_POINTER_START)) {
-					cycleIsFinished = true;
-					return null;
-				}
-			}
-		}
-		return null;
-	}
-
 	/**
 	 * Checks if provided data about the user is valid.
 	 * 
@@ -143,20 +127,19 @@ public class UserManager implements IUserManager {
 		List<UserLocationDTO> potentiallyInfectedUsers;
 
 		try (Jedis jedis = RedisConnector.createConnection().getResource()) {
-			Stream<UserLocationDTO> userWithLocations = jedis.keys("*==").stream()
+			potentiallyInfectedUsers = jedis.keys("*==#locations").stream()
 					// Get only healthy users
-					.filter(x -> jedis.hget(x, "covidStatus").equals("0") && !x.equals(token))
+					.filter(x -> jedis.hget(x.split("#")[0], "covidStatus").equals("0")
+							&& !x.split("#")[0].equals(token))
 					// Check if that user could be infected and save that location
 					.map(x -> {
-						LocationDTO location = locationManager.isInRange(
-								String.format(LocationManager.KEY_FORMAT, x, LocationManager.LOCATIONS_SUFFIX),
-								locationOfInfection, distanceInMeters, timeInterval);
+						LocationDTO location = locationManager.isInRange(x, locationOfInfection, distanceInMeters,
+								timeInterval);
 						return location == null ? null : new UserLocationDTO(location, x.split("#")[0]);
-					}).filter(x -> x != null);
+					}).filter(x -> x != null).collect(Collectors.toCollection(ArrayList<UserLocationDTO>::new));
 			// Mark them as potentially infected
-			userWithLocations.forEach(x -> jedis.hset(x.getToken(), "covidStatus", "1"));
-			potentiallyInfectedUsers = userWithLocations
-					.collect(Collectors.toCollection(ArrayList<UserLocationDTO>::new));
+			potentiallyInfectedUsers.forEach(x -> jedis.hset(x.getToken(), "covidStatus", "1"));
+
 			return new DBResultMessage<List<UserLocationDTO>>(potentiallyInfectedUsers, DbStatus.SUCCESS);
 		} catch (DateTimeParseException e) {
 			return ErrorHandler.handle(e);
@@ -171,7 +154,7 @@ public class UserManager implements IUserManager {
 			if (!jedis.exists(token))
 				return new DBResultMessage<Boolean>(DbStatus.NOT_FOUND);
 			long success = jedis.hset(token, "covidStatus", String.valueOf(covidStatus));
-			if (success == RedisConnector.SUCCESS)
+			if (success == 0)
 				return new DBResultMessage<Boolean>(true, DbStatus.SUCCESS);
 			else
 				return new DBResultMessage<Boolean>(false, DbStatus.SERVER_ERROR,

@@ -50,7 +50,7 @@ public class UserManager implements IUserManager {
 	}
 
 	private void markAsPotentiallyInfected(String token, LocationDTO location) {
-		int meters = 2000;
+		int meters = 20000;
 		int timeInterval = 30;
 		DBResultMessage<List<UserLocationDTO>> potentiallyInfected = userManager.markUsersAsPotentiallyInfected(token,
 				location, meters, timeInterval);

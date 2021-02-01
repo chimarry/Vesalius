@@ -19,6 +19,7 @@ import redis.clients.jedis.GeoRadiusResponse;
 import redis.clients.jedis.GeoUnit;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
+import redis.clients.jedis.params.GeoRadiusParam;
 
 public class LocationManager implements ILocationManager {
 
@@ -80,7 +81,8 @@ public class LocationManager implements ILocationManager {
 		LocationDTO potentiallyInfectedOnLocation = null;
 		try (Jedis jedis = RedisConnector.createConnection().getResource()) {
 			Optional<GeoRadiusResponse> hasBeenInContact = jedis.georadius(locationToken, location.getLongitude(),
-					location.getLatitude(), distanceInMeters, GeoUnit.M).stream().filter(x -> {
+					location.getLatitude(), distanceInMeters, GeoUnit.M, GeoRadiusParam.geoRadiusParam().withCoord())
+					.stream().filter(x -> {
 						String member = x.getMemberByString();
 						String[] dates = member.split(SEPARATOR);
 						return DateTimeUtil.areOverlapped(location.getSince(), location.getUntil(),

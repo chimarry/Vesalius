@@ -1,6 +1,7 @@
 package pro.artse.medicalstaff.controllers;
 
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
@@ -275,7 +276,8 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 			potInfectedCheckBox.setSelected(false);
 			notInfectedCheckBox.setSelected(false);
 		}
-		Location location = new Location();
+		Location location = new Location(17.191052994189608, 44.77777556721956, LocalDateTime.of(2021, 2, 1, 12, 0),
+				LocalDateTime.of(2021, 2, 1, 13, 0));
 		Task<MSResultMessage<Boolean>> task = new Task<MSResultMessage<Boolean>>() {
 			@Override
 			public MSResultMessage<Boolean> call() throws Exception {
