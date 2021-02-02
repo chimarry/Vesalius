@@ -18,6 +18,7 @@ import pro.artse.user.errorhandling.SUResultMessage;
 import pro.artse.user.errorhandling.UserAlert;
 import pro.artse.user.errorhandling.Validator;
 import pro.artse.user.factories.WebServiceFactory;
+import pro.artse.user.models.User;
 import pro.artse.user.util.StageUtil;
 
 /**
@@ -32,7 +33,7 @@ public class RegisterController implements Initializable {
 
 	@FXML
 	private Button registerButton;
-	
+
 	@FXML
 	private Button alreadyRegisteredButton;
 
@@ -81,6 +82,7 @@ public class RegisterController implements Initializable {
 
 				if (token.isSuccess()) {
 					UserAlert.alert(AlertType.CONFIRMATION, "Successful registration", "Token:\n" + token.getResult());
+					User.getInstance().setToken(token.getResult());
 					StageUtil.switchStage(registerButton, "/pro/artse/user/fxml/LoginDialog.fxml");
 				} else
 					UserAlert.alert(AlertType.ERROR, token.getStatus().toString(),
@@ -92,10 +94,11 @@ public class RegisterController implements Initializable {
 			}
 		}
 	}
-	
+
 	private void alreadyRegistered(ActionEvent action) {
 		StageUtil.switchStage(registerButton, "/pro/artse/user/fxml/LoginForm.fxml");
 	}
+
 	/**
 	 * Check if field are valid.
 	 * 

@@ -16,6 +16,7 @@ import pro.artse.user.errorhandling.UserAlert;
 import pro.artse.user.errorhandling.Validator;
 import pro.artse.user.factories.ManagersFactory;
 import pro.artse.user.managers.ILoginManager;
+import pro.artse.user.models.User;
 import pro.artse.user.util.StageUtil;
 
 /**
@@ -60,7 +61,13 @@ public class LoginDialogController implements Initializable {
 	private void login(ActionEvent event) {
 		if (!areValidPasswords() || Validator.isNullOrEmpty(tokenField.getText())) {
 			UserAlert.alert(AlertType.ERROR, "Data is invalid.");
-			repeatPasswordField.setText("");
+			repeatPasswordField.clear();
+			passwordField.clear();
+		} else if (tokenField.getText().equals(User.getInstance().getToken())) {
+			UserAlert.alert(AlertType.ERROR, "Token is not valid.");
+			repeatPasswordField.clear();
+			tokenField.clear();
+			passwordField.clear();
 		} else {
 			boolean isUserSaved = loginManager.saveUser(tokenField.getText(), passwordField.getText());
 			if (isUserSaved) {

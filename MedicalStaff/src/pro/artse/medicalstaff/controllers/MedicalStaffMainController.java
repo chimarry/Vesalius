@@ -173,11 +173,13 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 		TextArea sentMessageArea = new TextArea();
 		sentMessageArea.setText("You[sent]: " + text);
 		standardUserMessagesData.add(sentMessageArea);
+		((TextArea) standardUserMessagesData.get(0)).clear();
 		chatService.sendMessage(text);
 	}
 
 	private void stop(ActionEvent event) {
 		// TODO: Check which tab is selected
+		((TextArea) standardUserMessagesData.get(0)).clear();
 		chatService.makeAvailable();
 	}
 

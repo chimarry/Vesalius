@@ -173,6 +173,7 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 		String text = ((TextArea) medicalStaffMessagesData.get(0)).getText();
 		TextArea sentMessageArea = new TextArea();
 		sentMessageArea.setText("You[sent]: " + text);
+		((TextArea) medicalStaffMessagesData.get(0)).clear();
 		medicalStaffMessagesData.add(sentMessageArea);
 		chatService.sendMessage(text);
 	}
