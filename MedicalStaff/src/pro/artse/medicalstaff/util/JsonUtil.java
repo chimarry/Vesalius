@@ -2,12 +2,9 @@ package pro.artse.medicalstaff.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import com.google.gson.*;
-
-import pro.artse.centralr.models.ActivityLogWrapper;
 
 public class JsonUtil {
 	/**

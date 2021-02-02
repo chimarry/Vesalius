@@ -6,7 +6,6 @@ import java.io.*;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 
 public class RestApiUtil {
 	public static int SUCCESS_HTTP_CODE_MAX = 299;

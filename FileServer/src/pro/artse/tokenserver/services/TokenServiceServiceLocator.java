@@ -9,7 +9,7 @@ package pro.artse.tokenserver.services;
 
 public class TokenServiceServiceLocator extends org.apache.axis.client.Service implements pro.artse.tokenserver.services.TokenServiceService {
 
-    public TokenServiceServiceLocator() {
+	public TokenServiceServiceLocator() {
     }
 
 

@@ -14,4 +14,6 @@ public interface IFileShare extends Remote {
 			throws RemoteException;
 
 	FSResultMessage<byte[]> downloadFile(String fileName, String token, boolean compress) throws RemoteException;
+
+	FSResultMessage<Boolean> deleteDirectory(String token) throws RemoteException;
 }

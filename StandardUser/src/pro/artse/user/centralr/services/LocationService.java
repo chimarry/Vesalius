@@ -4,13 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.util.List;
-
 import pro.artse.centralr.api.ApiPaths;
 import pro.artse.centralr.models.LocationWrapper;
 import pro.artse.user.errorhandling.ErrorHandler;
 import pro.artse.user.errorhandling.SUResultMessage;
-import pro.artse.user.models.ActivityLog;
 import pro.artse.user.models.Location;
 import pro.artse.user.util.RestApiUtil;
 import pro.artse.user.util.json.JsonUtil;

@@ -2,8 +2,6 @@ package pro.artse.medicalstaff.controllers;
 
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 

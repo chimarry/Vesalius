@@ -5,16 +5,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import com.sothawo.mapjfx.Coordinate;
 import com.sothawo.mapjfx.MapView;
 import com.sothawo.mapjfx.Marker;
-import com.sothawo.mapjfx.XYZParam;
-import com.sothawo.mapjfx.event.MapLabelEvent;
 import com.sothawo.mapjfx.event.MapViewEvent;
-import com.sothawo.mapjfx.event.MarkerEvent;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -26,31 +22,42 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
-import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
+import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.Separator;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.VBox;
 import pro.artse.user.centralr.services.IActivityLogService;
 import pro.artse.user.centralr.services.ILocationService;
-import pro.artse.user.centralr.services.ManagersFactory;
+import pro.artse.user.centralr.services.IUserService;
 import pro.artse.user.chat.IChatService;
 import pro.artse.user.chat.ISubscriber;
 import pro.artse.user.errorhandling.SUResultMessage;
+import pro.artse.user.errorhandling.SUStatus;
 import pro.artse.user.errorhandling.UserAlert;
 import pro.artse.user.errorhandling.Validator;
+import pro.artse.user.factories.ManagersFactory;
+import pro.artse.user.factories.WebServiceFactory;
+import pro.artse.user.managers.IFileServerManager;
+import pro.artse.user.managers.ILoginManager;
 import pro.artse.user.models.ActivityLog;
 import pro.artse.user.models.Location;
 import pro.artse.user.models.User;
 import pro.artse.user.util.StageUtil;
 
 public class StandardUserMainController implements Initializable, ISubscriber {
-	private final IActivityLogService activityService = ManagersFactory.getActivityLogService();
-	private final IChatService chatService = ManagersFactory.getChatService();
-	private final ILocationService locationService = ManagersFactory.getLocationService();
+	private final IActivityLogService activityService = WebServiceFactory.getActivityLogService();
+	private final IChatService chatService = WebServiceFactory.getChatService();
+	private final ILocationService locationService = WebServiceFactory.getLocationService();
+	private final IUserService userService = WebServiceFactory.getUserService();
+	private final IFileServerManager fileServerManager = ManagersFactory.getFileServerManager();
+	private final ILoginManager loginManager = ManagersFactory.getLoginManager();
 
 	private ObservableList<Node> medicalStaffMessagesData = FXCollections.<Node>observableArrayList();
 
@@ -161,7 +168,34 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 	 * @param event
 	 */
 	private void unregister(ActionEvent event) {
-
+		Task<SUResultMessage<Boolean>> task = new Task<SUResultMessage<Boolean>>() {
+			@Override
+			public SUResultMessage<Boolean> call() throws Exception {
+				SUResultMessage<Boolean> filesDeleted = fileServerManager
+						.deleteDirectory(User.getInstance().getToken());
+				if (!filesDeleted.isSuccess())
+					return filesDeleted;
+				SUResultMessage<Boolean> isUnregistered = userService.unregister(User.getInstance().getToken());
+				if (!isUnregistered.isSuccess())
+					return new SUResultMessage<Boolean>(isUnregistered.getResult(), isUnregistered.getStatus(),
+							isUnregistered.getMessage() + " Files are deleted.");
+				boolean isRemovedFromLocal = loginManager.removeUser();
+				if (!isRemovedFromLocal)
+					return new SUResultMessage<Boolean>(false, SUStatus.SERVER_ERROR,
+							"User is not removed from local system.");
+				return isUnregistered;
+			}
+		};
+		task.setOnFailed(e -> UserAlert.alert(AlertType.ERROR, UserAlert.CENTRAL_REGISTER_CONNECTION_PROBLEM));
+		task.setOnSucceeded(e -> {
+			if (task.getValue().isSuccess()) {
+				UserAlert.alert(AlertType.INFORMATION, "You are now unregistered from the system.");
+			} else {
+				SUResultMessage<Boolean> result = task.getValue();
+				UserAlert.alert(AlertType.ERROR, result.getMessage());
+			}
+		});
+		new Thread(task).start();
 	}
 
 	/**

@@ -18,7 +18,6 @@ import pro.artse.fileserver.errorhandling.FSResultMessage;
 import pro.artse.fileserver.models.BasicFileInfo;
 import pro.artse.fileserver.rmi.IFileShare;
 import pro.artse.fileserver.util.Compressor;
-import pro.artse.user.errorhandling.ErrorHandler;
 import pro.artse.user.errorhandling.SUResultMessage;
 import pro.artse.user.errorhandling.SUStatus;
 import pro.artse.user.models.MedicalDocument;
@@ -95,6 +94,24 @@ public class FileServerManager implements IFileServerManager {
 			compressedData.setResult(Compressor.decompress(data.getResult()));
 			return compressedData;
 		} catch (IOException | NotBoundException | DataFormatException e) {
+			return pro.artse.user.errorhandling.ErrorHandler.handle(e);
+		}
+	}
+
+	@Override
+	public SUResultMessage<Boolean> deleteDirectory(String token) {
+		System.setProperty("java.security.policy", RESOURCE_PATH + File.separator + "client_policy.txt");
+		if (System.getSecurityManager() == null) {
+			System.setSecurityManager(new SecurityManager());
+		}
+		try {
+			String name = "FileShare";
+			Registry registry;
+			registry = LocateRegistry.getRegistry(1099);
+			IFileShare fileShare = (IFileShare) registry.lookup(name);
+			FSResultMessage<Boolean> deleted = fileShare.deleteDirectory(token);
+			return Mapper.mapFromFS(deleted);
+		} catch (IOException | NotBoundException e) {
 			return pro.artse.user.errorhandling.ErrorHandler.handle(e);
 		}
 	}

@@ -4,14 +4,12 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import pro.artse.dal.errorhandling.DBResultMessage;
 import pro.artse.dal.errorhandling.DbStatus;
 import pro.artse.dal.errorhandling.ErrorHandler;
 import pro.artse.dal.factory.ManagerFactory;
+import pro.artse.dal.managers.IActivityLogManager;
 import pro.artse.dal.managers.ILocationManager;
 import pro.artse.dal.managers.IUserManager;
 import pro.artse.dal.models.KeyUserInfoDTO;
@@ -20,8 +18,6 @@ import pro.artse.dal.models.UserDTO;
 import pro.artse.dal.models.UserLocationDTO;
 import pro.artse.dal.util.RedisConnector;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.ScanParams;
-import redis.clients.jedis.ScanResult;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
 /**
@@ -34,6 +30,7 @@ public class UserManager implements IUserManager {
 
 	private static final String TOKENS_KEY = "tokens";
 	private ILocationManager locationManager = ManagerFactory.getLocationManager();
+	private IActivityLogManager activityLogManager = ManagerFactory.getActivityLogManager();
 
 	@Override
 	public DBResultMessage<Boolean> add(UserDTO user) {
@@ -159,6 +156,28 @@ public class UserManager implements IUserManager {
 			else
 				return new DBResultMessage<Boolean>(false, DbStatus.SERVER_ERROR,
 						"Could not change covid status of an user.");
+		} catch (JedisConnectionException ex) {
+			return ErrorHandler.handle(ex);
+		}
+	}
+
+	@Override
+	public DBResultMessage<Boolean> unregister(String token) {
+		try (Jedis jedis = RedisConnector.createConnection().getResource()) {
+			if (!jedis.exists(token) || jedis.hget(token, "isBlocked").equals("1"))
+				return new DBResultMessage<Boolean>(DbStatus.NOT_FOUND);
+			DBResultMessage<Boolean> deletedLocations = locationManager.deleteAll(token);
+			if (!deletedLocations.isSuccess())
+				return deletedLocations;
+			DBResultMessage<Boolean> deletedActivities = activityLogManager.deleteAll(token);
+			if (!deletedActivities.isSuccess())
+				return deletedActivities;
+			// Remove from index
+			jedis.srem(TOKENS_KEY, token);
+			if (jedis.del(token) == RedisConnector.SUCCESS)
+				return new DBResultMessage<Boolean>(true, DbStatus.SUCCESS);
+			return new DBResultMessage<Boolean>(false, DbStatus.SERVER_ERROR,
+					"Some of the user data might not be deleted.");
 		} catch (JedisConnectionException ex) {
 			return ErrorHandler.handle(ex);
 		}

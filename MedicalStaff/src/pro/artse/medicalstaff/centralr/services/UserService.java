@@ -1,17 +1,13 @@
 package pro.artse.medicalstaff.centralr.services;
 
 import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 
 import javax.ws.rs.core.Response;
 
 import pro.artse.centralr.api.ApiPaths;
-import pro.artse.centralr.models.ActivityLogWrapper;
 import pro.artse.centralr.models.LocationWrapper;
 import pro.artse.medicalstaff.errorhandling.ErrorHandler;
 import pro.artse.medicalstaff.errorhandling.MSResultMessage;

@@ -1,9 +1,7 @@
 package pro.artse.user.controllers;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.prefs.Preferences;
 
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -13,9 +11,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import pro.artse.user.centralr.services.IActivityLogService;
-import pro.artse.user.centralr.services.ManagersFactory;
 import pro.artse.user.errorhandling.SUResultMessage;
 import pro.artse.user.errorhandling.UserAlert;
+import pro.artse.user.factories.WebServiceFactory;
 import pro.artse.user.models.ActivityLog;
 import pro.artse.user.models.User;
 
@@ -27,7 +25,7 @@ import pro.artse.user.models.User;
  */
 public class ActivityLogController implements Initializable {
 
-	private static final IActivityLogService activityService = ManagersFactory.getActivityLogService();
+	private static final IActivityLogService activityService = WebServiceFactory.getActivityLogService();
 
 	@FXML
 	private TableView<ActivityLog> activityLog;

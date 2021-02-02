@@ -2,8 +2,6 @@ package pro.artse.centralr.managers;
 
 import java.rmi.RemoteException;
 import java.util.List;
-import java.util.concurrent.Future;
-
 import javax.ws.rs.core.Response.Status;
 import javax.xml.rpc.ServiceException;
 
@@ -57,5 +55,11 @@ public class UserManager implements IUserManager {
 		if (potentiallyInfected.isSuccess())
 			potentiallyInfected.getResult().stream()
 					.forEach(x -> markAsPotentiallyInfected(x.getToken(), x.getLocation()));
+	}
+
+	@Override
+	public CrResultMessage<Boolean> unregister(String token) {
+		DBResultMessage<Boolean> isUnregistered = userManager.unregister(token);
+		return Mapper.mapFrom(isUnregistered);
 	}
 }

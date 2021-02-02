@@ -1,10 +1,8 @@
 package pro.artse.user.controllers;
 
-import java.awt.Button;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -17,26 +15,21 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonBar.ButtonData;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 import pro.artse.user.centralr.services.ILocationService;
-import pro.artse.user.centralr.services.ManagersFactory;
 import pro.artse.user.errorhandling.SUResultMessage;
 import pro.artse.user.errorhandling.UserAlert;
+import pro.artse.user.factories.WebServiceFactory;
 import pro.artse.user.models.Location;
 import pro.artse.user.models.User;
 
 public class LocationController implements Initializable {
 
-	private final ILocationService locationService = ManagersFactory.getLocationService();
-	private final ArrayList<Marker> markers = new ArrayList<Marker>();
+	private final ILocationService locationService = WebServiceFactory.getLocationService();
 
 	@FXML
 	private TableView<Location> locations;

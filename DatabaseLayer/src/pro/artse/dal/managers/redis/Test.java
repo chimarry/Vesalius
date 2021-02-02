@@ -1,13 +1,9 @@
 package pro.artse.dal.managers.redis;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import pro.artse.dal.errorhandling.DBResultMessage;
 import pro.artse.dal.managers.IUserManager;
 import pro.artse.dal.models.KeyUserInfoDTO;
-import pro.artse.dal.models.LocationDTO;
-import pro.artse.dal.models.UserLocationDTO;
 
 public class Test {
 

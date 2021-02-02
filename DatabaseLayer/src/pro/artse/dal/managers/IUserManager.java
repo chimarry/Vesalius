@@ -77,4 +77,6 @@ public interface IUserManager {
 
 	DBResultMessage<List<UserLocationDTO>> markUsersAsPotentiallyInfected(String token, LocationDTO locationOfInfection,
 			int distanceInMeters, int timeInterval);
+
+	DBResultMessage<Boolean> unregister(String token);
 }

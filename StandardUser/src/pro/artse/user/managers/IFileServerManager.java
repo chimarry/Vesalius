@@ -12,4 +12,6 @@ public interface IFileServerManager {
 	SUResultMessage<byte[]> downloadFile(String fileName, String token);
 
 	SUResultMessage<List<MedicalDocument>> getUserFiles(String token);
+
+	SUResultMessage<Boolean> deleteDirectory(String token);
 }

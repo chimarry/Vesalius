@@ -1,9 +1,6 @@
 package pro.artse.dal.models;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-import sun.util.resources.cldr.sk.CalendarData_sk_SK;
 
 /**
  * Represents activity in application that is related to specific user.

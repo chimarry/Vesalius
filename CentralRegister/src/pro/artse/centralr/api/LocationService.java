@@ -16,7 +16,6 @@ import pro.arste.centralr.errorhandling.CrResultMessage;
 import pro.arste.centralr.errorhandling.ErrorHandler;
 import pro.artse.centralr.managers.ILocationManager;
 import pro.artse.centralr.managers.ManagerFactory;
-import pro.artse.centralr.models.ActivityLogWrapper;
 import pro.artse.centralr.models.LocationWrapper;
 
 @Path("locations")

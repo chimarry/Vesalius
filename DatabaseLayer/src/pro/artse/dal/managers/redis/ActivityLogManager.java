@@ -63,4 +63,16 @@ public class ActivityLogManager implements IActivityLogManager {
 			return ErrorHandler.handle(e, activities);
 		}
 	}
+
+	@Override
+	public DBResultMessage<Boolean> deleteAll(String token) {
+		String key = token + ACTIVITIES_SUFFIX;
+		try (Jedis jedis = RedisConnector.createConnection().getResource()) {
+			if (jedis.del(key) == RedisConnector.SUCCESS)
+				return new DBResultMessage<Boolean>(true, DbStatus.SUCCESS);
+			return new DBResultMessage<Boolean>(false, DbStatus.NOT_FOUND);
+		} catch (JedisConnectionException e) {
+			return ErrorHandler.handle(e);
+		}
+	}
 }

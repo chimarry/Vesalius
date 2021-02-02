@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.rmi.RemoteException;
@@ -11,7 +12,9 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 import java.util.zip.DataFormatException;
 
 import pro.artse.fileserver.errorhandling.ErrorHandler;
@@ -116,6 +119,28 @@ public class FileShare implements IFileShare {
 		try (FileOutputStream fos = new FileOutputStream(file, true)) {
 			fos.write(data);
 			return true;
+		}
+	}
+
+	@Override
+	public FSResultMessage<Boolean> deleteDirectory(String token) throws RemoteException {
+		String userDirectoryPath = DirectoryStructureBuilder.buildUserDirectoryPath(token);
+		try (Stream<Path> walk = Files.walk(Paths.get(userDirectoryPath))) {
+			walk.sorted(Comparator.reverseOrder()).forEach(FileShare::deleteDirectoryJava8Extract);
+			return new FSResultMessage<Boolean>(true, FSStatus.SUCCESS);
+		} catch (IOException e) {
+			// TODO: Add logger
+			e.printStackTrace();
+			return new FSResultMessage<Boolean>(false, FSStatus.SERVER_ERROR);
+		}
+	}
+
+	// extract method to handle exception in lambda
+	public static void deleteDirectoryJava8Extract(Path path) {
+		try {
+			Files.delete(path);
+		} catch (IOException e) {
+			System.err.printf("Unable to delete this path : %s%n%s", path, e);
 		}
 	}
 }

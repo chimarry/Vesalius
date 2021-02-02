@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import pro.arste.centralr.errorhandling.CrResultMessage;
-import pro.artse.centralr.models.ActivityLogWrapper;
 import pro.artse.centralr.models.LocationWrapper;
 import pro.artse.centralr.util.Mapper;
 import pro.artse.dal.errorhandling.DBResultMessage;

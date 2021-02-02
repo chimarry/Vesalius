@@ -1,7 +1,6 @@
 package pro.arste.logger;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;

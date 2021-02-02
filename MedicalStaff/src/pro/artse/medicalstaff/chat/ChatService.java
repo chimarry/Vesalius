@@ -6,10 +6,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import javax.xml.stream.events.StartDocument;
-
-import com.sun.nio.file.SensitivityWatchEventModifier;
-
 import pro.artse.chat.util.ConfigurationUtil;
 import pro.artse.chat.util.StreamUtil;
 

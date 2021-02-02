@@ -98,4 +98,14 @@ public class LocationManager implements ILocationManager {
 		}
 		return potentiallyInfectedOnLocation;
 	}
+
+	@Override
+	public DBResultMessage<Boolean> deleteAll(String token) {
+		String key = String.format(KEY_FORMAT, token, LOCATIONS_SUFFIX);
+		try (Jedis jedis = RedisConnector.createConnection().getResource()) {
+			if (jedis.del(key) == RedisConnector.SUCCESS)
+				return new DBResultMessage<Boolean>(true, DbStatus.SUCCESS);
+			return new DBResultMessage<Boolean>(false, DbStatus.NOT_FOUND);
+		}
+	}
 }

@@ -9,7 +9,6 @@ import javax.ws.rs.core.Response;
 import pro.arste.centralr.errorhandling.CrResultMessage;
 import pro.arste.centralr.errorhandling.ErrorHandler;
 import pro.artse.centralr.managers.IActivityLogManager;
-import pro.artse.centralr.managers.IAuthorizationManager;
 import pro.artse.centralr.managers.ManagerFactory;
 import pro.artse.centralr.models.ActivityLogWrapper;
 

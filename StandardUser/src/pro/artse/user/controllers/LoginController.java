@@ -1,15 +1,11 @@
 package pro.artse.user.controllers;
 
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.ResourceBundle;
-import java.util.prefs.Preferences;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;

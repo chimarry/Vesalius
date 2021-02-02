@@ -1,8 +1,6 @@
 package pro.artse.centralr.managers;
 
 import java.rmi.RemoteException;
-import java.util.List;
-
 import javax.xml.rpc.ServiceException;
 
 import pro.arste.centralr.errorhandling.CrResultMessage;
@@ -15,6 +13,8 @@ public interface IUserManager {
 	CrResultMessage<KeyUserInfoWrapper> search(String token) throws ServiceException, RemoteException;
 
 	CrResultMessage<Boolean> blockUser(String token);
+
+	CrResultMessage<Boolean> unregister(String token);
 
 	CrResultMessage<Boolean> markUserAsInfected(String token, LocationWrapper location);
 }

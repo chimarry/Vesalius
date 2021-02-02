@@ -11,4 +11,6 @@ public interface ILocationManager {
 	DBResultMessage<List<LocationDTO>> getLocations(String token, int timeIntervalInDays);
 
 	LocationDTO isInRange(String locationToken, LocationDTO location, int distanceInMeters, int timeInterval);
+
+	DBResultMessage<Boolean> deleteAll(String token);
 }

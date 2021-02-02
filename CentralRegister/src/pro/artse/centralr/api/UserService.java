@@ -13,19 +13,20 @@ import pro.artse.centralr.managers.IUserManager;
 import pro.artse.centralr.managers.ManagerFactory;
 import pro.artse.centralr.models.KeyUserInfoWrapper;
 import pro.artse.centralr.models.LocationWrapper;
+import pro.artse.dal.errorhandling.DBResultMessage;
 
 @Path("users")
 public class UserService extends BaseService {
 	private final IUserManager userManager = ManagerFactory.getUserManager();
 	private final ILocationManager locationManager = ManagerFactory.getLocationManager();
 
-	@PUT
+	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response unregister(@HeaderParam("token") String token) {
 		try {
-			// TODO: Add logic
 			authorize(token);
-			return null;
+			CrResultMessage<Boolean> unregistered = userManager.unregister(token);
+			return unregistered.buildResponse();
 		} catch (Exception ex) {
 			return ErrorHandler.handle(ex).buildResponse();
 		}

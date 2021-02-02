@@ -5,8 +5,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.PriorityBlockingQueue;
 
-import pro.artse.chat.models.MedicalStaffMember;
-
 public class MedicalStaffManager implements IMedicalStaffManager {
 
 	private static Queue<Socket> medicalStaff = new PriorityBlockingQueue<Socket>();

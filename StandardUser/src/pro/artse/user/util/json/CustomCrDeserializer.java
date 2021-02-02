@@ -1,21 +1,13 @@
 package pro.artse.user.util.json;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.google.gson.reflect.TypeToken;
-
 import pro.artse.user.errorhandling.SUResultMessage;
-import pro.artse.user.models.ActivityLog;
 import pro.artse.user.util.Mapper;
 
 public class CustomCrDeserializer<T> implements JsonDeserializer<SUResultMessage<T>> {

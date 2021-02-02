@@ -1,10 +1,8 @@
 package pro.arste.chat;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import pro.artse.chat.util.ConfigurationUtil;
