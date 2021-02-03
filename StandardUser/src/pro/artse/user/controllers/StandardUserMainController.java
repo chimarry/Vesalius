@@ -190,6 +190,8 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 		task.setOnSucceeded(e -> {
 			if (task.getValue().isSuccess()) {
 				UserAlert.alert(AlertType.INFORMATION, "You are now unregistered from the system.");
+				User.getInstance().clear();
+				StageUtil.switchStage(latitudeBox, "/pro/artse/user/fxml/RegisterForm.fxml");
 			} else {
 				SUResultMessage<Boolean> result = task.getValue();
 				UserAlert.alert(AlertType.ERROR, result.getMessage());

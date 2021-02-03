@@ -57,14 +57,15 @@ public class LoginDialogController implements Initializable {
 	 * @param event
 	 */
 	private void login(ActionEvent event) {
-		if (!areValidPasswords() || Validator.isNullOrEmpty(tokenField.getText())) {
-			UserAlert.alert(AlertType.ERROR, "Data is invalid.");
-			repeatPasswordField.clear();
-			passwordField.clear();
-		} else if (tokenField.getText().equals(User.getInstance().getToken())) {
+		if (Validator.isNullOrEmpty(tokenField.getText())
+				|| !tokenField.getText().equals(User.getInstance().getToken())) {
 			UserAlert.alert(AlertType.ERROR, "Token is not valid.");
 			repeatPasswordField.clear();
 			tokenField.clear();
+			passwordField.clear();
+		} else if (!areValidPasswords()) {
+			UserAlert.alert(AlertType.ERROR, "Data is invalid.");
+			repeatPasswordField.clear();
 			passwordField.clear();
 		} else {
 			boolean isUserSaved = loginManager.saveUser(tokenField.getText(), passwordField.getText());
