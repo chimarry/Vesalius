@@ -5,6 +5,8 @@ import java.net.HttpURLConnection;
 import java.rmi.RemoteException;
 import java.util.zip.DataFormatException;
 
+import com.esotericsoftware.kryo.KryoException;
+
 public class ErrorHandler {
 	public static <T> SUResultMessage<T> handle(Exception ex, HttpURLConnection connection, T result) {
 		SUResultMessage<T> resultMessage = handle(ex, connection);
@@ -20,7 +22,9 @@ public class ErrorHandler {
 
 	public static <T> SUResultMessage<T> handle(Exception ex) {
 		// TODO: Use logger
-		if (ex instanceof DataFormatException)
+		if (ex instanceof KryoException)
+			return new SUResultMessage<T>(null, SUStatus.SERVER_ERROR, "Kryo error.");
+		else if (ex instanceof DataFormatException)
 			return new SUResultMessage<T>(null, SUStatus.INVALID_DATA, "File could not be decompressed");
 		else if (ex instanceof RemoteException)
 			return new SUResultMessage<T>(null, SUStatus.SERVER_ERROR, UserAlert.REMOTE_CONNECTION_PROBLEM);
