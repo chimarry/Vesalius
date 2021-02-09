@@ -22,7 +22,6 @@ public class CustomCrDeserializer<T> implements JsonDeserializer<SUResultMessage
 	@Override
 	public SUResultMessage<T> deserialize(JsonElement json, Type arg1, JsonDeserializationContext arg2)
 			throws JsonParseException {
-
 		JsonObject jsonObject = json.getAsJsonObject();
 		String status = jsonObject.get("httpStatusCode").getAsString();
 		JsonElement messageElement = jsonObject.get("message");

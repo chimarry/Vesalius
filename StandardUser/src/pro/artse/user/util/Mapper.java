@@ -4,6 +4,8 @@ import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import pro.artse.centralr.models.ActivityLogWrapper;

@@ -23,7 +23,7 @@ public class NotificationManager implements INotificationManager {
 		try (Jedis jedis = RedisConnector.createConnection().getResource()) {
 			// Save notification data
 			String notificationKey = notification.getName();
-			jedis.hset(notificationKey, notification.mapAttributes());
+			jedis.hmset(notificationKey, notification.mapAttributes());
 
 			// Add to index
 			String indexKey = String.format(KEY_FORMAT, notification.getToken(), NOTIFICATION_SUFFIX);

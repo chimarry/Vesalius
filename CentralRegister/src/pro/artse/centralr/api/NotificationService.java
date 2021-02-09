@@ -25,6 +25,7 @@ public class NotificationService extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getNewerNotifications(@HeaderParam("token") String token) {
 		try {
+			authorize(token);
 			CrResultMessage<List<NotificationWrapper>> notifications = notificationManager.getNewerNotifications(token);
 			return notifications.buildResponse();
 		} catch (Exception ex) {

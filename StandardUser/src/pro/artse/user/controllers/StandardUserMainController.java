@@ -1,10 +1,13 @@
 package pro.artse.user.controllers;
 
+import java.io.File;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import com.sothawo.mapjfx.Coordinate;
@@ -22,8 +25,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -31,10 +36,13 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import pro.artse.user.centralr.services.IActivityLogService;
 import pro.artse.user.centralr.services.ILocationService;
+import pro.artse.user.centralr.services.INotificationService;
 import pro.artse.user.centralr.services.IUserService;
 import pro.artse.user.chat.IChatService;
 import pro.artse.user.chat.ISubscriber;
@@ -48,6 +56,7 @@ import pro.artse.user.managers.IFileServerManager;
 import pro.artse.user.managers.ILoginManager;
 import pro.artse.user.models.ActivityLog;
 import pro.artse.user.models.Location;
+import pro.artse.user.models.Notification;
 import pro.artse.user.models.User;
 import pro.artse.user.util.StageUtil;
 
@@ -58,8 +67,10 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 	private final IUserService userService = WebServiceFactory.getUserService();
 	private final IFileServerManager fileServerManager = ManagersFactory.getFileServerManager();
 	private final ILoginManager loginManager = ManagersFactory.getLoginManager();
+	private final INotificationService notificationService = WebServiceFactory.getNotificationService();
 
 	private ObservableList<Node> medicalStaffMessagesData = FXCollections.<Node>observableArrayList();
+	private ArrayList<Notification> unreadNotifications = new ArrayList<Notification>();
 
 	@FXML
 	private MapView mapView;
@@ -99,6 +110,12 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 
 	@FXML
 	private TextField untilTimeTextField;
+
+	@FXML
+	private HBox notificationContainer;
+
+	@FXML
+	private Button showNotificationButton;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -145,8 +162,12 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 		uploadDocsButton.setOnAction(this::uploadDocuments);
 		viewDocsButton.setOnAction(this::viewDocuments);
 		sendLocationButton.setOnAction(this::sendLocation);
+		showNotificationButton.setOnAction(this::showNotification);
 
 		initializeMap();
+
+		notificationContainer.setVisible(false);
+		manageNotifications();
 	}
 
 	/**
@@ -293,6 +314,49 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 
 	private void viewDocuments(ActionEvent event) {
 		StageUtil.showDialog("/pro/artse/user/fxml/DocumentsForm.fxml");
+	}
+
+	private void manageNotifications() {
+		String userToken = User.getInstance().getToken();
+		Task<Boolean> refreshNotifications = new Task<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				int refreshMiliseconds = 1200;
+				while (true) {
+					SUResultMessage<Notification[]> notifications = notificationService
+							.getNewerNotifications(userToken);
+					if (notifications.isSuccess() && notifications.getResult().length != 0)
+						Platform.runLater(() -> {
+							unreadNotifications.addAll(Arrays.asList(notifications.getResult()));
+							showNotificationLine();
+						});
+					Thread.sleep(refreshMiliseconds);
+				}
+			}
+		};
+		new Thread(refreshNotifications).start();
+	}
+
+	private void showNotification(ActionEvent event) {
+		Notification notification = unreadNotifications.get(0);
+		Alert alert = new Alert(Alert.AlertType.INFORMATION, "Notification", ButtonType.CLOSE);
+		File file = new File("C:\\Users\\Vasic\\Desktop\\MDP\\Vesalius\\Vesalius\\Design\\mapExample.jpg");
+		Image image = new Image(file.toURI().toString());
+		ImageView imageView = new ImageView(image);
+		alert.setTitle("Notifications");
+		alert.setHeaderText("Infection took place at " + System.lineSeparator() + notification.getLocation().getSince()
+				+ " - " + notification.getLocation().getUntil());
+		alert.setContentText("You have been in contact with: " + notification.getFromWhomToken()
+				+ System.lineSeparator() + "that has been infected.");
+		alert.setGraphic(imageView);
+		alert.showAndWait();
+		unreadNotifications.remove(0);
+		showNotificationLine();
+	}
+
+	private void showNotificationLine() {
+		if (unreadNotifications.isEmpty())
+			notificationContainer.setVisible(false);
 	}
 
 	private void initializeMap() {

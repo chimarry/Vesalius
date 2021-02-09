@@ -4,12 +4,7 @@ import javax.xml.rpc.ServiceException;
 
 import pro.artse.tokenserver.services.TokenService;
 import pro.artse.tokenserver.services.TokenServiceServiceLocator;
-import pro.artse.user.centralr.services.ActivityLogService;
-import pro.artse.user.centralr.services.IActivityLogService;
-import pro.artse.user.centralr.services.ILocationService;
-import pro.artse.user.centralr.services.IUserService;
-import pro.artse.user.centralr.services.LocationService;
-import pro.artse.user.centralr.services.UserService;
+import pro.artse.user.centralr.services.*;
 import pro.artse.user.chat.ChatService;
 import pro.artse.user.chat.IChatService;
 
@@ -44,5 +39,9 @@ public class WebServiceFactory {
 
 	public static IUserService getUserService() {
 		return new UserService();
+	}
+
+	public static INotificationService getNotificationService() {
+		return new NotificationService();
 	}
 }
