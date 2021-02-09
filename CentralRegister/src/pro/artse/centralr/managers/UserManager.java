@@ -10,13 +10,15 @@ import pro.artse.centralr.models.KeyUserInfoWrapper;
 import pro.artse.centralr.models.LocationWrapper;
 import pro.artse.centralr.util.Mapper;
 import pro.artse.dal.errorhandling.DBResultMessage;
-import pro.artse.dal.factory.ManagerFactory;
 import pro.artse.dal.models.LocationDTO;
+import pro.artse.dal.models.NotificationDTO;
 import pro.artse.dal.models.UserLocationDTO;
 import pro.artse.tokenserver.services.TokenService;
 
 public class UserManager implements IUserManager {
-	private final pro.artse.dal.managers.IUserManager userManager = ManagerFactory.getUserManager();
+	private final pro.artse.dal.managers.IUserManager userManager = pro.artse.dal.factory.ManagerFactory
+			.getUserManager();
+	private final INotificationManager notificationManager = ManagerFactory.getNotificationManager();
 
 	@Override
 	public CrResultMessage<KeyUserInfoWrapper[]> getAll() throws ServiceException, RemoteException {
@@ -39,27 +41,36 @@ public class UserManager implements IUserManager {
 	}
 
 	@Override
+	public CrResultMessage<Boolean> unregister(String token) {
+		DBResultMessage<Boolean> isUnregistered = userManager.unregister(token);
+		return Mapper.mapFrom(isUnregistered);
+	}
+
+	@Override
 	public CrResultMessage<Boolean> markUserAsInfected(String token, LocationWrapper location) {
 		DBResultMessage<Boolean> isMarkedAsInfected = userManager.changeCovidStatus(token, 2);
 		if (!isMarkedAsInfected.isSuccess())
 			return Mapper.mapFrom(isMarkedAsInfected);
-		markAsPotentiallyInfected(token, Mapper.mapToDTO(location));
+		markAsPotentiallyInfected(token, token, Mapper.mapToDTO(location));
 		return new CrResultMessage<Boolean>(true, Status.OK);
 	}
 
-	private void markAsPotentiallyInfected(String token, LocationDTO location) {
+	private void markAsPotentiallyInfected(String infectionSourceToken, String infectedPersonToken,
+			LocationDTO location) {
+		// TODO: Get n, k, p
 		int meters = 20000;
 		int timeInterval = 5;
-		DBResultMessage<List<UserLocationDTO>> potentiallyInfected = userManager.markUsersAsPotentiallyInfected(token,
-				location, meters, timeInterval);
+		saveNotification(infectedPersonToken, infectionSourceToken, location);
+		DBResultMessage<List<UserLocationDTO>> potentiallyInfected = userManager
+				.markUsersAsPotentiallyInfected(infectionSourceToken, location, meters, timeInterval);
 		if (potentiallyInfected.isSuccess())
 			potentiallyInfected.getResult().stream()
-					.forEach(x -> markAsPotentiallyInfected(x.getToken(), x.getLocation()));
+					.forEach(x -> markAsPotentiallyInfected(infectionSourceToken, x.getToken(), x.getLocation()));
 	}
 
-	@Override
-	public CrResultMessage<Boolean> unregister(String token) {
-		DBResultMessage<Boolean> isUnregistered = userManager.unregister(token);
-		return Mapper.mapFrom(isUnregistered);
+	private void saveNotification(String token, String fromWhomToken, LocationDTO location) {
+		NotificationDTO notification = new NotificationDTO(token, fromWhomToken, location);
+		CrResultMessage<Boolean> isAdded = notificationManager.add(Mapper.mapToWrapper(notification));
+		// TODO: Log errors
 	}
 }

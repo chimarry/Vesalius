@@ -10,11 +10,13 @@ import com.google.gson.GsonBuilder;
 import pro.arste.centralr.errorhandling.CrResultMessage;
 import pro.artse.centralr.models.ActivityLogWrapper;
 import pro.artse.centralr.models.LocationWrapper;
+import pro.artse.centralr.models.NotificationWrapper;
 import pro.artse.dal.errorhandling.DBResultMessage;
 import pro.artse.dal.errorhandling.DbStatus;
 import pro.artse.dal.models.ActivityLogDTO;
 import pro.artse.dal.models.ActivityLogDTO.ActivityDTO;
 import pro.artse.dal.models.LocationDTO;
+import pro.artse.dal.models.NotificationDTO;
 
 /**
  * Maper between layers and tiers.
@@ -23,6 +25,16 @@ import pro.artse.dal.models.LocationDTO;
  *
  */
 public class Mapper {
+	public static NotificationWrapper mapToWrapper(NotificationDTO dto) {
+		LocationWrapper location = Mapper.mapToWrapper(dto.getLocation());
+		return new NotificationWrapper(dto.getToken(), dto.getFromWhomToken(), dto.getName(), location);
+	}
+
+	public static NotificationDTO mapToDTO(NotificationWrapper wrapper) {
+		LocationDTO location = Mapper.mapToDTO(wrapper.getLocation());
+		return new NotificationDTO(wrapper.getToken(), wrapper.getFromWhomToken(), location);
+	}
+
 	public static ActivityLogDTO mapToDTO(ActivityLogWrapper wrapper) {
 		return new ActivityLogDTO(LocalDateTime.parse(wrapper.getLogInAt()),
 				LocalDateTime.parse(wrapper.getLogOutAt()));

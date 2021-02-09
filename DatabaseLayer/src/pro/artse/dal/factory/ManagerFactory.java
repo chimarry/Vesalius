@@ -32,4 +32,13 @@ public final class ManagerFactory {
 	public static ILocationManager getLocationManager() {
 		return new LocationManager();
 	}
+
+	/**
+	 * @return Manager for manipulating notifications.
+	 * @see NotificationManager
+	 * @return
+	 */
+	public static INotificationManager getNotificationManager() {
+		return new NotificationManager();
+	}
 }

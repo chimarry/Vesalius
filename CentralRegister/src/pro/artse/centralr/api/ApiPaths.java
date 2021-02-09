@@ -12,4 +12,5 @@ public final class ApiPaths {
 	public static final String GET_LOCATIONS = API_PREFIX + "locations";
 	public static final String GET_USER_LOCATIONS = GET_ONE_USER + "/locations";
 	public static final String POST_USER_IS_INFECTED = GET_ONE_USER + "/infected";
+	public static final String GET_NOTIFICATIONS = API_PREFIX + "/notifications";
 }

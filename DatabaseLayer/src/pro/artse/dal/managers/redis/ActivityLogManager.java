@@ -24,8 +24,6 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
 public class ActivityLogManager implements IActivityLogManager {
 
 	public static final String ACTIVITIES_SUFFIX = "activities";
-	private static final int BEGIN = 0;
-	private static final int END = -1;
 
 	/**
 	 * Adds user's activity in Redis database.
@@ -53,7 +51,8 @@ public class ActivityLogManager implements IActivityLogManager {
 		List<ActivityDTO> activities = new ArrayList<>();
 		try (Jedis jedis = RedisConnector.createConnection().getResource()) {
 			String key = token + ACTIVITIES_SUFFIX;
-			activities = jedis.lrange(key, BEGIN, END).stream().map(x -> new ActivityLogDTO.ActivityDTO(x))
+			activities = jedis.lrange(key, RedisConnector.START, RedisConnector.END).stream()
+					.map(x -> new ActivityLogDTO.ActivityDTO(x))
 					.collect(Collectors.toCollection(ArrayList<ActivityDTO>::new));
 			;
 			return new DBResultMessage<List<ActivityDTO>>(activities, DbStatus.SUCCESS);

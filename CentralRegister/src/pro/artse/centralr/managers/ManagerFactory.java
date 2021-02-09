@@ -42,7 +42,7 @@ public final class ManagerFactory {
 	}
 
 	/**
-	 * Creates implementation for ILocationManager;
+	 * Creates implementation for ILocationManager.
 	 * 
 	 * @return @see LocationManager
 	 */
@@ -51,7 +51,15 @@ public final class ManagerFactory {
 	}
 
 	/**
+	 * Creates implementation for INotificationManager.
 	 * 
+	 * @return @see NotificationManager
+	 */
+	public static INotificationManager getNotificationManager() {
+		return new NotificationManager();
+	}
+
+	/**
 	 * @return Configured token service.
 	 * @throws ServiceException
 	 */
