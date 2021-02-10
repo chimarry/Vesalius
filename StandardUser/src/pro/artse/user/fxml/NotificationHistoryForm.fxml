@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.sothawo.mapjfx.MapView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="502.0" prefWidth="978.0" style="-fx-background-color: #a67a53;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pro.artse.user.controllers.NotificationHistoryController">
+   <children>
+      <Separator layoutX="22.0" layoutY="42.0" prefHeight="3.0" prefWidth="928.0" />
+      <Label layoutX="382.0" layoutY="11.0" prefHeight="31.0" prefWidth="230.0" stylesheets="@../../../../../../Design/LabelCss.css" text="Notification History" />
+      <TableView fx:id="notificationsTable" layoutX="6.0" layoutY="71.0" prefHeight="420.0" prefWidth="516.0" stylesheets="@../../../../../../Design/tableCss.css">
+         <columns>
+            <TableColumn fx:id="since" prefWidth="164.0" text="Since" />
+            <TableColumn fx:id="until" prefWidth="149.0" text="Until" />
+            <TableColumn fx:id="fromWhomToken" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="200.0" text="Infected by" />
+            <TableColumn fx:id="longitude" prefWidth="75.0" text="Longitude" visible="false" />
+            <TableColumn fx:id="latitude" prefWidth="75.0" text="Latitude" visible="false" />
+         </columns>
+      </TableView>
+      <MapView fx:id="mapView" layoutX="607.0" layoutY="70.0" prefHeight="420.0" prefWidth="346.0" />
+   </children>
+</AnchorPane>

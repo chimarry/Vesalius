@@ -6,6 +6,7 @@ import java.rmi.RemoteException;
 import java.util.zip.DataFormatException;
 
 import com.esotericsoftware.kryo.KryoException;
+import com.google.gson.JsonSyntaxException;
 
 public class ErrorHandler {
 	public static <T> SUResultMessage<T> handle(Exception ex, HttpURLConnection connection, T result) {
@@ -22,7 +23,9 @@ public class ErrorHandler {
 
 	public static <T> SUResultMessage<T> handle(Exception ex) {
 		// TODO: Use logger
-		if (ex instanceof KryoException)
+		if(ex instanceof JsonSyntaxException)
+			return new SUResultMessage<T>(null, SUStatus.INVALID_DATA, "Invalid json.");
+		else if (ex instanceof KryoException)
 			return new SUResultMessage<T>(null, SUStatus.SERVER_ERROR, "Kryo error.");
 		else if (ex instanceof DataFormatException)
 			return new SUResultMessage<T>(null, SUStatus.INVALID_DATA, "File could not be decompressed");

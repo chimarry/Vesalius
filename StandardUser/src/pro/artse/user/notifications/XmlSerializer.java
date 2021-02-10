@@ -12,13 +12,13 @@ import pro.artse.user.errorhandling.SUResultMessage;
 import pro.artse.user.errorhandling.SUStatus;
 import pro.artse.user.models.Notification;
 
-public class XmlSerializer implements Serializer {
+public class XmlSerializer extends Serializer {
 
 	private static final String EXTENSION = ".xml";
 
 	@Override
 	public SUResultMessage<Boolean> serialize(Notification notification) {
-		File file = NotificationDirectory.createNotificationFile(notification.getToken(), notification.getName(),
+		File file = NotificationStorage.createNotificationFile(notification.getToken(), notification.getName(),
 				EXTENSION);
 		XmlMapper xmlMapper = new XmlMapper();
 		try {
@@ -28,6 +28,23 @@ public class XmlSerializer implements Serializer {
 			return new SUResultMessage<Boolean>(true, SUStatus.SUCCESS);
 		} catch (IOException e) {
 			return handle(e);
+		}
+	}
+
+	@Override
+	protected boolean hasExtension(String extension) {
+		return EXTENSION.equals(extension);
+	}
+
+	@Override
+	public SUResultMessage<Notification> deserialize(File file) {
+		XmlMapper xmlMapper = new XmlMapper();
+		try {
+			byte[] xmlData = Files.readAllBytes(Paths.get(file.getPath()));
+			Notification notification = xmlMapper.readValue(new String(xmlData), Notification.class);
+			return new SUResultMessage<Notification>(notification, SUStatus.SUCCESS);
+		} catch (IOException e) {
+			return handleNotificationError(e);
 		}
 	}
 }

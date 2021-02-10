@@ -5,15 +5,22 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.sun.net.httpserver.Filter;
+
 import pro.artse.fileserver.rmi.FileShare;
+import pro.artse.user.errorhandling.SUResultMessage;
+import pro.artse.user.errorhandling.SUStatus;
 import pro.artse.user.models.Notification;
 import pro.artse.user.models.User;
 import pro.artse.user.util.ConfigurationUtil;
 
-public final class NotificationDirectory {
+public final class NotificationStorage {
 
 	public static final String DIRECTORY_FORMAT = ConfigurationUtil.get("notificationRootDirectory") + File.separator
 			+ "%s";
@@ -52,6 +59,21 @@ public final class NotificationDirectory {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
+		}
+	}
+
+	public static SUResultMessage<List<File>> getNotifications(String token) {
+		ArrayList<File> notifications = new ArrayList<>();
+		String userDirectoryPath = String.format(DIRECTORY_FORMAT, token);
+		try {
+			notifications = Files.walk(Paths.get(userDirectoryPath)).sorted(Comparator.reverseOrder()).map(Path::toFile)
+					.filter(x -> x.isFile()).collect(Collectors.toCollection(ArrayList<File>::new));
+			return new SUResultMessage<List<File>>(notifications, SUStatus.SUCCESS);
+		} catch (IOException e) {
+			// TODO Add logger
+			e.printStackTrace();
+			return new SUResultMessage<List<File>>(notifications, SUStatus.SERVER_ERROR,
+					"Notifications could not been read");
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package pro.artse.user.controllers;
 
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -63,14 +64,14 @@ public class LocationController implements Initializable {
 		since.setCellValueFactory(location -> {
 			SimpleStringProperty property = new SimpleStringProperty();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-			property.setValue(formatter.format(location.getValue().getSinceAsDateTime()));
+			property.setValue(formatter.format(LocalDateTime.parse(location.getValue().getSince())));
 			return property;
 		});
 
 		until.setCellValueFactory(location -> {
 			SimpleStringProperty property = new SimpleStringProperty();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-			property.setValue(formatter.format(location.getValue().getUntilAsDateTime()));
+			property.setValue(formatter.format(LocalDateTime.parse(location.getValue().getUntil())));
 			return property;
 		});
 

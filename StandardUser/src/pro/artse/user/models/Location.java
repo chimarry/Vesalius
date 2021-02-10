@@ -3,6 +3,11 @@ package pro.artse.user.models;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.KryoSerializable;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+
 public class Location implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -15,6 +20,14 @@ public class Location implements Serializable {
 		super();
 	}
 
+	public Location(double longitude, double latitude, String since, String until) {
+		this();
+		this.longitude = longitude;
+		this.latitude = latitude;
+		this.since = since;
+		this.until = until;
+	}
+	
 	public Location(double longitude, double latitude, LocalDateTime since, LocalDateTime until) {
 		this();
 		this.longitude = longitude;
@@ -53,13 +66,5 @@ public class Location implements Serializable {
 
 	public void setUntil(String until) {
 		this.until = until;
-	}
-
-	public LocalDateTime getSinceAsDateTime() {
-		return LocalDateTime.parse(since);
-	}
-
-	public LocalDateTime getUntilAsDateTime() {
-		return LocalDateTime.parse(until);
 	}
 }

@@ -18,7 +18,7 @@ import pro.artse.fileserver.errorhandling.FSStatus;
 import pro.artse.fileserver.rmi.FileShare;
 import pro.artse.fileserver.util.DirectoryStructureBuilder;
 import pro.artse.user.models.User;
-import pro.artse.user.notifications.NotificationDirectory;
+import pro.artse.user.notifications.NotificationStorage;
 
 public class LoginManager implements ILoginManager {
 
@@ -57,7 +57,7 @@ public class LoginManager implements ILoginManager {
 				user.setLoggedIn(true);
 				user.setLoggedInAt(LocalDateTime.now());
 
-				return NotificationDirectory.createNotificationDirectory(User.getInstance().getToken());
+				return NotificationStorage.createNotificationDirectory(User.getInstance().getToken());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -100,7 +100,7 @@ public class LoginManager implements ILoginManager {
 		File file = new File(User.getInstance().getToken() + ".txt");
 		try {
 			Files.deleteIfExists(file.toPath());
-			return NotificationDirectory.deleteNotificationDirectory(User.getInstance().getToken());
+			return NotificationStorage.deleteNotificationDirectory(User.getInstance().getToken());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

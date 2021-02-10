@@ -13,13 +13,13 @@ import pro.artse.user.errorhandling.SUStatus;
 import pro.artse.user.models.Notification;
 import pro.artse.user.models.User;
 
-public class CsvSerializer implements Serializer {
+public class CsvSerializer extends Serializer {
 
 	private static final String EXTENSION = ".csv";
 
 	@Override
 	public SUResultMessage<Boolean> serialize(Notification notification) {
-		File file = NotificationDirectory.createNotificationFile(notification.getToken(), notification.getName(),
+		File file = NotificationStorage.createNotificationFile(notification.getToken(), notification.getName(),
 				EXTENSION);
 		// TODO: check this
 		String[] notificationArray = new String[10];
@@ -40,5 +40,16 @@ public class CsvSerializer implements Serializer {
 			escapedData = "\"" + data + "\"";
 		}
 		return escapedData;
+	}
+	
+	@Override
+	protected boolean hasExtension(String extension) {
+		return EXTENSION.equals(extension);
+	}
+
+	@Override
+	public SUResultMessage<Notification> deserialize(File file) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

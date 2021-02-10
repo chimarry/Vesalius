@@ -8,6 +8,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import com.sothawo.mapjfx.Coordinate;
@@ -58,6 +59,7 @@ import pro.artse.user.models.ActivityLog;
 import pro.artse.user.models.Location;
 import pro.artse.user.models.Notification;
 import pro.artse.user.models.User;
+import pro.artse.user.notifications.NotificationStorage;
 import pro.artse.user.notifications.Serializer;
 import pro.artse.user.notifications.SerializerFactory;
 import pro.artse.user.util.StageUtil;
@@ -155,10 +157,18 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 		changePasswordItem.setOnAction(this::changePassword);
 		changePasswordMenu.getItems().add(changePasswordItem);
 
+		Menu notificationHistoryMenu = new Menu("Notifications");
+		notificationHistoryMenu.setGraphic(new ImageView("file:../Design/notification.png"));
+		notificationHistoryMenu.setStyle("-fx-accent: #a67a53");
+		MenuItem notificationItem = new MenuItem("History");
+		notificationItem.setOnAction(this::showNotificationHistory);
+		notificationHistoryMenu.getItems().add(notificationItem);
+
 		mainMenu.getMenus().add(logoutMenu);
 		mainMenu.getMenus().add(activitiesMenu);
 		mainMenu.getMenus().add(locationMenu);
 		mainMenu.getMenus().add(changePasswordMenu);
+		mainMenu.getMenus().add(notificationHistoryMenu);
 
 		sendMsgButton.setOnAction(this::sendMessage);
 		uploadDocsButton.setOnAction(this::uploadDocuments);
@@ -370,6 +380,10 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 	private void showNotificationLine() {
 		showNotificationButton.setText(String.format("%s  (%d) ", "Show  ", unreadNotifications.size()));
 		notificationContainer.setVisible(!unreadNotifications.isEmpty());
+	}
+	
+	private void showNotificationHistory(ActionEvent event) {
+		StageUtil.showDialog("/pro/artse/user/fxml/NotificationHistoryForm.fxml");
 	}
 
 	private void initializeMap() {
