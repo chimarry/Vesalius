@@ -58,6 +58,8 @@ import pro.artse.user.models.ActivityLog;
 import pro.artse.user.models.Location;
 import pro.artse.user.models.Notification;
 import pro.artse.user.models.User;
+import pro.artse.user.notifications.Serializer;
+import pro.artse.user.notifications.SerializerFactory;
 import pro.artse.user.util.StageUtil;
 
 public class StandardUserMainController implements Initializable, ISubscriber {
@@ -334,29 +336,40 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 				}
 			}
 		};
+		refreshNotifications.setOnFailed(e -> UserAlert.alert(AlertType.ERROR, "Notifications cannot be read."));
 		new Thread(refreshNotifications).start();
 	}
 
 	private void showNotification(ActionEvent event) {
 		Notification notification = unreadNotifications.get(0);
+		serializeNotification(notification);
+
 		Alert alert = new Alert(Alert.AlertType.INFORMATION, "Notification", ButtonType.CLOSE);
 		File file = new File("C:\\Users\\Vasic\\Desktop\\MDP\\Vesalius\\Vesalius\\Design\\mapExample.jpg");
 		Image image = new Image(file.toURI().toString());
 		ImageView imageView = new ImageView(image);
-		alert.setTitle("Notifications");
+		alert.setTitle("New notification");
 		alert.setHeaderText("Infection took place at " + System.lineSeparator() + notification.getLocation().getSince()
 				+ " - " + notification.getLocation().getUntil());
 		alert.setContentText("You have been in contact with: " + notification.getFromWhomToken()
 				+ System.lineSeparator() + "that has been infected.");
 		alert.setGraphic(imageView);
 		alert.showAndWait();
+
 		unreadNotifications.remove(0);
 		showNotificationLine();
 	}
 
+	private void serializeNotification(Notification notification) {
+		Serializer serializer = SerializerFactory.getNextSerializer();
+		SUResultMessage<Boolean> isSerialized = serializer.serialize(notification);
+		if (!isSerialized.isSuccess())
+			UserAlert.alert(AlertType.ERROR, isSerialized.getStatus() + " " + isSerialized.getMessage());
+	}
+
 	private void showNotificationLine() {
-		if (unreadNotifications.isEmpty())
-			notificationContainer.setVisible(false);
+		showNotificationButton.setText(String.format("%s  (%d) ", "Show  ", unreadNotifications.size()));
+		notificationContainer.setVisible(!unreadNotifications.isEmpty());
 	}
 
 	private void initializeMap() {

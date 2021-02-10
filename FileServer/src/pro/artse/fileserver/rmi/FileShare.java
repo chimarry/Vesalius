@@ -48,7 +48,6 @@ public class FileShare implements IFileShare {
 			// TODO: Log error
 			e.printStackTrace();
 		}
-
 	}
 
 	@Override
@@ -140,7 +139,8 @@ public class FileShare implements IFileShare {
 		try {
 			Files.delete(path);
 		} catch (IOException e) {
-			System.err.printf("Unable to delete this path : %s%n%s", path, e);
+			// TODO: logger
+			e.printStackTrace();
 		}
 	}
 }

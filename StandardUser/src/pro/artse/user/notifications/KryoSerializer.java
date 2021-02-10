@@ -1,7 +1,9 @@
-package pro.artse.user.serialization;
+package pro.artse.user.notifications;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.KryoException;
@@ -18,17 +20,19 @@ public class KryoSerializer implements Serializer {
 
 	@Override
 	public SUResultMessage<Boolean> serialize(Notification notification) {
-		String fileName = buildFileName(EXTENSION);
-		try (Output out = new Output(new FileOutputStream(fileName))) {
+		File file = NotificationDirectory.createNotificationFile(notification.getToken(), notification.getName(),
+				EXTENSION);
+
+		try (Output out = new Output(new FileOutputStream(file))) {
 			Kryo kryo = new Kryo();
 			kryo.register(Notification.class);
 			kryo.writeClassAndObject(out, notification);
 			out.flush();
 			return new SUResultMessage<Boolean>(true, SUStatus.SUCCESS);
 		} catch (KryoException e) {
-			return ErrorHandler.handle(e);
+			return handle(e);
 		} catch (FileNotFoundException e) {
-			return ErrorHandler.handle(e);
+			return handle(e);
 		}
 	}
 }

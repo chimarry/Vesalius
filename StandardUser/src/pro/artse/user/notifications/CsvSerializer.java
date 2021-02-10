@@ -1,5 +1,6 @@
-package pro.artse.user.serialization;
+package pro.artse.user.notifications;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -10,6 +11,7 @@ import java.util.stream.Stream;
 import pro.artse.user.errorhandling.SUResultMessage;
 import pro.artse.user.errorhandling.SUStatus;
 import pro.artse.user.models.Notification;
+import pro.artse.user.models.User;
 
 public class CsvSerializer implements Serializer {
 
@@ -17,12 +19,14 @@ public class CsvSerializer implements Serializer {
 
 	@Override
 	public SUResultMessage<Boolean> serialize(Notification notification) {
-		String fileName = buildFileName(EXTENSION);
+		File file = NotificationDirectory.createNotificationFile(notification.getToken(), notification.getName(),
+				EXTENSION);
+		// TODO: check this
 		String[] notificationArray = new String[10];
 		byte[] csvData = Stream.of(notificationArray).map(this::escapeSpecialCharacters)
 				.collect(Collectors.joining(",")).getBytes();
 		try {
-			Files.write(Paths.get(fileName), csvData, StandardOpenOption.CREATE_NEW);
+			Files.write(Paths.get(file.getPath()), csvData, StandardOpenOption.WRITE);
 			return new SUResultMessage<Boolean>(true, SUStatus.SUCCESS);
 		} catch (IOException e) {
 			return handle(e);

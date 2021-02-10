@@ -77,7 +77,8 @@ public class NotificationDTO {
 		ByteBuffer bb = ByteBuffer.wrap(new byte[16]);
 		bb.putLong(uuid.getMostSignificantBits());
 		bb.putLong(uuid.getLeastSignificantBits());
-		return Base64.getEncoder().encodeToString(bb.array());
+		String originalName = Base64.getEncoder().encodeToString(bb.array());
+		return originalName.replace('/', '+');
 	}
 
 	public static NotificationDTO buildNotification(String name, Map<String, String> attibutes) {

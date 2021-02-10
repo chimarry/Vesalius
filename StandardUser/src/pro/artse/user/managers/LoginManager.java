@@ -2,12 +2,23 @@ package pro.artse.user.managers;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.stream.Stream;
+
 import javax.xml.bind.DatatypeConverter;
 
+import pro.artse.dal.util.ConfigurationUtil;
+import pro.artse.fileserver.errorhandling.FSResultMessage;
+import pro.artse.fileserver.errorhandling.FSStatus;
+import pro.artse.fileserver.rmi.FileShare;
+import pro.artse.fileserver.util.DirectoryStructureBuilder;
 import pro.artse.user.models.User;
+import pro.artse.user.notifications.NotificationDirectory;
 
 public class LoginManager implements ILoginManager {
 
@@ -45,13 +56,14 @@ public class LoginManager implements ILoginManager {
 				user.setPasswordHash(getHash(password));
 				user.setLoggedIn(true);
 				user.setLoggedInAt(LocalDateTime.now());
+
+				return NotificationDirectory.createNotificationDirectory(User.getInstance().getToken());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return false;
 			}
 		}
-		return true;
 	}
 
 	private String getHash(String password) {
@@ -88,8 +100,7 @@ public class LoginManager implements ILoginManager {
 		File file = new File(User.getInstance().getToken() + ".txt");
 		try {
 			Files.deleteIfExists(file.toPath());
-			logout();
-			return true;
+			return NotificationDirectory.deleteNotificationDirectory(User.getInstance().getToken());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

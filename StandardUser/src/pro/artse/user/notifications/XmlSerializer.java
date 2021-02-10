@@ -1,5 +1,6 @@
-package pro.artse.user.serialization;
+package pro.artse.user.notifications;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -17,12 +18,13 @@ public class XmlSerializer implements Serializer {
 
 	@Override
 	public SUResultMessage<Boolean> serialize(Notification notification) {
-		String fileName = buildFileName(EXTENSION);
+		File file = NotificationDirectory.createNotificationFile(notification.getToken(), notification.getName(),
+				EXTENSION);
 		XmlMapper xmlMapper = new XmlMapper();
 		try {
 			String xml = xmlMapper.writeValueAsString(notification);
 			byte[] xmlData = xml.getBytes();
-			Files.write(Paths.get(fileName), xmlData, StandardOpenOption.CREATE_NEW);
+			Files.write(Paths.get(file.getPath()), xmlData, StandardOpenOption.WRITE);
 			return new SUResultMessage<Boolean>(true, SUStatus.SUCCESS);
 		} catch (IOException e) {
 			return handle(e);
