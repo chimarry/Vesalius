@@ -2,6 +2,7 @@ package pro.artse.medicalstaff.controllers;
 
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
@@ -127,15 +128,6 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 		sendButton.setOnAction(this::send);
 		stopButton.setOnAction(this::stop);
 
-		// Show statistics
-		PieChart.Data infectedData = new PieChart.Data("Infected", 13);
-		PieChart.Data notInfectedData = new PieChart.Data("Not infected", 25);
-		PieChart.Data potInfectedData = new PieChart.Data("Potentially infected", 10);
-
-		// TODO: Add statistics
-		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(infectedData, notInfectedData,
-				potInfectedData);
-		statisticChart.setData(pieChartData);
 		// TODO: Enable chat
 
 		documentsButton.setOnAction(this::showDocuments);
@@ -203,6 +195,7 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 								disableOptions(true);
 						});
 				setRowColor();
+				Platform.runLater(() -> showStatistics(resultMessage.getResult()));
 			} else
 				MedicalStaffAlert.processResult(resultMessage);
 
@@ -365,5 +358,28 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 		potInfectedCheckBox.setSelected(false);
 		notInfectedCheckBox.setSelected(false);
 		infectedCheckBox.setSelected(false);
+	}
+
+	private void showStatistics(KeyUserInfo[] users) {
+		int infected = 0, potInfected = 0, notInfected = 0;
+		for (KeyUserInfo user : users) {
+			CovidStatus covidStatus = CovidStatus.values()[user.getCovidStatus()];
+			if (covidStatus == CovidStatus.INFECTED)
+				++infected;
+			else if (covidStatus == CovidStatus.NOT_INFECTED)
+				++notInfected;
+			else
+				++potInfected;
+
+		}
+		// Show statistics
+		PieChart.Data infectedData = new PieChart.Data("Infected", infected);
+		PieChart.Data notInfectedData = new PieChart.Data("Not infected", notInfected);
+		PieChart.Data potInfectedData = new PieChart.Data("Potentially infected", potInfected);
+
+		// TODO: Add statistics
+		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(infectedData,
+				potInfectedData,notInfectedData);
+		statisticChart.setData(pieChartData);
 	}
 }

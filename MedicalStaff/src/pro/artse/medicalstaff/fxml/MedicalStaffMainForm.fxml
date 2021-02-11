@@ -10,7 +10,6 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -18,7 +17,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="658.0" prefWidth="1226.0" style="-fx-background-color: #04121c;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pro.artse.medicalstaff.controllers.MedicalStaffMainController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="658.0" prefWidth="1226.0" style="-fx-background-color: #04121c;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pro.artse.medicalstaff.controllers.MedicalStaffMainController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1008.0" minWidth="10.0" prefWidth="921.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="696.0" minWidth="10.0" prefWidth="305.0" />
@@ -70,7 +69,7 @@
                   <TableColumn fx:id="statusColumn" prefWidth="207.0" text="Status" />
               </columns>
             </TableView>
-            <VBox layoutX="689.0" layoutY="186.0" prefHeight="318.0" prefWidth="131.0">
+            <VBox layoutX="688.0" layoutY="122.0" prefHeight="234.0" prefWidth="131.0">
                <children>
                   <Button fx:id="locationsButton" mnemonicParsing="false" prefHeight="0.0" prefWidth="130.0" stylesheets="@../../../../../../Design/ButtonCss.css" text="Locations">
                      <VBox.margin>
@@ -102,7 +101,7 @@
             </VBox>
             <TextField fx:id="searchTokenTextField" layoutX="24.0" layoutY="75.0" prefHeight="25.0" prefWidth="245.0" promptText="Search by token" />
             <Button fx:id="searchButton" layoutX="269.0" layoutY="75.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="38.0" style="-fx-background-image: @../../../../../../Design/search.png; -fx-background-color: transparent;" />
-            <PieChart fx:id="statisticChart" labelLineLength="5.0" layoutX="626.0" layoutY="21.0" prefHeight="158.0" prefWidth="235.0" />
+            <PieChart fx:id="statisticChart" labelLineLength="5.0" layoutX="663.0" layoutY="402.0" prefHeight="159.0" prefWidth="201.0" />
          </children>
       </AnchorPane>
    </children>
