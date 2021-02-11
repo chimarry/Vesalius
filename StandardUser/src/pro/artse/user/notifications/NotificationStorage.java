@@ -3,6 +3,7 @@ package pro.artse.user.notifications;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -78,11 +79,13 @@ public final class NotificationStorage {
 		String userDirectoryPath = String.format(DIRECTORY_FORMAT, token);
 		try {
 			notifications = Files.walk(Paths.get(userDirectoryPath)).sorted(Comparator.reverseOrder()).map(Path::toFile)
-					.filter(x -> x.isFile() && !x.getPath().contains(IMAGE_DIRECTORY)).collect(Collectors.toCollection(ArrayList<File>::new));
+					.filter(x -> x.isFile() && !x.getPath().contains(IMAGE_DIRECTORY))
+					.collect(Collectors.toCollection(ArrayList<File>::new));
 			return new SUResultMessage<List<File>>(notifications, SUStatus.SUCCESS);
+		} catch (NoSuchFileException e) {
+			return new SUResultMessage<List<File>>(notifications, SUStatus.SUCCESS, "Notification history is empty.");
 		} catch (IOException e) {
 			// TODO Add logger
-			e.printStackTrace();
 			return new SUResultMessage<List<File>>(notifications, SUStatus.SERVER_ERROR,
 					"Notifications could not been read");
 		}

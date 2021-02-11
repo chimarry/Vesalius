@@ -124,10 +124,7 @@ public class NotificationHistoryController implements Initializable {
 				UserAlert.processResult(resultMessage);
 		});
 		task.setOnFailed(e -> {
-			if (e.getSource().getException() instanceof NoSuchFileException)
-				UserAlert.alert(AlertType.INFORMATION, "No notifications.");
-			else
-				UserAlert.alert(AlertType.ERROR, "Notification history could not been shown.");
+			UserAlert.alert(AlertType.ERROR, "Notification history could not been shown.");
 		});
 		new Thread(task).start();
 	}
