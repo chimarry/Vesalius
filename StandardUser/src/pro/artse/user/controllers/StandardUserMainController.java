@@ -59,6 +59,7 @@ import pro.artse.user.models.ActivityLog;
 import pro.artse.user.models.Location;
 import pro.artse.user.models.Notification;
 import pro.artse.user.models.User;
+import pro.artse.user.notifications.NotificationImageDrawer;
 import pro.artse.user.notifications.NotificationStorage;
 import pro.artse.user.notifications.Serializer;
 import pro.artse.user.notifications.SerializerFactory;
@@ -333,7 +334,7 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 		Task<Boolean> refreshNotifications = new Task<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
-				int refreshMiliseconds = 1200;
+				int refreshMiliseconds = 10000;
 				while (true) {
 					SUResultMessage<Notification[]> notifications = notificationService
 							.getNewerNotifications(userToken);
@@ -355,8 +356,7 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 		serializeNotification(notification);
 
 		Alert alert = new Alert(Alert.AlertType.INFORMATION, "Notification", ButtonType.CLOSE);
-		File file = new File("C:\\Users\\Vasic\\Desktop\\MDP\\Vesalius\\Vesalius\\Design\\mapExample.jpg");
-		Image image = new Image(file.toURI().toString());
+		Image image = NotificationImageDrawer.readImageForNotification(notification);
 		ImageView imageView = new ImageView(image);
 		alert.setTitle("New notification");
 		alert.setHeaderText("Infection took place at " + System.lineSeparator() + notification.getLocation().getSince()
@@ -372,7 +372,7 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 
 	private void serializeNotification(Notification notification) {
 		Serializer serializer = SerializerFactory.getNextSerializer();
-		SUResultMessage<Boolean> isSerialized = serializer.serialize(notification);
+		SUResultMessage<Boolean> isSerialized = serializer.serializeNotification(notification);
 		if (!isSerialized.isSuccess())
 			UserAlert.alert(AlertType.ERROR, isSerialized.getStatus() + " " + isSerialized.getMessage());
 	}
@@ -381,7 +381,7 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 		showNotificationButton.setText(String.format("%s  (%d) ", "Show  ", unreadNotifications.size()));
 		notificationContainer.setVisible(!unreadNotifications.isEmpty());
 	}
-	
+
 	private void showNotificationHistory(ActionEvent event) {
 		StageUtil.showDialog("/pro/artse/user/fxml/NotificationHistoryForm.fxml");
 	}

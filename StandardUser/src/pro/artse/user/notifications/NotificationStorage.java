@@ -26,8 +26,19 @@ public final class NotificationStorage {
 			+ "%s";
 	public static final String FILE_NAME_FORMAT = DIRECTORY_FORMAT + File.separator + "%s";
 
+	public static final String IMAGE_DIRECTORY = "tumbnails";
+
+	public static final String IMAGE_DIRECTORY_FORMAT = DIRECTORY_FORMAT + File.separator + IMAGE_DIRECTORY;
+
 	public static String buildFileName(String notificationName, String token, String extension) {
 		return String.format(FILE_NAME_FORMAT, token, notificationName + extension);
+	}
+
+	public static String buildDirectoryForImagesPath(String token) {
+		File imagesDir = new File(String.format(IMAGE_DIRECTORY_FORMAT, token));
+		if (!imagesDir.exists())
+			imagesDir.mkdirs();
+		return imagesDir.getPath();
 	}
 
 	public static boolean createNotificationDirectory(String token) {
@@ -67,7 +78,7 @@ public final class NotificationStorage {
 		String userDirectoryPath = String.format(DIRECTORY_FORMAT, token);
 		try {
 			notifications = Files.walk(Paths.get(userDirectoryPath)).sorted(Comparator.reverseOrder()).map(Path::toFile)
-					.filter(x -> x.isFile()).collect(Collectors.toCollection(ArrayList<File>::new));
+					.filter(x -> x.isFile() && !x.getPath().contains(IMAGE_DIRECTORY)).collect(Collectors.toCollection(ArrayList<File>::new));
 			return new SUResultMessage<List<File>>(notifications, SUStatus.SUCCESS);
 		} catch (IOException e) {
 			// TODO Add logger

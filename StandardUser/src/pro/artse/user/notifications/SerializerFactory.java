@@ -8,7 +8,7 @@ public final class SerializerFactory {
 	private static final int SERIALIZER_COUNT = 5;
 
 	private static final Serializer[] serializers = new Serializer[] { new JavaSerializer(), new KryoSerializer(),
-			new GsonSerializer(), new XmlSerializer(), new CsvSerializer() };
+			new GsonSerializer(), new XmlSerializer(), new TextSerializer() };
 
 	public static Serializer getNextSerializer() {
 		return serializers[(nextSerializer++) % SERIALIZER_COUNT];

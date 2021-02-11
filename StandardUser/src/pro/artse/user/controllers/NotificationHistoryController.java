@@ -1,6 +1,7 @@
 package pro.artse.user.controllers;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -122,7 +123,10 @@ public class NotificationHistoryController implements Initializable {
 				UserAlert.processResult(resultMessage);
 		});
 		task.setOnFailed(e -> {
-			UserAlert.alert(AlertType.ERROR, "Notification history could not been shown.");
+			if (e.getSource().getException() instanceof FileNotFoundException)
+				UserAlert.alert(AlertType.INFORMATION, "No notifications.");
+			else
+				UserAlert.alert(AlertType.ERROR, "Notification history could not been shown.");
 		});
 		new Thread(task).start();
 	}
