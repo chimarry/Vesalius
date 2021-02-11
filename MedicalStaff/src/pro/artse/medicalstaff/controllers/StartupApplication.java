@@ -3,6 +3,7 @@ package pro.artse.medicalstaff.controllers;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -15,6 +16,7 @@ public class StartupApplication extends Application {
 		Scene scene = new Scene(mainPane);
 		primaryStage.setScene(scene);
 		primaryStage.setOnHidden(MedicalStaffMainController::onClose);
+		primaryStage.getIcons().add(new Image("file:../Design/virusIcon.png"));
 		primaryStage.show();
 	}
 

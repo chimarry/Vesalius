@@ -7,13 +7,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="loginPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="372.0" prefWidth="640.0" style="-fx-background-color: #04121c;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pro.artse.user.controllers.LoginController">
+<AnchorPane fx:id="loginPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="352.0" prefWidth="534.0" style="-fx-background-color: #04121c;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pro.artse.user.controllers.LoginController">
    <children>
-      <Label layoutX="128.0" layoutY="71.0" prefHeight="44.0" prefWidth="125.0" stylesheets="@../../../../../../Design/LabelCss.css" text="Token:" />
-      <Label layoutX="129.0" layoutY="136.0" prefHeight="55.0" prefWidth="125.0" stylesheets="@../../../../../../Design/LabelCss.css" text="Password*" wrapText="true" />
-      <PasswordField fx:id="passwordBox" layoutX="256.0" layoutY="145.0" prefHeight="38.0" prefWidth="240.0" />
-      <Button fx:id="loginButton" defaultButton="true" layoutX="256.0" layoutY="232.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="151.0" stylesheets="@../../../../../../Design/ButtonCss.css" text="Log in" />
-      <TextField fx:id="tokenField" layoutX="256.0" layoutY="78.0" prefHeight="31.0" prefWidth="240.0" promptText="asfasfasfas12as==">
+      <Label layoutX="84.0" layoutY="75.0" prefHeight="44.0" prefWidth="125.0" stylesheets="@../../../../../../Design/LabelCss.css" text="Token:" />
+      <Label layoutX="84.0" layoutY="149.0" prefHeight="55.0" prefWidth="125.0" stylesheets="@../../../../../../Design/LabelCss.css" text="Password*" wrapText="true" />
+      <PasswordField fx:id="passwordBox" layoutX="223.0" layoutY="157.0" prefHeight="38.0" prefWidth="240.0" />
+      <Button fx:id="loginButton" defaultButton="true" layoutX="312.0" layoutY="249.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="151.0" stylesheets="@../../../../../../Design/ButtonCss.css" text="LOG IN" />
+      <TextField fx:id="tokenField" layoutX="223.0" layoutY="78.0" prefHeight="38.0" prefWidth="240.0" promptText="asfasfasfas12as==">
          <font>
             <Font name="System Bold Italic" size="9.0" />
          </font>
