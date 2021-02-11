@@ -73,4 +73,10 @@ public class UserManager implements IUserManager {
 		CrResultMessage<Boolean> isAdded = notificationManager.add(Mapper.mapToWrapper(notification));
 		// TODO: Log errors
 	}
+
+	@Override
+	public CrResultMessage<Boolean> changeCovidStatus(String token, int status) {
+		DBResultMessage<Boolean> isChanged = userManager.changeCovidStatus(token, status);
+		return Mapper.mapFrom(isChanged);
+	}
 }

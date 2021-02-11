@@ -99,4 +99,22 @@ public class UserService extends BaseService {
 			return ErrorHandler.handle(e).buildResponse();
 		}
 	}
+
+	/**
+	 * Changes covid status of an user.
+	 * 
+	 * @return Wrapper result with correct HTTP status code. @see HttpResultMessage
+	 */
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{token}/covidStatus")
+	public Response markAsInfected(KeyUserInfoWrapper userInfo, @PathParam("token") String token) {
+		try {
+			CrResultMessage<Boolean> resultMessage = userManager.changeCovidStatus(token, userInfo.getCovidStatus());
+			return resultMessage.buildResponse();
+		} catch (Exception e) {
+			return ErrorHandler.handle(e).buildResponse();
+		}
+	}
 }

@@ -17,4 +17,6 @@ public interface IUserManager {
 	CrResultMessage<Boolean> unregister(String token);
 
 	CrResultMessage<Boolean> markUserAsInfected(String token, LocationWrapper location);
+	
+	CrResultMessage<Boolean> changeCovidStatus(String token, int status);
 }

@@ -14,4 +14,6 @@ public interface IUserService {
 	MSResultMessage<Boolean> blockUser(String token) throws Exception;
 
 	MSResultMessage<Boolean> markUserAsInfected(String token, Location location) throws IOException;
+	
+	MSResultMessage<Boolean> changeCovidStatus(KeyUserInfo userInfo) throws IOException;
 }

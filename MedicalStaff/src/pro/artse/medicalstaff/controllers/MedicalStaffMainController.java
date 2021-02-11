@@ -1,8 +1,6 @@
 package pro.artse.medicalstaff.controllers;
 
 import java.net.URL;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
@@ -20,6 +18,7 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.WindowEvent;
@@ -86,13 +85,13 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 	private TableColumn<KeyUserInfo, CovidStatus> statusColumn;
 
 	@FXML
-	private CheckBox infectedCheckBox;
+	private Button infectedButton;
 
 	@FXML
-	private CheckBox potInfectedCheckBox;
+	private Button potInfectedButton;
 
 	@FXML
-	private CheckBox notInfectedCheckBox;
+	private Button notInfectedButton;
 
 	@FXML
 	private TextField searchTokenTextField;
@@ -103,6 +102,12 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		infectedButton.setGraphic(new ImageView(new Image("file:../Design/infectedIcon.png")));
+		infectedButton.setContentDisplay(ContentDisplay.CENTER);
+		potInfectedButton.setGraphic(new ImageView(new Image("file:../Design/potInfectedIcon.png")));
+		potInfectedButton.setContentDisplay(ContentDisplay.CENTER);
+		notInfectedButton.setGraphic(new ImageView(new Image("file:../Design/notInfectedIcon.png")));
+		notInfectedButton.setContentDisplay(ContentDisplay.CENTER);
 		// Initialize chat
 		initializeChatSpace();
 		chatService.register(this);
@@ -118,9 +123,9 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 		getUsers();
 
 		// Add action handlers
-		notInfectedCheckBox.setOnAction(this::chooseNotInfected);
-		infectedCheckBox.setOnAction(this::chooseInfected);
-		potInfectedCheckBox.setOnAction(this::choosePotInfected);
+		notInfectedButton.setOnAction(this::chooseNotInfected);
+		infectedButton.setOnAction(this::chooseInfected);
+		potInfectedButton.setOnAction(this::choosePotInfected);
 
 		searchButton.setOnAction(this::search);
 		blockUserButton.setOnAction(this::blockUser);
@@ -267,31 +272,42 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 	}
 
 	private void chooseInfected(ActionEvent event) {
-		if (infectedCheckBox.isSelected()) {
-			potInfectedCheckBox.setSelected(false);
-			notInfectedCheckBox.setSelected(false);
-		}
 		StageUtil.showDialog("/pro/artse/medicalstaff/fxml/MarkAsInfectedForm.fxml",
 				usersTableView.getSelectionModel().getSelectedItem().getToken());
 	}
 
 	private void chooseNotInfected(ActionEvent event) {
-		if (notInfectedCheckBox.isSelected()) {
-			potInfectedCheckBox.setSelected(false);
-			infectedCheckBox.setSelected(false);
-		}
 		changeCovidStatus(CovidStatus.NOT_INFECTED);
 	}
 
 	private void choosePotInfected(ActionEvent event) {
-		if (potInfectedCheckBox.isSelected()) {
-			infectedCheckBox.setSelected(false);
-			notInfectedCheckBox.setSelected(false);
-		}
 		changeCovidStatus(CovidStatus.POTENTIALLY_INFECTED);
 	}
 
 	private void changeCovidStatus(CovidStatus covidStatus) {
+		Task<MSResultMessage<Boolean>> task = new Task<MSResultMessage<Boolean>>() {
+			@Override
+			public MSResultMessage<Boolean> call() throws Exception {
+				KeyUserInfo newUserInfo = new KeyUserInfo(
+						usersTableView.getSelectionModel().getSelectedItem().getToken(), covidStatus.ordinal());
+				MSResultMessage<Boolean> data = userService.changeCovidStatus(newUserInfo);
+				return data;
+			}
+		};
+		task.setOnSucceeded(e -> {
+			MSResultMessage<Boolean> resultMessage = task.getValue();
+			if (resultMessage.isSuccess()) {
+				getUsers();
+			} else if (resultMessage.getStatus() == MSStatus.NOT_FOUND) {
+				MedicalStaffAlert.processResult(resultMessage, AlertType.INFORMATION);
+			} else
+				MedicalStaffAlert.processResult(resultMessage, AlertType.ERROR);
+
+		});
+		task.setOnFailed(e -> {
+			MedicalStaffAlert.alert(AlertType.ERROR, "Connection with Central register failed.");
+		});
+		new Thread(task).start();
 	}
 
 	private void setRowColor() {
@@ -313,9 +329,9 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 		locationsButton.setDisable(isDisabled);
 		blockUserButton.setDisable(isDisabled);
 		documentsButton.setDisable(isDisabled);
-		infectedCheckBox.setDisable(isDisabled);
-		potInfectedCheckBox.setDisable(isDisabled);
-		notInfectedCheckBox.setDisable(isDisabled);
+		infectedButton.setDisable(isDisabled);
+		potInfectedButton.setDisable(isDisabled);
+		notInfectedButton.setDisable(isDisabled);
 	}
 
 	private void showDocuments(ActionEvent event) {
@@ -328,12 +344,6 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 		KeyUserInfo info = usersTableView.getSelectionModel().getSelectedItem();
 		String token = info.getToken();
 		StageUtil.showDialog("/pro/artse/medicalstaff/fxml/LocationsForm.fxml", token);
-	}
-
-	private void clearCheckboxes() {
-		potInfectedCheckBox.setSelected(false);
-		notInfectedCheckBox.setSelected(false);
-		infectedCheckBox.setSelected(false);
 	}
 
 	private void showStatistics(KeyUserInfo[] users) {

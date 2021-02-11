@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import javax.ws.rs.core.Response;
 
 import pro.artse.centralr.api.ApiPaths;
+import pro.artse.centralr.models.KeyUserInfoWrapper;
 import pro.artse.centralr.models.LocationWrapper;
 import pro.artse.medicalstaff.errorhandling.ErrorHandler;
 import pro.artse.medicalstaff.errorhandling.MSResultMessage;
@@ -87,6 +88,31 @@ public class UserService implements IUserService {
 		HttpURLConnection connection = RestApiUtil.openConnectionJSON(urlPath, "POST", true);
 		connection.setRequestProperty("Content-Type", "application/json");
 		LocationWrapper wrapper = Mapper.mapToWrapper(location);
+		String jsonString = JsonUtil.mapToJson(wrapper);
+		try (OutputStream os = connection.getOutputStream()) {
+			os.write(jsonString.getBytes());
+			os.flush();
+		} catch (Exception e) {
+			// TODO: Add logger
+			return ErrorHandler.handle(e, connection);
+		}
+		try (BufferedReader reader = RestApiUtil.getReader(connection)) {
+			String resultString = reader.readLine();
+			MSResultMessage<Boolean> infectedResult = Mapper.mapFromCR(resultString, Boolean.class);
+			connection.disconnect();
+			return infectedResult;
+		} catch (Exception e) {
+			// TODO: Add logger
+			return ErrorHandler.handle(e, connection);
+		}
+	}
+
+	@Override
+	public MSResultMessage<Boolean> changeCovidStatus(KeyUserInfo userInfo) throws IOException {
+		String urlPath = RestApiUtil.buildPath(ApiPaths.PUT_COVID_STATUS, userInfo.getToken());
+		HttpURLConnection connection = RestApiUtil.openConnectionJSON(urlPath, "PUT", true);
+		connection.setRequestProperty("Content-Type", "application/json");
+		KeyUserInfoWrapper wrapper = Mapper.mapToWrapper(userInfo);
 		String jsonString = JsonUtil.mapToJson(wrapper);
 		try (OutputStream os = connection.getOutputStream()) {
 			os.write(jsonString.getBytes());
