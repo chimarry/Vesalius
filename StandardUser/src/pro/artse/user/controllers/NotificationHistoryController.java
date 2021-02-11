@@ -3,6 +3,7 @@ package pro.artse.user.controllers;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.nio.file.NoSuchFileException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -123,7 +124,7 @@ public class NotificationHistoryController implements Initializable {
 				UserAlert.processResult(resultMessage);
 		});
 		task.setOnFailed(e -> {
-			if (e.getSource().getException() instanceof FileNotFoundException)
+			if (e.getSource().getException() instanceof NoSuchFileException)
 				UserAlert.alert(AlertType.INFORMATION, "No notifications.");
 			else
 				UserAlert.alert(AlertType.ERROR, "Notification history could not been shown.");
