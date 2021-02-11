@@ -8,6 +8,7 @@ import javax.xml.rpc.ServiceException;
 import pro.arste.centralr.errorhandling.CrResultMessage;
 import pro.artse.centralr.models.KeyUserInfoWrapper;
 import pro.artse.centralr.models.LocationWrapper;
+import pro.artse.centralr.util.ConfigurationUtil;
 import pro.artse.centralr.util.Mapper;
 import pro.artse.dal.errorhandling.DBResultMessage;
 import pro.artse.dal.models.LocationDTO;
@@ -57,9 +58,8 @@ public class UserManager implements IUserManager {
 
 	private void markAsPotentiallyInfected(String infectionSourceToken, String infectedPersonToken,
 			LocationDTO location) {
-		// TODO: Get n, k, p
-		int meters = 20000;
-		int timeInterval = 5;
+		int meters = ConfigurationUtil.getMeteres();
+		int timeInterval = ConfigurationUtil.getTimeInterval();
 		saveNotification(infectedPersonToken, infectionSourceToken, location);
 		DBResultMessage<List<UserLocationDTO>> potentiallyInfected = userManager
 				.markUsersAsPotentiallyInfected(infectionSourceToken, location, meters, timeInterval);

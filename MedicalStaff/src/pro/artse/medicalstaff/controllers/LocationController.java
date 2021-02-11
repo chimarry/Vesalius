@@ -28,36 +28,39 @@ import pro.artse.medicalstaff.util.ITokenSetup;
 
 public class LocationController implements Initializable, ITokenSetup {
 
-	private final ILocationService locationService = WebServiceFactory.getLocationService();
-	private String token;
+	protected final ILocationService locationService = WebServiceFactory.getLocationService();
+	protected String token;
 
 	@FXML
-	private TableView<Location> locations;
+	protected TableView<Location> locations;
 
 	@FXML
-	private TableColumn<Location, String> since;
+	protected TableColumn<Location, String> since;
 
 	@FXML
-	private TableColumn<Location, String> until;
+	protected TableColumn<Location, String> until;
 
 	@FXML
-	private TableColumn<Location, Double> longitude;
+	protected TableColumn<Location, Double> longitude;
 
 	@FXML
-	private TableColumn<Location, Double> latitude;
+	protected TableColumn<Location, Double> latitude;
 
 	@FXML
-	private MapView mapView;
+	protected MapView mapView;
 
-	private Marker marker = null;
+	protected Marker marker = null;
 
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		// create a text input dialog
+	public int getDays() {
 		TextInputDialog td = new TextInputDialog("12");
 		td.setHeaderText("Enter number of days");
 		Optional<String> daysAsString = td.showAndWait();
+		return Integer.parseInt(daysAsString.get());
+	}
 
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {
+		int days = getDays();
 		longitude.setCellValueFactory(new PropertyValueFactory<>("Longitude"));
 		latitude.setCellValueFactory(new PropertyValueFactory<>("Latitude"));
 		since.setCellValueFactory(location -> {
@@ -84,10 +87,9 @@ public class LocationController implements Initializable, ITokenSetup {
 		});
 
 		Task<MSResultMessage<Location[]>> task = new Task<MSResultMessage<Location[]>>() {
-
 			@Override
 			public MSResultMessage<Location[]> call() throws Exception {
-				return locationService.getAll(token, Integer.parseInt(daysAsString.get()));
+				return locationService.getAll(token, days);
 			}
 		};
 		task.setOnSucceeded(e -> {
@@ -99,13 +101,14 @@ public class LocationController implements Initializable, ITokenSetup {
 				MedicalStaffAlert.processResult(resultMessage);
 		});
 		task.setOnFailed(e -> {
+			e.getSource().getException().printStackTrace();
 			MedicalStaffAlert.alert(AlertType.ERROR, MedicalStaffAlert.REMOTE_CONNECTION_PROBLEM);
 		});
 		new Thread(task).start();
 
 	}
 
-	private void initializeMap() {
+	protected void initializeMap() {
 		Coordinate banjaLukaCenterCoordinates = new Coordinate(44.77777556721956, 17.191052994189608);
 		mapView.setCenter(banjaLukaCenterCoordinates);
 		if (marker == null)

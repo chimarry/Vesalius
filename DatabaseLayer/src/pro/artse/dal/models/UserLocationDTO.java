@@ -16,7 +16,7 @@ public class UserLocationDTO {
 	}
 
 	public void setLocation(LocationDTO location) {
-		this.location = new LocationDTO(location.getLongitude(), location.getLongitude(), location.getSince(),
+		this.location = new LocationDTO(location.getLongitude(), location.getLatitude(), location.getSince(),
 				location.getUntil());
 	}
 

@@ -271,32 +271,8 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 			potInfectedCheckBox.setSelected(false);
 			notInfectedCheckBox.setSelected(false);
 		}
-		Location location = new Location(17.191052994189608, 44.77777556721956, LocalDateTime.of(2021, 2, 1, 12, 0),
-				LocalDateTime.of(2021, 2, 1, 13, 0));
-		Task<MSResultMessage<Boolean>> task = new Task<MSResultMessage<Boolean>>() {
-			@Override
-			public MSResultMessage<Boolean> call() throws Exception {
-				MSResultMessage<Boolean> data = userService
-						.markUserAsInfected(usersTableView.getSelectionModel().getSelectedItem().getToken(), location);
-				return data;
-			}
-		};
-		task.setOnSucceeded(e -> {
-			MSResultMessage<Boolean> resultMessage = task.getValue();
-			if (resultMessage.isSuccess()) {
-				usersTableView.getSelectionModel().selectedItemProperty().get().setCovidStatus(2);
-			} else if (resultMessage.getStatus() == MSStatus.NOT_FOUND) {
-				MedicalStaffAlert.processResult(resultMessage, AlertType.INFORMATION);
-			} else
-				MedicalStaffAlert.processResult(resultMessage, AlertType.ERROR);
-
-		});
-		task.setOnFailed(e -> {
-			MedicalStaffAlert.alert(AlertType.ERROR, "Connection with Central register failed.");
-		});
-		new Thread(task).start();
-		clearCheckboxes();
-		getUsers();
+		StageUtil.showDialog("/pro/artse/medicalstaff/fxml/MarkAsInfectedForm.fxml",
+				usersTableView.getSelectionModel().getSelectedItem().getToken());
 	}
 
 	private void chooseNotInfected(ActionEvent event) {
@@ -376,10 +352,9 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 		PieChart.Data infectedData = new PieChart.Data("Infected", infected);
 		PieChart.Data notInfectedData = new PieChart.Data("Not infected", notInfected);
 		PieChart.Data potInfectedData = new PieChart.Data("Potentially infected", potInfected);
-
-		// TODO: Add statistics
-		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(infectedData,
-				potInfectedData,notInfectedData);
+		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(infectedData, potInfectedData,
+				notInfectedData);
+		statisticChart.setVisible(true);
 		statisticChart.setData(pieChartData);
 	}
 }

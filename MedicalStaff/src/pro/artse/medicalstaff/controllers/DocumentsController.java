@@ -112,7 +112,6 @@ public class DocumentsController implements Initializable, ITokenSetup {
 							resultMessage.getResult());
 				} catch (IOException e1) {
 					MedicalStaffAlert.alert(AlertType.ERROR, "Directory is invalid");
-					e1.printStackTrace();
 				}
 				updateDownloadStatus("-fx-text-fill: green;", "Download completed!");
 			} else {

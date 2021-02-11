@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.sothawo.mapjfx.MapView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="502.0" prefWidth="978.0" style="-fx-background-color: #a67a53;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pro.artse.medicalstaff.controllers.MarkAsInfectedController">
+   <children>
+      <Separator layoutX="22.0" layoutY="42.0" prefHeight="3.0" prefWidth="928.0" />
+      <Label layoutX="398.0" layoutY="11.0" prefHeight="31.0" prefWidth="101.0" stylesheets="@../../../../../../Design/LabelCss.css" text="Locations" />
+      <TableView fx:id="locations" layoutX="6.0" layoutY="71.0" prefHeight="420.0" prefWidth="638.0" stylesheets="@../../../../../../Design/tableCss.css">
+         <columns>
+            <TableColumn fx:id="since" prefWidth="153.0" text="Since" />
+            <TableColumn fx:id="until" prefWidth="142.0" text="Until" />
+            <TableColumn fx:id="longitude" prefWidth="177.0" text="Longitude" />
+            <TableColumn fx:id="latitude" prefWidth="139.0" text="Latitude" />
+         </columns>
+      </TableView>
+      <MapView fx:id="mapView" layoutX="655.0" layoutY="70.0" prefHeight="364.0" prefWidth="298.0" />
+      <Button fx:id="markAsInfectedButton" layoutX="842.0" layoutY="454.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="108.0" stylesheets="@../../../../../../Design/ButtonCss.css" text="Mark" />
+   </children>
+</AnchorPane>

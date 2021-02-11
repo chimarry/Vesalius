@@ -78,8 +78,6 @@ public class RegisterController implements Initializable {
 				jsonResultString = tokenService.generateToken(firstNameBox.getText(), lastNameBox.getText(),
 						ubnBox.getText());
 				SUResultMessage<String> token = pro.artse.user.util.Mapper.mapFromTs(jsonResultString, String.class);
-				// TODO: Save token
-
 				if (token.isSuccess()) {
 					UserAlert.alert(AlertType.CONFIRMATION, "Successful registration", "Token:\n" + token.getResult());
 					User.getInstance().setToken(token.getResult());
