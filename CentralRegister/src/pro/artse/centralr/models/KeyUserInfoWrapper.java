@@ -16,6 +16,10 @@ public class KeyUserInfoWrapper {
 	 */
 	private int isBloked;
 
+	public KeyUserInfoWrapper() {
+		super();
+	}
+
 	/**
 	 * Creates basic user's information, where all the values accept a token has
 	 * default value.
@@ -24,7 +28,7 @@ public class KeyUserInfoWrapper {
 	 */
 
 	public KeyUserInfoWrapper(String token, int covidStatus) {
-		super();
+		this();
 		this.token = token;
 		this.covidStatus = covidStatus;
 		this.isBloked = 0;
@@ -57,7 +61,7 @@ public class KeyUserInfoWrapper {
 	 * Sets type of a person.
 	 * 
 	 * @param covidStatus Number that indicates what type of a person does user
-	 *                   belong to.
+	 *                    belong to.
 	 */
 	public void setCovidStatus(int covidStatus) {
 		this.covidStatus = covidStatus;

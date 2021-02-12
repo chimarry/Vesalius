@@ -109,7 +109,7 @@ public class UserService extends BaseService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{token}/covidStatus")
-	public Response markAsInfected(KeyUserInfoWrapper userInfo, @PathParam("token") String token) {
+	public Response changeCovidStatus(KeyUserInfoWrapper userInfo, @PathParam("token") String token) {
 		try {
 			CrResultMessage<Boolean> resultMessage = userManager.changeCovidStatus(token, userInfo.getCovidStatus());
 			return resultMessage.buildResponse();

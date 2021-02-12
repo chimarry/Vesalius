@@ -88,7 +88,7 @@
                   </Button>
                   <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="20.0" prefWidth="126.0">
                      <children>
-                        <Button fx:id="infectedButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" text="Button" />
+                        <Button fx:id="infectedButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent; -fx-border-color: white;" text="" />
                         <Label text="Infected">
                            <HBox.margin>
                               <Insets left="2.0" />
@@ -101,7 +101,7 @@
                   </HBox>
                   <HBox layoutX="10.0" layoutY="172.0" prefHeight="20.0" prefWidth="126.0">
                      <children>
-                        <Button fx:id="potInfectedButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" text="Button" />
+                        <Button fx:id="potInfectedButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent; -fx-border-color: white;" text="" />
                         <Label text="Potentially infected">
                            <HBox.margin>
                               <Insets left="2.0" />
@@ -114,7 +114,7 @@
                   </HBox>
                   <HBox prefHeight="20.0" prefWidth="131.0">
                      <children>
-                        <Button fx:id="notInfectedButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" text="Button" />
+                        <Button fx:id="notInfectedButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent; -fx-border-color: white;" text="" />
                         <Label prefHeight="17.0" prefWidth="92.0" text="Not infected">
                            <padding>
                               <Insets left="2.0" />

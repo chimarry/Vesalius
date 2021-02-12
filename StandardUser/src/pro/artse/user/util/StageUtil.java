@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import pro.artse.user.errorhandling.UserAlert;
@@ -29,6 +30,7 @@ public final class StageUtil {
 			Pane pane = (Pane) FXMLLoader.load(StageUtil.class.getResource(resource));
 			Stage newStage = new Stage();
 			newStage.setScene(new Scene(pane));
+			newStage.getIcons().add(new Image("file:../Design/virusIcon.png"));
 			newStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -56,6 +58,7 @@ public final class StageUtil {
 			Pane pane = (Pane) FXMLLoader.load(StageUtil.class.getResource(resource));
 			Stage newStage = new Stage();
 			newStage.setScene(new Scene(pane));
+			newStage.getIcons().add(new Image("file:../Design/virusIcon.png"));
 			newStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
