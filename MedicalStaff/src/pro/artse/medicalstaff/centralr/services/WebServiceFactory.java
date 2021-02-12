@@ -14,4 +14,8 @@ public final class WebServiceFactory {
 	public static ILocationService getLocationService() {
 		return new LocationService();
 	}
+
+	public static IMulticastChatService getMulticastChatService() {
+		return new MulticastChatService();
+	}
 }

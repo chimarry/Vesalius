@@ -25,6 +25,7 @@ import javafx.stage.WindowEvent;
 import pro.artse.medicalstaff.centralr.services.IUserService;
 import pro.artse.medicalstaff.centralr.services.WebServiceFactory;
 import pro.artse.medicalstaff.chat.IChatService;
+import pro.artse.medicalstaff.chat.IMulticastChatService;
 import pro.artse.medicalstaff.chat.ISubscriber;
 import pro.artse.medicalstaff.errorhandling.MSResultMessage;
 import pro.artse.medicalstaff.errorhandling.MSStatus;
@@ -37,6 +38,7 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 
 	private final IUserService userService = WebServiceFactory.getUserService();
 	private final static IChatService chatService = WebServiceFactory.getChatService();
+	private final static IMulticastChatService multicastChatService = WebServiceFactory.getMulticastChatService();
 
 	private ObservableList<Node> standardUserMessagesData = FXCollections.<Node>observableArrayList();
 	private ObservableList<Node> medicalStaffMessagesData = FXCollections.<Node>observableArrayList();
@@ -97,6 +99,7 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 
 	public static void onClose(WindowEvent event) {
 		chatService.closeConnection();
+		multicastChatService.leaveGroup();
 	}
 
 	@Override
@@ -111,6 +114,8 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 		initializeChatSpace();
 		chatService.register(this);
 		chatService.openConnection();
+		multicastChatService.register(this);
+		multicastChatService.joinGroup();
 
 		disableOptions(true);
 
@@ -145,6 +150,15 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 		});
 	}
 
+	@Override
+	public void notifyMedicalStaff(String message) {
+		Platform.runLater(() -> {
+			TextArea textArea = new TextArea();
+			textArea.setText("Medical staff: " + message);
+			medicalStaffMessagesData.add(textArea);
+		});
+	}
+
 	private void initializeChatSpace() {
 		Bindings.bindContentBidirectional(standardUserMessagesData, standardUserMessages.getChildren());
 		Bindings.bindContentBidirectional(medicalStaffMessagesData, medicalStaffMessages.getChildren());
@@ -162,17 +176,27 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 	}
 
 	private void send(ActionEvent event) {
-		// TODO: Check which tab is selected
-		String text = ((TextArea) standardUserMessagesData.get(0)).getText();
-		TextArea sentMessageArea = new TextArea();
-		sentMessageArea.setText("You[sent]: " + text);
-		standardUserMessagesData.add(sentMessageArea);
-		((TextArea) standardUserMessagesData.get(0)).clear();
-		chatService.sendMessage(text);
+		// Send message to standard user
+		if (standardUserTab.isSelected()) {
+			String text = ((TextArea) standardUserMessagesData.get(0)).getText();
+			TextArea sentMessageArea = new TextArea();
+			sentMessageArea.setText("You[sent]: " + text);
+			standardUserMessagesData.add(sentMessageArea);
+			((TextArea) standardUserMessagesData.get(0)).clear();
+			chatService.sendMessage(text);
+		}
+		// Send message to medical staff
+		else if (medicalStaffTab.isSelected()) {
+			String text = ((TextArea) medicalStaffMessagesData.get(0)).getText();
+			TextArea sentMessageArea = new TextArea();
+			sentMessageArea.setText("You[sent]: " + text);
+			medicalStaffMessagesData.add(sentMessageArea);
+			((TextArea) medicalStaffMessagesData.get(0)).clear();
+			multicastChatService.sendMessage(text);
+		}
 	}
 
 	private void stop(ActionEvent event) {
-		// TODO: Check which tab is selected
 		((TextArea) standardUserMessagesData.get(0)).clear();
 		chatService.makeAvailable();
 	}
@@ -364,4 +388,5 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 		statisticChart.setVisible(true);
 		statisticChart.setData(pieChartData);
 	}
+
 }
