@@ -8,6 +8,7 @@ import java.net.UnknownHostException;
 
 import pro.artse.chat.util.ConfigurationUtil;
 import pro.artse.chat.util.StreamUtil;
+import pro.artse.medicalstaff.errorhandling.ErrorHandler;
 
 public class ChatService implements IChatService {
 
@@ -41,16 +42,15 @@ public class ChatService implements IChatService {
 						receiveMessage();
 					} catch (IOException e) {
 						isFinished = true;
-						e.printStackTrace();
-						// TODO: handle exception
+						ErrorHandler.handle(e);
 					}
 				}
 			});
 			receiveThread.start();
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			ErrorHandler.handle(e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			ErrorHandler.handle(e);
 		}
 	}
 
@@ -61,7 +61,6 @@ public class ChatService implements IChatService {
 
 	@Override
 	public void closeConnection() {
-		// TODO: Fix error handling
 		// TODO: Fix this
 		isFinished = true;
 	}
@@ -80,8 +79,7 @@ public class ChatService implements IChatService {
 			} else
 				subscriber.notify(message);
 		} catch (IOException e) {
-			// TODO Handle exception
-			e.printStackTrace();
+			ErrorHandler.handle(e);
 			throw e;
 		}
 	}

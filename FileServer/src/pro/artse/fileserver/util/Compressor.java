@@ -6,6 +6,8 @@ import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
+import pro.artse.fileserver.errorhandling.ErrorHandler;
+
 public final class Compressor {
 
 	public static byte[] compress(byte[] data) throws IOException {
@@ -21,8 +23,7 @@ public final class Compressor {
 			compressor.end();
 			return bao.toByteArray();
 		} catch (IOException e) {
-			// TODO Add logger
-			e.printStackTrace();
+			ErrorHandler.handle(e);
 			throw e;
 		}
 	}
@@ -39,8 +40,7 @@ public final class Compressor {
 			decompressor.end();
 			return bao.toByteArray();
 		} catch (IOException e) {
-			// TODO Add logger
-			e.printStackTrace();
+			ErrorHandler.handle(e);
 			throw e;
 		}
 	}

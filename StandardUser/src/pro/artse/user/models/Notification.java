@@ -1,10 +1,6 @@
 package pro.artse.user.models;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.time.temporal.TemporalAccessor;
-
-import pro.artse.centralr.models.LocationWrapper;
 
 public class Notification implements Serializable {
 

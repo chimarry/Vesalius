@@ -4,14 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.KryoException;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
-import pro.artse.user.errorhandling.ErrorHandler;
 import pro.artse.user.errorhandling.SUResultMessage;
 import pro.artse.user.errorhandling.SUStatus;
 import pro.artse.user.models.Notification;

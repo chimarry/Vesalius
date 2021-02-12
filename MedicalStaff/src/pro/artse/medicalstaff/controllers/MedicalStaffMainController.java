@@ -31,7 +31,6 @@ import pro.artse.medicalstaff.errorhandling.MSStatus;
 import pro.artse.medicalstaff.errorhandling.MedicalStaffAlert;
 import pro.artse.medicalstaff.models.CovidStatus;
 import pro.artse.medicalstaff.models.KeyUserInfo;
-import pro.artse.medicalstaff.models.Location;
 import pro.artse.medicalstaff.util.StageUtil;
 
 public class MedicalStaffMainController implements Initializable, ISubscriber {
@@ -132,8 +131,6 @@ public class MedicalStaffMainController implements Initializable, ISubscriber {
 
 		sendButton.setOnAction(this::send);
 		stopButton.setOnAction(this::stop);
-
-		// TODO: Enable chat
 
 		documentsButton.setOnAction(this::showDocuments);
 		locationsButton.setOnAction(this::showLocations);

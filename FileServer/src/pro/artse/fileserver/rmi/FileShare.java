@@ -45,8 +45,7 @@ public class FileShare implements IFileShare {
 			System.out.println("File server started is started.");
 
 		} catch (RemoteException e) {
-			// TODO: Log error
-			e.printStackTrace();
+			ErrorHandler.handle(e);
 		}
 	}
 
@@ -90,8 +89,7 @@ public class FileShare implements IFileShare {
 					BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
 					userFiles.add(new BasicFileInfo(name, attr.size(), attr.creationTime()));
 				} catch (IOException e) {
-					// TODO Add better handling
-					e.printStackTrace();
+					ErrorHandler.handle(e);
 				}
 			});
 			return new FSResultMessage<List<BasicFileInfo>>(userFiles, FSStatus.SUCCESS);
@@ -114,7 +112,6 @@ public class FileShare implements IFileShare {
 	}
 
 	private boolean saveFile(File file, byte[] data) throws IOException {
-		// Write data
 		try (FileOutputStream fos = new FileOutputStream(file, true)) {
 			fos.write(data);
 			return true;
@@ -128,9 +125,7 @@ public class FileShare implements IFileShare {
 			walk.sorted(Comparator.reverseOrder()).forEach(FileShare::deleteDirectoryJava8Extract);
 			return new FSResultMessage<Boolean>(true, FSStatus.SUCCESS);
 		} catch (IOException e) {
-			// TODO: Add logger
-			e.printStackTrace();
-			return new FSResultMessage<Boolean>(false, FSStatus.SERVER_ERROR);
+			return ErrorHandler.handle(e);
 		}
 	}
 
@@ -139,8 +134,7 @@ public class FileShare implements IFileShare {
 		try {
 			Files.delete(path);
 		} catch (IOException e) {
-			// TODO: logger
-			e.printStackTrace();
+			ErrorHandler.handle(e);
 		}
 	}
 }

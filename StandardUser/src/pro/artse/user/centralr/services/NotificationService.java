@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 
 import pro.artse.centralr.api.ApiPaths;
+import pro.artse.user.errorhandling.ErrorHandler;
 import pro.artse.user.errorhandling.SUResultMessage;
 import pro.artse.user.models.Notification;
 import pro.artse.user.util.RestApiUtil;
@@ -21,12 +22,10 @@ public class NotificationService implements INotificationService {
 			connection.disconnect();
 			return resultNotifications;
 		} catch (IOException e) {
-			// TODO Add logger
-			connection.disconnect();
+			ErrorHandler.handle(e, connection);
 			throw e;
 		} catch (Exception e) {
-			// TODO Add logger
-			connection.disconnect();
+			ErrorHandler.handle(e, connection);
 			throw e;
 		}
 	}

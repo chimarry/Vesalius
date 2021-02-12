@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.LocalDate;
 
+import pro.arste.chat.errorhandling.ErrorHandler;
 import pro.artse.chat.util.ConfigurationUtil;
 
 public class UnicastChatConnectionRunnable implements Runnable {
@@ -24,7 +25,7 @@ public class UnicastChatConnectionRunnable implements Runnable {
 				new Thread(new UnicastChatRunnable(standardUser, medicalStaffMember)).start();
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			ErrorHandler.handle(ex);
 		}
 	}
 }

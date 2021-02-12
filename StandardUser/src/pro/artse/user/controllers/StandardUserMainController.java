@@ -58,7 +58,6 @@ import pro.artse.user.models.Location;
 import pro.artse.user.models.Notification;
 import pro.artse.user.models.User;
 import pro.artse.user.notifications.NotificationImageDrawer;
-import pro.artse.user.notifications.NotificationStorage;
 import pro.artse.user.notifications.Serializer;
 import pro.artse.user.notifications.SerializerFactory;
 import pro.artse.user.util.StageUtil;

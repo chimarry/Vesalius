@@ -21,7 +21,6 @@ public class UserService implements IUserService {
 			connection.disconnect();
 			return deletedResult;
 		} catch (Exception e) {
-			// TODO: Add logger
 			return ErrorHandler.handle(e, connection);
 		}
 	}

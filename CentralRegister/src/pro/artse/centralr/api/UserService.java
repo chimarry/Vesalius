@@ -13,7 +13,6 @@ import pro.artse.centralr.managers.IUserManager;
 import pro.artse.centralr.managers.ManagerFactory;
 import pro.artse.centralr.models.KeyUserInfoWrapper;
 import pro.artse.centralr.models.LocationWrapper;
-import pro.artse.dal.errorhandling.DBResultMessage;
 
 @Path("users")
 public class UserService extends BaseService {

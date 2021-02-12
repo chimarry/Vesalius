@@ -5,7 +5,13 @@ import java.net.HttpURLConnection;
 import java.rmi.RemoteException;
 import java.util.zip.DataFormatException;
 
+import pro.arste.logger.IVesaliusLogger;
+import pro.arste.logger.LoggerFactory;
+
 public class ErrorHandler {
+	private static final String OUTPUT_LOG_FILE = "medical_staff_logs.log";
+	private static final IVesaliusLogger LOGGER = LoggerFactory.getLogger(OUTPUT_LOG_FILE);
+
 	public static <T> MSResultMessage<T> handle(Exception ex, HttpURLConnection connection, T result) {
 		MSResultMessage<T> resultMessage = handle(ex, connection);
 		resultMessage.setResult(result);
@@ -13,13 +19,13 @@ public class ErrorHandler {
 	}
 
 	public static <T> MSResultMessage<T> handle(Exception ex, HttpURLConnection connection) {
-		connection.disconnect();
+		if (connection != null)
+			connection.disconnect();
 		return handle(ex);
 	}
 
 	public static <T> MSResultMessage<T> handle(Exception ex) {
-		// TODO: Use logger
-		ex.printStackTrace();
+		LOGGER.log(ex);
 		if (ex instanceof DataFormatException)
 			return new MSResultMessage<T>(null, MSStatus.INVALID_DATA, "File could not be decompressed");
 		else if (ex instanceof RemoteException)

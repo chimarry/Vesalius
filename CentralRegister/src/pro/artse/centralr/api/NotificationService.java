@@ -13,7 +13,6 @@ import pro.arste.centralr.errorhandling.CrResultMessage;
 import pro.arste.centralr.errorhandling.ErrorHandler;
 import pro.artse.centralr.managers.INotificationManager;
 import pro.artse.centralr.managers.ManagerFactory;
-import pro.artse.centralr.models.KeyUserInfoWrapper;
 import pro.artse.centralr.models.NotificationWrapper;
 
 @Path("notifications")

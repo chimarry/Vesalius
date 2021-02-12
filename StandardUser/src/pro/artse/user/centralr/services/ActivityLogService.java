@@ -30,19 +30,16 @@ public class ActivityLogService implements IActivityLogService {
 			connection.disconnect();
 			return resultActivities;
 		} catch (IOException e) {
-			// TODO Add logger
-			connection.disconnect();
+			ErrorHandler.handle(e, connection);
 			throw e;
 		} catch (Exception e) {
-			// TODO Add logger
-			connection.disconnect();
+			ErrorHandler.handle(e, connection);
 			throw e;
 		}
 	}
 
 	@Override
 	public SUResultMessage<Boolean> add(ActivityLog activityLog, String token) throws IOException {
-		// TODO: Add error mechanism
 		HttpURLConnection connection = RestApiUtil.openConnectionJSON(token, ApiPaths.POST_ACTIVITY, "POST", true);
 		connection.setRequestProperty("Content-Type", "application/json");
 		ActivityLogWrapper wrapper = pro.artse.user.util.Mapper.mapToWrapper(activityLog);
@@ -52,7 +49,6 @@ public class ActivityLogService implements IActivityLogService {
 			os.write(jsonString.getBytes());
 			os.flush();
 		} catch (Exception e) {
-			// TODO: Add logger
 			return ErrorHandler.handle(e, connection);
 		}
 		try (BufferedReader reader = RestApiUtil.getReader(connection)) {
@@ -62,7 +58,6 @@ public class ActivityLogService implements IActivityLogService {
 			connection.disconnect();
 			return activityResult;
 		} catch (Exception e) {
-			// TODO: Add logger
 			return ErrorHandler.handle(e, connection);
 		}
 	}

@@ -6,6 +6,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.xml.rpc.ServiceException;
 
 import pro.arste.centralr.errorhandling.CrResultMessage;
+import pro.arste.centralr.errorhandling.ErrorHandler;
 import pro.artse.centralr.models.KeyUserInfoWrapper;
 import pro.artse.centralr.models.LocationWrapper;
 import pro.artse.centralr.util.ConfigurationUtil;
@@ -71,7 +72,8 @@ public class UserManager implements IUserManager {
 	private void saveNotification(String token, String fromWhomToken, LocationDTO location) {
 		NotificationDTO notification = new NotificationDTO(token, fromWhomToken, location);
 		CrResultMessage<Boolean> isAdded = notificationManager.add(Mapper.mapToWrapper(notification));
-		// TODO: Log errors
+		if (!isAdded.isSuccess())
+			ErrorHandler.handle(new Exception(isAdded.getHttpStatusCode() + isAdded.getMessage()));
 	}
 
 	@Override

@@ -3,7 +3,6 @@ package pro.artse.user.controllers;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
 

@@ -2,21 +2,12 @@ package pro.artse.user.managers;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.stream.Stream;
-
 import javax.xml.bind.DatatypeConverter;
 
-import pro.artse.dal.util.ConfigurationUtil;
-import pro.artse.fileserver.errorhandling.FSResultMessage;
-import pro.artse.fileserver.errorhandling.FSStatus;
-import pro.artse.fileserver.rmi.FileShare;
-import pro.artse.fileserver.util.DirectoryStructureBuilder;
+import pro.artse.user.errorhandling.ErrorHandler;
 import pro.artse.user.models.User;
 import pro.artse.user.notifications.NotificationStorage;
 
@@ -59,8 +50,7 @@ public class LoginManager implements ILoginManager {
 
 				return NotificationStorage.createNotificationDirectory(User.getInstance().getToken());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				ErrorHandler.handle(e);
 				return false;
 			}
 		}
@@ -71,7 +61,7 @@ public class LoginManager implements ILoginManager {
 			MessageDigest md = MessageDigest.getInstance("SHA-512");
 			return DatatypeConverter.printHexBinary(md.digest(password.getBytes())).toUpperCase();
 		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			ErrorHandler.handle(e);
 			return null;
 		}
 	}
@@ -102,8 +92,7 @@ public class LoginManager implements ILoginManager {
 			Files.deleteIfExists(file.toPath());
 			return NotificationStorage.deleteNotificationDirectory(User.getInstance().getToken());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ErrorHandler.handle(e);
 			return false;
 		}
 	}
@@ -122,7 +111,7 @@ public class LoginManager implements ILoginManager {
 			Files.deleteIfExists(file.toPath());
 			file.createNewFile();
 		} catch (IOException e) {
-			e.printStackTrace();
+			ErrorHandler.handle(e);
 			return false;
 		}
 
@@ -130,7 +119,7 @@ public class LoginManager implements ILoginManager {
 		try (PrintWriter fileStream = new PrintWriter(new FileOutputStream(file), true)) {
 			fileStream.println(currentUser.getToken() + "#" + getHash(newPassword));
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			ErrorHandler.handle(e);
 			return false;
 		}
 		currentUser.setPasswordHash(getHash(newPassword));

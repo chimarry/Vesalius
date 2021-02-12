@@ -1,9 +1,7 @@
 package pro.artse.user.controllers;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.net.URL;
-import java.nio.file.NoSuchFileException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -15,11 +13,7 @@ import com.sothawo.mapjfx.MapView;
 import com.sothawo.mapjfx.Marker;
 import com.sothawo.mapjfx.Marker.Provided;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableDoubleValue;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,6 +21,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import pro.artse.user.errorhandling.ErrorHandler;
 import pro.artse.user.errorhandling.SUResultMessage;
 import pro.artse.user.errorhandling.SUStatus;
 import pro.artse.user.errorhandling.UserAlert;
@@ -104,10 +99,10 @@ public class NotificationHistoryController implements Initializable {
 				for (File file : notificationFiles.getResult()) {
 					Serializer serializer = SerializerFactory.getBasedOnExtension(file.getName());
 					SUResultMessage<Notification> notification = serializer.deserialize(file);
-					if (notification.isSuccess()) {
-						// TODO: log error
+					if (notification.isSuccess())
 						notifications.add(notification.getResult());
-					}
+					else
+						ErrorHandler.handle(new Exception(notification.getStatus() + " " + notification.getMessage()));
 				}
 				return new SUResultMessage<List<Notification>>(notifications, SUStatus.SUCCESS);
 			}

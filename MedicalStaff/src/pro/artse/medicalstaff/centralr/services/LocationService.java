@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 
 import pro.artse.centralr.api.ApiPaths;
+import pro.artse.medicalstaff.errorhandling.ErrorHandler;
 import pro.artse.medicalstaff.errorhandling.MSResultMessage;
 import pro.artse.medicalstaff.models.Location;
 import pro.artse.medicalstaff.util.Mapper;
@@ -24,12 +25,10 @@ public class LocationService implements ILocationService {
 			connection.disconnect();
 			return resultLocations;
 		} catch (IOException e) {
-			// TODO Add logger
-			connection.disconnect();
+			ErrorHandler.handle(e, connection);
 			throw e;
 		} catch (Exception e) {
-			// TODO Add logger
-			connection.disconnect();
+			ErrorHandler.handle(e, connection);
 			throw e;
 		}
 	}

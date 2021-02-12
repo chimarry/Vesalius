@@ -30,12 +30,10 @@ public class UserService implements IUserService {
 			connection.disconnect();
 			return resultActivities;
 		} catch (IOException e) {
-			// TODO Add logger
-			connection.disconnect();
+			ErrorHandler.handle(e, connection);
 			throw e;
 		} catch (Exception e) {
-			// TODO Add logger
-			connection.disconnect();
+			ErrorHandler.handle(e, connection);
 			throw e;
 		}
 	}
@@ -52,11 +50,10 @@ public class UserService implements IUserService {
 			connection.disconnect();
 			return resultOfSearch;
 		} catch (IOException e) {
-			// TODO Add logger
-			connection.disconnect();
+			ErrorHandler.handle(e, connection);
 			throw e;
-		} catch (Exception e) { // TODO Add logger
-			connection.disconnect();
+		} catch (Exception e) {
+			ErrorHandler.handle(e, connection);
 			throw e;
 		}
 
@@ -72,12 +69,10 @@ public class UserService implements IUserService {
 			connection.disconnect();
 			return isBlocked;
 		} catch (IOException e) {
-			// TODO Add logger
-			connection.disconnect();
+			ErrorHandler.handle(e, connection);
 			throw e;
 		} catch (Exception e) {
-			// TODO Add logger
-			connection.disconnect();
+			ErrorHandler.handle(e, connection);
 			throw e;
 		}
 	}
@@ -93,7 +88,6 @@ public class UserService implements IUserService {
 			os.write(jsonString.getBytes());
 			os.flush();
 		} catch (Exception e) {
-			// TODO: Add logger
 			return ErrorHandler.handle(e, connection);
 		}
 		try (BufferedReader reader = RestApiUtil.getReader(connection)) {
@@ -102,7 +96,6 @@ public class UserService implements IUserService {
 			connection.disconnect();
 			return infectedResult;
 		} catch (Exception e) {
-			// TODO: Add logger
 			return ErrorHandler.handle(e, connection);
 		}
 	}
@@ -118,7 +111,6 @@ public class UserService implements IUserService {
 			os.write(jsonString.getBytes());
 			os.flush();
 		} catch (Exception e) {
-			// TODO: Add logger
 			return ErrorHandler.handle(e, connection);
 		}
 		try (BufferedReader reader = RestApiUtil.getReader(connection)) {
@@ -127,7 +119,6 @@ public class UserService implements IUserService {
 			connection.disconnect();
 			return infectedResult;
 		} catch (Exception e) {
-			// TODO: Add logger
 			return ErrorHandler.handle(e, connection);
 		}
 	}

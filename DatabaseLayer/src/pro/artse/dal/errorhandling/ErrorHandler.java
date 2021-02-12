@@ -1,6 +1,5 @@
 package pro.artse.dal.errorhandling;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
 import pro.arste.logger.IVesaliusLogger;
@@ -8,8 +7,7 @@ import pro.arste.logger.LoggerFactory;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
 public class ErrorHandler {
-	private static IVesaliusLogger logger = LoggerFactory
-			.getLogger("C:\\Users\\Marija\\Desktop\\log" + LocalDate.now() + ".log");
+	private static IVesaliusLogger logger = LoggerFactory.getLogger("database_layer_logs.log");
 
 	public static <T> DBResultMessage<T> handle(Exception ex, T result) {
 		DBResultMessage<T> resultMessage = handle(ex);
@@ -19,7 +17,6 @@ public class ErrorHandler {
 
 	public static <T> DBResultMessage<T> handle(Exception ex) {
 		logger.log(ex);
-		ex.printStackTrace();
 		if (ex instanceof JedisConnectionException) {
 			return new DBResultMessage<T>(null, DbStatus.SERVER_ERROR, "Jedis connection problem.");
 		} else if (ex instanceof DateTimeParseException) {

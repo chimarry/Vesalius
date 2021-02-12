@@ -10,15 +10,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import com.sun.net.httpserver.Filter;
-
-import pro.artse.fileserver.rmi.FileShare;
+import pro.artse.user.errorhandling.ErrorHandler;
 import pro.artse.user.errorhandling.SUResultMessage;
 import pro.artse.user.errorhandling.SUStatus;
-import pro.artse.user.models.Notification;
-import pro.artse.user.models.User;
 import pro.artse.user.util.ConfigurationUtil;
 
 public final class NotificationStorage {
@@ -68,8 +63,7 @@ public final class NotificationStorage {
 					.forEach(File::delete);
 			return true;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ErrorHandler.handle(e);
 			return false;
 		}
 	}
@@ -85,7 +79,7 @@ public final class NotificationStorage {
 		} catch (NoSuchFileException e) {
 			return new SUResultMessage<List<File>>(notifications, SUStatus.SUCCESS, "Notification history is empty.");
 		} catch (IOException e) {
-			// TODO Add logger
+			ErrorHandler.handle(e);
 			return new SUResultMessage<List<File>>(notifications, SUStatus.SERVER_ERROR,
 					"Notifications could not been read");
 		}

@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.LocalDate;
 
+import pro.arste.chat.errorhandling.ErrorHandler;
 import pro.artse.chat.util.ConfigurationUtil;
 
 public class AvailabilityRunnable implements Runnable {
@@ -24,8 +25,7 @@ public class AvailabilityRunnable implements Runnable {
 				medicalStaffManager.makeAvailable(medicalStaffMember);
 			}
 		} catch (Exception ex) {
-			// TODO: Add error handler: BindException
-			ex.printStackTrace();
+			ErrorHandler.handle(ex);
 		}
 	}
 }

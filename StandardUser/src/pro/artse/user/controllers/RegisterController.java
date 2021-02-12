@@ -13,6 +13,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
+import pro.arste.centralr.errorhandling.ErrorHandler;
 import pro.artse.tokenserver.services.TokenService;
 import pro.artse.user.errorhandling.SUResultMessage;
 import pro.artse.user.errorhandling.UserAlert;
@@ -86,8 +87,7 @@ public class RegisterController implements Initializable {
 					UserAlert.alert(AlertType.ERROR, token.getStatus().toString(),
 							"Registration failed." + token.getMessage());
 			} catch (RemoteException e) {
-				// TODO: Add logger
-				e.printStackTrace();
+				ErrorHandler.handle(e);
 				UserAlert.alert(AlertType.ERROR, "Unable to connect to a server.");
 			}
 		}

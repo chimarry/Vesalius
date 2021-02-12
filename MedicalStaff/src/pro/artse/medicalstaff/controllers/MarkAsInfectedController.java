@@ -48,10 +48,12 @@ public class MarkAsInfectedController extends LocationController {
 		};
 		task.setOnSucceeded(e -> {
 			MSResultMessage<Boolean> resultMessage = task.getValue();
-			if (resultMessage.getStatus() == MSStatus.NOT_FOUND) {
+			if (resultMessage.getStatus() == MSStatus.NOT_FOUND)
 				MedicalStaffAlert.processResult(resultMessage, AlertType.INFORMATION);
-			} else
+			else if (!resultMessage.isSuccess())
 				MedicalStaffAlert.processResult(resultMessage, AlertType.ERROR);
+			else
+				MedicalStaffAlert.alert(AlertType.INFORMATION, "Success", "Refresh table to see results.");
 			StageUtil.closeDialog(markAsInfectedButton);
 		});
 

@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.time.LocalDateTime;
 
+import pro.arste.chat.errorhandling.ErrorHandler;
 import pro.artse.chat.util.ConfigurationUtil;
 import pro.artse.chat.util.StreamUtil;
 
@@ -74,8 +75,7 @@ public class UnicastChatRunnable implements Runnable {
 			channel2.join();
 			closeSockets(suPrintWriter, msPrintWriter);
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			ErrorHandler.handle(e1);
 		}
 
 	}
@@ -99,9 +99,7 @@ public class UnicastChatRunnable implements Runnable {
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println("Error when closing");
-			e.printStackTrace();
+			ErrorHandler.handle(e);
 		}
 	}
 }

@@ -32,7 +32,6 @@ public class AuthorizationManager implements IAuthorizationManager {
 				resultMessage.setHttpStatusCode(Status.UNAUTHORIZED);
 			return resultMessage;
 		} catch (RemoteException e) {
-			// TODO: Add logger
 			return ErrorHandler.handle(e);
 		}
 	}

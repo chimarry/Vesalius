@@ -1,8 +1,6 @@
 package pro.artse.user.notifications;
 
 import java.io.File;
-import java.util.List;
-
 import pro.artse.user.errorhandling.ErrorHandler;
 import pro.artse.user.errorhandling.SUResultMessage;
 import pro.artse.user.models.Notification;

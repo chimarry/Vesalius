@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import pro.artse.user.errorhandling.ErrorHandler;
+
 public class RestApiUtil {
 	public static int SUCCESS_HTTP_CODE_MAX = 299;
 
@@ -20,20 +22,20 @@ public class RestApiUtil {
 	 * @return Opened and configured HTTP URL connection.
 	 */
 	public static HttpURLConnection openConnectionJSON(String token, String path, String method, boolean doOutput) {
+		HttpURLConnection connection = null;
 		try {
 			URL url = new URL(path);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestProperty("Content-Type", "application/json");
 			connection.setDoOutput(doOutput);
 			connection.setRequestMethod(method);
 			connection.setRequestProperty("token", token);
 			return connection;
 		} catch (FileNotFoundException e) {
-			// TODO: Add logger
+			ErrorHandler.handle(e, connection);
 			return null;
 		} catch (IOException e) {
-			// TODO: Add logger
-			e.printStackTrace();
+			ErrorHandler.handle(e, connection);
 			return null;
 		}
 	}

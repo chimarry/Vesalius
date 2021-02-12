@@ -16,7 +16,6 @@ public class LocationService implements ILocationService {
 
 	@Override
 	public SUResultMessage<Boolean> add(Location location, String token) throws IOException {
-		// TODO: Add error mechanism
 		HttpURLConnection connection = RestApiUtil.openConnectionJSON(token, ApiPaths.POST_LOCATION, "POST", true);
 		connection.setRequestProperty("Content-Type", "application/json");
 		LocationWrapper wrapper = pro.artse.user.util.Mapper.mapToWrapper(location);
@@ -26,7 +25,6 @@ public class LocationService implements ILocationService {
 			os.write(jsonString.getBytes());
 			os.flush();
 		} catch (Exception e) {
-			// TODO: Add logger
 			return ErrorHandler.handle(e, connection);
 		}
 		try (BufferedReader reader = RestApiUtil.getReader(connection)) {
@@ -36,7 +34,6 @@ public class LocationService implements ILocationService {
 			connection.disconnect();
 			return locationResult;
 		} catch (Exception e) {
-			// TODO: Add logger
 			return ErrorHandler.handle(e, connection);
 		}
 	}
@@ -53,12 +50,10 @@ public class LocationService implements ILocationService {
 			connection.disconnect();
 			return resultLocations;
 		} catch (IOException e) {
-			// TODO Add logger
-			connection.disconnect();
+			ErrorHandler.handle(e, connection);
 			throw e;
 		} catch (Exception e) {
-			// TODO Add logger
-			connection.disconnect();
+			ErrorHandler.handle(e, connection);
 			throw e;
 		}
 	}
