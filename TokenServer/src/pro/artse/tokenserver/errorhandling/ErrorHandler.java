@@ -19,7 +19,6 @@ public class ErrorHandler {
 	}
 
 	public static <T> DBResultMessage<T> handle(Exception ex) {
-		ex.printStackTrace();
 		logger.log(ex);
 		if (ex instanceof DateTimeParseException) {
 			return new DBResultMessage<T>(DbStatus.INVALID_DATA);

@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import javafx.scene.image.Image;
+import pro.artse.user.errorhandling.ErrorHandler;
 import pro.artse.user.models.Location;
 import pro.artse.user.models.Notification;
 
@@ -47,7 +48,7 @@ public class NotificationImageDrawer {
 		try {
 			ImageIO.write(img, "png", new File(directoryPath + File.separator + notification.getName() + ".png"));
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			ErrorHandler.handle(ex);
 		}
 	}
 

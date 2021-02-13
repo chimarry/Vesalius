@@ -2,7 +2,9 @@ package pro.arste.chat;
 
 import java.net.Socket;
 
+import javax.net.ssl.SSLSocket;
+
 public interface IMedicalStaffManager {
-	Socket getAvailable();
-	void makeAvailable(Socket member);
+	SSLSocket getAvailable();
+	void makeAvailable(SSLSocket member);
 }

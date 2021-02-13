@@ -5,6 +5,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.LocalDate;
 
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
+
 import pro.arste.chat.errorhandling.ErrorHandler;
 import pro.artse.chat.util.ConfigurationUtil;
 
@@ -15,13 +18,11 @@ public class AvailabilityRunnable implements Runnable {
 	public void run() {
 		InetSocketAddress socketAddress = ConfigurationUtil.getInetSocketAddress("chatServerPort2",
 				"chatServerAddress");
-		try (ServerSocket ss = new ServerSocket()) {
+		SSLServerSocketFactory sslfactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+		try (ServerSocket ss = sslfactory.createServerSocket()) {
 			ss.bind(socketAddress);
 			while (true) {
-				Socket medicalStaffMember = ss.accept();
-				System.out.println(
-						"Accepting medical staff on port:" + medicalStaffMember.getPort() + " " + LocalDate.now());
-				// Save socket connection
+				SSLSocket medicalStaffMember = (SSLSocket) ss.accept();
 				medicalStaffManager.makeAvailable(medicalStaffMember);
 			}
 		} catch (Exception ex) {

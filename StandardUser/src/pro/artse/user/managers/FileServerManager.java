@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.zip.DataFormatException;
 
+import pro.arste.chat.errorhandling.ErrorHandler;
 import pro.artse.fileserver.errorhandling.FSResultMessage;
 import pro.artse.fileserver.models.BasicFileInfo;
 import pro.artse.fileserver.rmi.IFileShare;
@@ -47,7 +48,7 @@ public class FileServerManager implements IFileServerManager {
 					if (isUploaded.isSuccess())
 						numberOfAddedFiles.incrementAndGet();
 				} catch (IOException e) {
-					e.printStackTrace();
+					ErrorHandler.handle(e);
 				}
 			});
 			return new SUResultMessage<Integer>(new Integer(numberOfAddedFiles.intValue()), SUStatus.SUCCESS);

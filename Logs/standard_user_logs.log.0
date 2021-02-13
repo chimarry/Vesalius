@@ -1,0 +1,8 @@
+****Thread ID: 52 :: class javax.net.ssl.SSLHandshakeException
+			Class: sun.security.validator.PKIXValidator :: Method: doBuild :: Line: -1 :: 
+		Time: 2021-02-13
+		Message: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+****Thread ID: 52 :: class javax.net.ssl.SSLHandshakeException
+			Class: sun.security.validator.PKIXValidator :: Method: doBuild :: Line: -1 :: 
+		Time: 2021-02-13
+		Message: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target

@@ -33,7 +33,6 @@ public final class StageUtil {
 			newStage.getIcons().add(new Image("file:../Design/virusIcon.png"));
 			newStage.show();
 		} catch (Exception e) {
-			e.printStackTrace();
 			UserAlert.alert(AlertType.ERROR, "Unable to open new window");
 		}
 	}
@@ -61,7 +60,6 @@ public final class StageUtil {
 			newStage.getIcons().add(new Image("file:../Design/virusIcon.png"));
 			newStage.show();
 		} catch (Exception e) {
-			e.printStackTrace();
 			UserAlert.alert(AlertType.ERROR, "Unable to open new window");
 		}
 	}

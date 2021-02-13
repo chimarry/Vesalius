@@ -36,7 +36,6 @@ public class JavaSerializer extends Serializer {
 			out.writeObject(notification);
 			return new SUResultMessage<Boolean>(true, SUStatus.SUCCESS);
 		} catch (IOException e) {
-			e.printStackTrace();
 			return handle(e);
 		}
 	}

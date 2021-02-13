@@ -331,7 +331,7 @@ public class StandardUserMainController implements Initializable, ISubscriber {
 		Task<Boolean> refreshNotifications = new Task<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
-				int refreshMiliseconds = 10000;
+				int refreshMiliseconds = 100000;
 				while (true) {
 					SUResultMessage<Notification[]> notifications = notificationService
 							.getNewerNotifications(userToken);

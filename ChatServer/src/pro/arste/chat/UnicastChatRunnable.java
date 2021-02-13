@@ -2,8 +2,8 @@ package pro.arste.chat;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
-import java.net.Socket;
-import java.time.LocalDateTime;
+
+import javax.net.ssl.SSLSocket;
 
 import pro.arste.chat.errorhandling.ErrorHandler;
 import pro.artse.chat.util.ConfigurationUtil;
@@ -11,20 +11,18 @@ import pro.artse.chat.util.StreamUtil;
 
 public class UnicastChatRunnable implements Runnable {
 
-	private Socket standardUserSocket;
-	private Socket medicalStaffSocket;
+	private SSLSocket standardUserSocket;
+	private SSLSocket medicalStaffSocket;
 
 	private volatile Boolean isFinished = false;
 
-	public UnicastChatRunnable(Socket firstSocket, Socket secondSocket) {
+	public UnicastChatRunnable(SSLSocket firstSocket, SSLSocket secondSocket) {
 		this.medicalStaffSocket = secondSocket;
 		this.standardUserSocket = firstSocket;
 	}
 
 	@Override
 	public void run() {
-		System.out.println(standardUserSocket);
-		System.out.println(medicalStaffSocket);
 		try {
 			BufferedReader suBufferedReader = StreamUtil.getReader(standardUserSocket);
 			PrintWriter suPrintWriter = StreamUtil.getWriter(standardUserSocket);
@@ -37,17 +35,15 @@ public class UnicastChatRunnable implements Runnable {
 				while (!isFinished) {
 					try {
 						message = suBufferedReader.readLine();
-						System.out.println("SU: " + message);
 						msPrintWriter.println(message);
 						if (isFlag(message))
 							isFinished = true;
 					} catch (Exception e) {
 						isFinished = true;
 						msPrintWriter.println(ConfigurationUtil.get("errorFlag"));
-						e.printStackTrace();
+						ErrorHandler.handle(e);
 					}
 				}
-				System.out.println("Channel 1 is finished");
 			});
 
 			// Channel 2
@@ -56,17 +52,15 @@ public class UnicastChatRunnable implements Runnable {
 				while (!isFinished) {
 					try {
 						message = msBufferedReader.readLine();
-						System.out.println("MS: " + message);
 						suPrintWriter.println(message);
 						if (isFlag(message))
 							isFinished = true;
 					} catch (Exception e) {
 						isFinished = true;
 						suPrintWriter.println(ConfigurationUtil.get("errorFlag"));
-						e.printStackTrace();
+						ErrorHandler.handle(e);
 					}
 				}
-				System.out.println("Channel 2 is finished");
 			});
 
 			channel1.start();
@@ -89,15 +83,11 @@ public class UnicastChatRunnable implements Runnable {
 			isFinished = true;
 			suPrintWriter.println(ConfigurationUtil.get("closeFlag"));
 			msPrintWriter.println(ConfigurationUtil.get("closeFlag"));
-			if (!medicalStaffSocket.isClosed()) {
+			if (!medicalStaffSocket.isClosed())
 				medicalStaffSocket.close();
-				System.out.println("Medical staff is closed. " + LocalDateTime.now());
-			}
-			if (!standardUserSocket.isClosed()) {
-				standardUserSocket.close();
-				System.out.println("Standard user is closed. " + LocalDateTime.now());
-			}
 
+			if (!standardUserSocket.isClosed())
+				standardUserSocket.close();
 		} catch (Exception e) {
 			ErrorHandler.handle(e);
 		}

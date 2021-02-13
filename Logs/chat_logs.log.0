@@ -1,0 +1,4 @@
+****Thread ID: 18 :: class javax.net.ssl.SSLException
+			Class: java.net.SocketInputStream :: Method: read :: Line: -1 :: 
+		Time: 2021-02-13
+		Message: java.net.SocketException: Connection reset

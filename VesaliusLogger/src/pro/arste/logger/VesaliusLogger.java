@@ -15,7 +15,6 @@ public class VesaliusLogger implements IVesaliusLogger {
 	public VesaliusLogger(String fileName) {
 		logger = Logger.getLogger(VesaliusLogger.class.getName());
 		logger.setLevel(Level.ALL);
-		// FileHandler file name with max size and number of log files limit
 		try {
 			handler = new FileHandler(LOG_DIRECTORY + File.separator + fileName, 2000, 20);
 		} catch (SecurityException e) {

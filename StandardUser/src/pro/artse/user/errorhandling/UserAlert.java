@@ -41,7 +41,6 @@ public final class UserAlert {
 
 	public static void showExceptionError(Thread t, Throwable e) {
 		alert(AlertType.ERROR, "Exception occured.");
-		e.printStackTrace();
 	}
 
 	public static <T> void processResult(SUResultMessage<T> resultMessage) {

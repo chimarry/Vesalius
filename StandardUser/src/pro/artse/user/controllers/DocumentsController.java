@@ -111,7 +111,6 @@ public class DocumentsController implements Initializable {
 							resultMessage.getResult());
 				} catch (IOException e1) {
 					UserAlert.alert(AlertType.ERROR, "Directory is invalid");
-					e1.printStackTrace();
 				}
 				updateDownloadStatus("-fx-text-fill: green;", "Download completed!");
 			} else {

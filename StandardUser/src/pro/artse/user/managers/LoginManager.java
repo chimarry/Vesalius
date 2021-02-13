@@ -28,7 +28,7 @@ public class LoginManager implements ILoginManager {
 			}
 			return false;
 		} catch (IOException e) {
-			e.printStackTrace();
+			ErrorHandler.handle(e);
 			return false;
 		}
 	}
