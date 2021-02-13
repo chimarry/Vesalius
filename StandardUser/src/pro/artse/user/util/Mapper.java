@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 import pro.artse.centralr.models.ActivityLogWrapper;
@@ -32,14 +33,20 @@ public final class Mapper {
 	}
 
 	public static final <T> SUResultMessage<T> mapFromCR(String resultMessage, Type resultType) {
-		GsonBuilder gsonBuilder = new GsonBuilder();
-		CustomCrDeserializer<T> deserializer = new CustomCrDeserializer<T>(resultType);
-		gsonBuilder.registerTypeAdapter(new TypeToken<SUResultMessage<T>>() {
-		}.getType(), deserializer);
+		try {
+			GsonBuilder gsonBuilder = new GsonBuilder();
+			CustomCrDeserializer<T> deserializer = new CustomCrDeserializer<T>(resultType);
+			gsonBuilder.registerTypeAdapter(new TypeToken<SUResultMessage<T>>() {
+			}.getType(), deserializer);
 
-		Gson customGson = gsonBuilder.create();
-		return customGson.fromJson(resultMessage, new TypeToken<SUResultMessage<T>>() {
-		}.getType());
+			Gson customGson = gsonBuilder.create();
+			return customGson.fromJson(resultMessage, new TypeToken<SUResultMessage<T>>() {
+			}.getType());
+		} catch (IllegalStateException | JsonSyntaxException e) {
+			SUResultMessage<T> message =  ErrorHandler.handle(e);
+			message.setMessage("Connection with Central register failed.");
+			return message;
+		}
 	}
 
 	public static final <T> SUResultMessage<T> mapFromFS(FSResultMessage<T> original) {

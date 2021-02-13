@@ -1,6 +1,5 @@
 package pro.artse.user.errorhandling;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.rmi.RemoteException;

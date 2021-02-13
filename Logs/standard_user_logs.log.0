@@ -1,8 +1,14 @@
-****Thread ID: 52 :: class javax.net.ssl.SSLHandshakeException
-			Class: sun.security.validator.PKIXValidator :: Method: doBuild :: Line: -1 :: 
+****Thread ID: 20 :: class java.lang.IllegalStateException
 		Time: 2021-02-13
-		Message: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
-****Thread ID: 52 :: class javax.net.ssl.SSLHandshakeException
-			Class: sun.security.validator.PKIXValidator :: Method: doBuild :: Line: -1 :: 
+		Message: Not a JSON Object: "<!doctype"
+****Thread ID: 27 :: class java.lang.IllegalStateException
 		Time: 2021-02-13
-		Message: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+		Message: Not a JSON Object: "<!doctype"
+****Thread ID: 20 :: class com.google.gson.JsonSyntaxException
+			Class: com.google.gson.stream.JsonReader :: Method: syntaxError :: Line: 1568 :: 
+		Time: 2021-02-13
+		Message: com.google.gson.stream.MalformedJsonException: Use JsonReader.setLenient(true) to accept malformed JSON at line 1 column 12 path $
+****Thread ID: 27 :: class com.google.gson.JsonSyntaxException
+			Class: com.google.gson.stream.JsonReader :: Method: syntaxError :: Line: 1568 :: 
+		Time: 2021-02-13
+		Message: com.google.gson.stream.MalformedJsonException: Use JsonReader.setLenient(true) to accept malformed JSON at line 1 column 12 path $

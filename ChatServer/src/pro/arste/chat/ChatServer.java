@@ -1,7 +1,7 @@
 package pro.arste.chat;
 
 public class ChatServer {
-	private static final String KEY_STORE_PATH = "C:\\Users\\Vasic\\Desktop\\keystore.jks";
+	private static final String KEY_STORE_PATH = "keystore.jks";
 	private static final String KEY_STORE_PASSWORD = "securemdp";
 
 	public static void main(String... args) {

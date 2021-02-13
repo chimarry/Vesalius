@@ -101,7 +101,6 @@ public class LocationController implements Initializable, ITokenSetup {
 				MedicalStaffAlert.processResult(resultMessage);
 		});
 		task.setOnFailed(e -> {
-			e.getSource().getException().printStackTrace();
 			MedicalStaffAlert.alert(AlertType.ERROR, MedicalStaffAlert.REMOTE_CONNECTION_PROBLEM);
 		});
 		new Thread(task).start();

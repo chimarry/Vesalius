@@ -23,10 +23,9 @@ public class UnicastChatConnectionRunnable implements Runnable {
 			ss.bind(serverChannel);
 			while (true) {
 				SSLSocket standardUser = (SSLSocket) ss.accept();
-				System.out.println(standardUser.getLocalPort() + "su");
 				SSLSocket medicalStaffMember = medicalStaffManager.getAvailable();
-				System.out.println(medicalStaffMember.getLocalPort() + "ms");
-				new Thread(new UnicastChatRunnable(standardUser, medicalStaffMember)).start();
+				if (medicalStaffMember != null)
+					new Thread(new UnicastChatRunnable(standardUser, medicalStaffMember)).start();
 			}
 		} catch (Exception ex) {
 			ErrorHandler.handle(ex);

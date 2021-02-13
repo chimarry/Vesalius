@@ -37,7 +37,6 @@ public final class StageUtil {
 			newStage.setScene(new Scene(pane));
 			newStage.show();
 		} catch (Exception e) {
-			e.printStackTrace();
 			MedicalStaffAlert.alert(AlertType.ERROR, "Unable to open new window");
 		}
 	}
@@ -55,7 +54,6 @@ public final class StageUtil {
 			newStage.getIcons().add(new Image("file:../Design/virusIcon.png"));
 			newStage.show();
 		} catch (Exception e) {
-			e.printStackTrace();
 			MedicalStaffAlert.alert(AlertType.ERROR, "Unable to open new window");
 		}
 	}

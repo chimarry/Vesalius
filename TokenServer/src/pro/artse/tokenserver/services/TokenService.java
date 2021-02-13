@@ -46,12 +46,14 @@ public class TokenService implements ITokenService {
 		// Generate token
 		byte[] uuid = getBytesFrom(UUID.randomUUID());
 		String token = Base64.getEncoder().encodeToString(uuid);
+		token = token.replace('/', '+');
 
 		// Save information about the user
 		UserDTO user = Mapper.mapFrom(new Credentials(firstName, lastName, ubn), token);
 		DBResultMessage<Boolean> isAdded = userManager.add(user);
 		TSResultMessage<Boolean> resultMessage = Mapper.mapFrom(isAdded);
-		return serializer.toJson(new TSResultMessage<String>(token, resultMessage.getStatus(),resultMessage.getMessage()));
+		return serializer
+				.toJson(new TSResultMessage<String>(token, resultMessage.getStatus(), resultMessage.getMessage()));
 	}
 
 	@Override

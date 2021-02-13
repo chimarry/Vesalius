@@ -14,7 +14,7 @@ import pro.artse.chat.util.StreamUtil;
 import pro.artse.user.errorhandling.ErrorHandler;
 
 public class ChatService implements IChatService {
-	private static final String TRUST_STORE_PATH = "C:\\Users\\Vasic\\Desktop\\keystore.jks";
+	private static final String TRUST_STORE_PATH = "keystore.jks";
 	private static final String TRUST_STORE_PASSWORD = "securemdp";
 
 	private Boolean isFinished = false;

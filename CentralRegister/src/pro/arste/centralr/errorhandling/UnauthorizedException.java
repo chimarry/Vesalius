@@ -11,12 +11,13 @@ public class UnauthorizedException extends Exception {
 
 	public UnauthorizedException(Status status) {
 		super(buildMessage(status));
-		this.httpStatusCode = status == Status.NO_CONTENT ? Status.UNAUTHORIZED : Status.INTERNAL_SERVER_ERROR;
+		this.httpStatusCode = status == Status.UNAUTHORIZED ? Status.UNAUTHORIZED : Status.INTERNAL_SERVER_ERROR;
 	}
 
 	public static String buildMessage(Status status) {
 		switch (status) {
 		case NO_CONTENT:
+		case UNAUTHORIZED:
 			return UNAUTHORIZED_MESSAGE;
 		default:
 			return COULD_NOT_VERIFY_MESSAGE;
